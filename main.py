@@ -1,10 +1,11 @@
 import pygame
 import random
-import math
+
+from enemies import Enemy, Enemy_horizontal, Enemy_vertikal
 
 pygame.init()
 
-game_over_sound = pygame.mixer.Sound("ES_Trumpet Sad - SFX Producer.wav")
+game_over_sound = pygame.mixer.Sound("sound/ES_Trumpet Sad - SFX Producer.wav")
 game_over = 0
 
 
@@ -23,8 +24,8 @@ class Game:
         self.spaceship = Spaceship(self, 370, 515)
         self.running = True
         self.background_music_tracks = [
-            "ES_Empty Space - Etienne Roussel.mp3",
-            "bg_music_1-5.mpeg",
+            "sound/ES_Empty Space - Etienne Roussel.mp3",
+            "sound/bg_music_1-5.mpeg",
         ]
         self.current_background_music_track = 0
         self.current_background_music = -1
@@ -39,7 +40,7 @@ class Game:
                 Enemy_vertikal(self, random.randint(0, 736), random.randint(-700, -30))
             )
 
-        self.background_img = pygame.image.load("spr_space_himmel.png")
+        self.background_img = pygame.image.load("assets/space_sky.png")
 
     def run(self):
         while self.running:
@@ -109,8 +110,8 @@ class Game:
     def change_background_music(self, track_index):
         pygame.mixer.music.stop()
         pygame.mixer.music.load(self.background_music_tracks[track_index])
-        pygame.mixer.music.play(-1, 0.0, 10)
-        pygame.mixer.music.set_volume(0.05)
+        pygame.mixer.music.play(-1, 0.0, 5)
+        pygame.mixer.music.set_volume(0.5)
         self.current_background_music = track_index
 
     def check_game_over(self):
@@ -119,15 +120,15 @@ class Game:
             self.game_over_sound_played = True
 
     def level_check(self):
-        if self.score < 20:
+        if self.score < 50:
             self.level = 1
-        elif self.score >= 20 and self.score < 30:
+        elif self.score >= 50 and self.score < 100:
             self.level = 2
-        elif self.score >= 30 and self.score < 40:
+        elif self.score >= 100 and self.score < 150:
             self.level = 3
-        elif self.score >= 40 and self.score < 50:
+        elif self.score >= 150 and self.score < 200:
             self.level = 4
-        elif self.score >= 50:
+        elif self.score >= 200:
             self.level = 5
         else:
             self.level = 1
@@ -153,9 +154,9 @@ class Game:
 
 
 def main_menu_background_music():
-    pygame.mixer.music.load("ES_Empty Space - Etienne Roussel.mp3")
-    pygame.mixer.music.play(-1, 0.0, 10)
-    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.load("sound/ES_Empty Space - Etienne Roussel.mp3")
+    pygame.mixer.music.play(-1, 0.0, 5)
+    pygame.mixer.music.set_volume(0.5)
 
 
 def main_menu(game):
@@ -200,7 +201,7 @@ class Spaceship:
         self.y = y
         self.change_x = 0
         self.game = game
-        self.spaceship_img = pygame.image.load("spr_spaceship.png")
+        self.spaceship_img = pygame.image.load("assets/spaceship1.png")
         self.bullets = []
 
     def move(self, speed):
@@ -226,88 +227,18 @@ class Bullet:
         self.is_fired = False
         self.bullet_speed = 10
         self.game = game
-        self.bullet_img = pygame.image.load("spr_patrone.png")
+        self.bullet_img = pygame.image.load("assets/bullet.png")
 
     def fired(self):
         self.is_fired = True
 
-    def update(self):
-        self.y -= self.bullet_speed
-        if self.y < 0:
-            self.is_fired = False
-        self.game.screen.blit(self.bullet_img, (self.x, self.y))
-
-
-class Enemy:
-    def __init__(self, game, x, y):
-        self.game = game
-        self.x = x
-        self.y = y
-        self.change_x = 0
-        self.change_y = 0
-        self.enemy_img = pygame.image.load("spr_space_enemy.png")
-        self.hit = pygame.mixer.Sound("ES_Suction Pop 7 - SFX Producer.wav")
-        self.hit_img = None  # Das wird in den abgeleiteten Klassen überschrieben
-
-    def update(self):
-        # Diese Methode kann in den abgeleiteten Klassen überschrieben werden
-        pass
-
-
-class Enemy_horizontal(Enemy):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
-        self.change_x = 1
-        self.change_y = 1
-        self.hit_img = pygame.image.load("explosion1.png")
-
-    def update(self):
-        self.x += self.change_x
-        if self.x >= 736:
-            self.y += self.change_y
-            self.change_x = -(self.change_x)
-        if self.x <= 0:
-            self.y += self.change_y
-            self.change_x = -(self.change_x)
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))
-
-    def check_collision(self):
-        for bullet in self.game.spaceship.bullets:
-            distance = math.sqrt(
-                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
-            )
-            if distance <= 35:
-                self.game.screen.blit(self.hit_img, (self.x, self.y))
-                bullet.is_fired = False
-                self.game.score += 1
-                self.x = random.randint(0, 736)
-                self.y = random.randint(50, 150)
-                pygame.mixer.Sound.play(self.hit)
-
-
-class Enemy_vertikal(Enemy):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
-        self.change_y = 1
-        self.enemy_img = pygame.image.load("enemy_alien_vertikal.png")
-        self.hit_img = pygame.image.load("explosion2_300x300.png")
-
-    def check_collision(self):
-        for bullet in self.game.spaceship.bullets:
-            distance = math.sqrt(
-                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
-            )
-            if distance <= 35:
-                self.game.screen.blit(self.hit_img, (self.x - 20, self.y - 22))
-                bullet.is_fired = False
-                self.game.score += 2
-                self.x = random.randint(0, 736)
-                self.y = random.randint(-200, -30)
-                pygame.mixer.Sound.play(self.hit)
-
-    def update(self):
-        self.y += self.change_y
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))
+    def update(self):  # Wird in der Game-Klasse aufgerufen
+        self.y -= self.bullet_speed  # Bewegung der Kugel
+        if self.y < 0:  # Wenn die Kugel den oberen Rand erreicht hat
+            self.is_fired = False  # Kugel wird gelöscht
+        self.game.screen.blit(
+            self.bullet_img, (self.x, self.y)
+        )  # Kugel wird gezeichnet
 
 
 if __name__ == "__main__":
