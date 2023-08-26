@@ -1,8 +1,9 @@
 import pygame
 import random
+import cv2
 
 from enemies import Enemy, Enemy_horizontal, Enemy_vertikal
-from menu import main_menu
+from menu import main_menu, play_video_background
 
 pygame.init()
 
@@ -30,6 +31,19 @@ class Game:
         ]
         self.current_background_music_track = 0
         self.current_background_music = -1
+        self.background_videos = [
+            "movie/menu_bg_movie.mp4",
+            "movie/level1.mp4",
+        ]
+        self.current_background_video_index = 0
+        self.cap = cv2.VideoCapture(
+            self.background_videos[self.current_background_video_index]
+        )
+        self.update_background_video()
+
+        if not self.cap.isOpened():
+            print("Fehler: Das Hintergrundvideo konnte nicht geöffnet werden.")
+
         self.enemies_horizontal = []
         for i in range(8):
             self.enemies_horizontal.append(
@@ -46,7 +60,9 @@ class Game:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            self.screen.blit(self.background_img, (0, 0))
+            self.update_background_video()
+            play_video_background(self, self.cap)
+            # self.screen.blit(self.background_img, (0, 0))
             self.level_check()
             self.spaceship.update()
             self.print_score()
@@ -114,6 +130,20 @@ class Game:
         pygame.mixer.music.play(-1, 0.0, 5)
         pygame.mixer.music.set_volume(0.5)
         self.current_background_music = track_index
+
+    def update_background_video(self):
+        if self.level <= 5 and self.current_background_video_index != 0:
+            self.change_background_video_to(1)
+        elif self.level <= 10 and self.current_background_video_index != 1:
+            pass
+
+    def change_background_video_to(self, index):
+        if self.current_background_video_index != index:
+            self.cap.release()
+            self.current_background_video_index = index
+            self.cap = cv2.VideoCapture(
+                self.background_videos[self.current_background_video_index]
+            )
 
     def check_game_over(self):
         if self.game_over == 1 and not self.game_over_sound_played:
@@ -202,5 +232,6 @@ class Bullet:
 
 if __name__ == "__main__":
     game = Game(800, 600)
-    main_menu(game)
+    main_menu(game, game.clock)
+    game.update_background_video()
     game.run()
