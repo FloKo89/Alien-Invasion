@@ -132,9 +132,9 @@ class Game:
         self.current_background_music = track_index
 
     def update_background_video(self):
-        if self.level <= 5 and self.current_background_video_index != 0:
+        if self.level <= 5 and self.current_background_video_index != 1:
             self.change_background_video_to(1)
-        elif self.level <= 10 and self.current_background_video_index != 1:
+        elif self.level <= 10 and self.current_background_video_index != 2:
             pass
 
     def change_background_video_to(self, index):
@@ -233,5 +233,5 @@ class Bullet:
 if __name__ == "__main__":
     game = Game(800, 600)
     main_menu(game, game.clock)
-    game.update_background_video()
+    game.change_background_video_to(1)
     game.run()
