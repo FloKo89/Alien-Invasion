@@ -1,4 +1,5 @@
 import pygame
+import cv2
 
 
 def main_menu_background_music():
