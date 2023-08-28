@@ -11,7 +11,6 @@ from levels import levels, level_check
 pygame.init()
 
 game_over_sound = pygame.mixer.Sound("sound/ES_Trumpet Sad - SFX Producer.wav")
-game_over = 0
 
 
 class Game:
@@ -19,7 +18,7 @@ class Game:
     score = 0
 
     def __init__(self, width, height):
-        global game_over
+        self.game_over = False
         self.game_over_sound_played = False
         self.width = width
         self.height = height
@@ -34,6 +33,8 @@ class Game:
         self.cap = cv2.VideoCapture(
             self.background_videos[self.current_background_video_index]
         )
+        self.video_fps = self.cap.get(cv2.CAP_PROP_FPS)
+        self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
         self.enemies_vertikal = []
 
@@ -55,19 +56,18 @@ class Game:
                     return new_x, new_y
 
         for enemy_config in levels[self.level]["enemies"]:
-            if enemy_config["type"] == "horizontal":
-                self.enemies_horizontal.append(
-                    Enemy_horizontal(self, enemy_config["x"], enemy_config["y"])
-                )
-            elif enemy_config["type"] == "vertical":
-                self.enemies_vertikal.append(
-                    Enemy_vertikal(self, enemy_config["x"], enemy_config["y"])
-                )
+            x, y = generate_enemy_position(
+                self.enemies_horizontal + self.enemies_vertikal
+            )
 
-        num_existing_enemies = len(self.enemies_horizontal) + len(
-            self.enemies_vertikal
-        )  #
-        for _ in range(levels[self.level]["num_enemies"]):
+            if enemy_config["type"] == "horizontal":
+                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+            elif enemy_config["type"] == "vertical":
+                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+
+        num_existing_enemies = len(self.enemies_horizontal) + len(self.enemies_vertikal)
+
+        for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
             enemy_type = random.choice(["horizontal", "vertical"])
             x, y = generate_enemy_position(
                 self.enemies_horizontal + self.enemies_vertikal
@@ -98,9 +98,9 @@ class Game:
                 enemy.update()
                 enemy.check_collision()
                 if enemy.y > 460:
-                    for i in self.enemies_horizontal and self.enemies_vertikal:
+                    for i in self.enemies_horizontal + self.enemies_vertikal:
                         i.y = 1000
-                    self.game_over = 1
+                    self.game_over = True
                     self.print_game_over()
                     self.check_game_over()
                     break
@@ -109,32 +109,35 @@ class Game:
                 enemy.update()
                 enemy.check_collision()
                 if enemy.y > 460:
-                    for i in self.enemies_vertikal and self.enemies_horizontal:
+                    for i in self.enemies_vertikal + self.enemies_horizontal:
                         i.y = 1000
-                    self.game_over = 1
+                    self.game_over = True
                     self.print_game_over()
                     self.check_game_over()
                     break
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.spaceship.move(-10)
-                    if event.key == pygame.K_RIGHT:
-                        self.spaceship.move(10)
-                    if event.key == pygame.K_SPACE:
-                        self.spaceship.fire_bullet()
-
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT:
-                        self.spaceship.move(10)
-                    if event.key == pygame.K_RIGHT:
-                        self.spaceship.move(-10)
+            self.handle_events()
 
             pygame.display.update()
+
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.spaceship.move(-10)
+                if event.key == pygame.K_RIGHT:
+                    self.spaceship.move(10)
+                if event.key == pygame.K_SPACE:
+                    self.spaceship.fire_bullet()
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    self.spaceship.move(10)
+                if event.key == pygame.K_RIGHT:
+                    self.spaceship.move(-10)
 
     def change_background_music(self):
         if self.level in levels:
@@ -145,16 +148,21 @@ class Game:
 
     def update_background_video(self):
         if self.level in levels:
-            self.change_background_video_to(levels[self.level]["background_video"])
+            video_name = levels[self.level]["background_video"]
+            self.change_background_video_to(video_name, video_fps)
 
-    def change_background_video_to(self, video_name):
+    def change_background_video_to(self, video_name, fps=None):
         if self.cap is not None:
             self.cap.release()
 
         self.cap = cv2.VideoCapture(video_name)
+        if fps:
+            self.video_fps = fps
+        else:
+            self.video_fps = self.cap.get(cv2.CAP_PROP_FPS)
 
     def check_game_over(self):
-        if self.game_over == 1 and not self.game_over_sound_played:
+        if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
 
@@ -184,5 +192,4 @@ if __name__ == "__main__":
     game.change_background_music()
     game.change_background_video_to(levels[game.level]["background_video"])
     game.run()
-    pygame.quit()  # Pygame beenden
-    exit()  # Programm beenden
+    pygame.quit()

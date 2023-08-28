@@ -1,25 +1,31 @@
 levels = {
     1: {
         "enemies": [
-            {"type": "horizontal", "x": 100, "y": 100, "change_x": 1, "change_y": 1},
-            {"type": "vertical", "x": 300, "y": 200, "change_y": 1}
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "vertical"},
+            {"type": "vertical"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
-        "background_video": "movie/level1.mp4",
+        "background_video": "movie/level1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 8,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 7,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [
-            {"type": "horizontal", "x": 150, "y": 100, "change_x": 1, "change_y": 1},
-            {"type": "vertical", "x": 350, "y": 150, "change_y": 1}
-            # Fügen Sie die entsprechenden Feinde für Level 2 hinzu
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "vertical"},
+            {"type": "vertical"},
         ],
-        "background_video": "movie/level2.mp4",
-        "background_music": "sound/bg_music_2.mpeg",  # Pfad zu Ihrem Lied für Level 2
-        "num_enemies": 10,  # Optional, aber hier als Beispiel
-    }
-    # W    # Weitere Level hinzufügen nach Bedarf
+        "background_video": "movie/menu_bg_movie.mp4",
+        "background_music": "sound/bg_music_1-5.mpeg",
+        "num_enemies": 10,
+    },
 }
 
 

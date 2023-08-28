@@ -12,18 +12,25 @@ def main_menu_background_music():
 
 
 def play_video_background(game, cap):
-    ret, frame = cap.read()
-    if not ret:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
-        ret, frame = cap.read()  # Erneut lesen
+    current_time = pygame.time.get_ticks()
+    frame_duration = 1000.0 / game.video_fps
+    if current_time - game.last_video_update > frame_duration:
+        ret, frame = cap.read()
+        if not ret:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
+            ret, frame = cap.read()  # Erneut lesen
 
-    frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
-    frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
-    game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
+        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
+        game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        game.last_video_update = current_time
+    else:
+        # Das gleiche Bild sollte beibehalten werden, da nicht genug Zeit verstrichen ist
+        pass
 
 
-def resize_frame(frame, target_width, target_height):
+def resize_frame(frame, target_width, target_height):  #
     height, width, channels = frame.shape
     aspect_ratio = width / height
     new_width = int(target_height * aspect_ratio)
