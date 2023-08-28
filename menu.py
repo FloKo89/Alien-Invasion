@@ -15,12 +15,12 @@ def play_video_background(game, cap):
     ret, frame = cap.read()
     if not ret:
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
-        ret, frame = cap.read()
+        ret, frame = cap.read()  # Erneut lesen
 
     frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))
-    game.screen.blit(frame, (0, 0))
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
+    frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
+    game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
 
 
 def resize_frame(frame, target_width, target_height):
