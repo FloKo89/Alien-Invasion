@@ -1,11 +1,12 @@
 import pygame
 import random
+import math
 import cv2
 
 from enemies import Enemy, Enemy_horizontal, Enemy_vertikal
 from menu import main_menu, play_video_background
 from player import Spaceship
-from levels import levels
+from levels import levels, level_check
 
 pygame.init()
 
@@ -27,36 +28,61 @@ class Game:
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship(self, 370, 515)
         self.running = True
-        self.background_music_tracks = [
-            "sound/ES_Empty Space - Etienne Roussel.mp3",
-            "sound/bg_music_1-5.mpeg",
-        ]
-        self.current_background_music_track = 0
-        self.current_background_music = -1
-        self.background_videos = ["movie/menu_bg_movie.mp4", "movie/level1.mp4"]
-        self.current_background_video_index = 0
+        self.current_background_music = 0
+        self.background_videos = ["movie/menu_bg_movie.mp4"]
+        self.current_background_video_index = -1
         self.cap = cv2.VideoCapture(
             self.background_videos[self.current_background_video_index]
         )
-        self.update_background_video()
-
         self.enemies_horizontal = []
-        for i in range(8):
-            self.enemies_horizontal.append(
-                Enemy_horizontal(self, random.randint(0, 736), random.randint(30, 130))
-            )
         self.enemies_vertikal = []
-        for i in range(2):
-            self.enemies_vertikal.append(
-                Enemy_vertikal(self, random.randint(0, 736), random.randint(-700, -30))
+
+        def generate_enemy_position(enemies, min_distance=100):
+            while True:
+                new_x = random.randint(0, 736)
+                new_y = random.randint(50, 150)
+                too_close = False
+
+                for enemy in enemies:
+                    distance = math.sqrt(
+                        (new_x - enemy.x) ** 2 + (new_y - enemy.y) ** 2
+                    )
+                    if distance < min_distance:
+                        too_close = True
+                        break
+
+                if not too_close:
+                    return new_x, new_y
+
+        for enemy_config in levels[self.level]["enemies"]:
+            if enemy_config["type"] == "horizontal":
+                self.enemies_horizontal.append(
+                    Enemy_horizontal(self, enemy_config["x"], enemy_config["y"])
+                )
+            elif enemy_config["type"] == "vertical":
+                self.enemies_vertikal.append(
+                    Enemy_vertikal(self, enemy_config["x"], enemy_config["y"])
+                )
+
+        num_existing_enemies = len(self.enemies_horizontal) + len(
+            self.enemies_vertikal
+        )  #
+        for _ in range(levels[self.level]["num_enemies"]):
+            enemy_type = random.choice(["horizontal", "vertical"])
+            x, y = generate_enemy_position(
+                self.enemies_horizontal + self.enemies_vertikal
             )
+
+            if enemy_type == "horizontal":
+                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+            else:
+                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
 
     def run(self):
         while self.running:
             self.clock.tick(60)
-            self.update_background_video()
             play_video_background(self, self.cap)
-            self.level_check()
+            level_check(self)
             self.spaceship.update()
             self.print_score()
             self.print_level()
@@ -110,52 +136,27 @@ class Game:
 
             pygame.display.update()
 
-            if self.level == 1 and self.current_background_music != 1:
-                self.change_background_music(1)
-            elif self.level == 2 and self.current_background_music != 2:
-                self.change_background_music(2)
-            elif self.level == 3 and self.current_background_music != 3:
-                self.change_background_music(3)
-
-    def change_background_music(self, track_index):
-        pygame.mixer.music.stop()
-        pygame.mixer.music.load(self.background_music_tracks[track_index])
-        pygame.mixer.music.play(-1, 0.0, 5)
-        pygame.mixer.music.set_volume(0.5)
-        self.current_background_music = track_index
+    def change_background_music(self):
+        if self.level in levels:
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load(levels[self.level]["background_music"])
+            pygame.mixer.music.play(-1, 0.0, 5)
+            pygame.mixer.music.set_volume(0.5)
 
     def update_background_video(self):
-        if self.level <= 5 and self.current_background_video_index != 1:
-            self.change_background_video_to(1)
-        elif self.level <= 10 and self.current_background_video_index != 2:
-            pass
+        if self.level in levels:
+            self.change_background_video_to(levels[self.level]["background_video"])
 
-    def change_background_video_to(self, index):
-        if self.current_background_video_index != index:
+    def change_background_video_to(self, video_name):
+        if self.cap is not None:
             self.cap.release()
-            self.current_background_video_index = index
-            self.cap = cv2.VideoCapture(
-                self.background_videos[self.current_background_video_index]
-            )
+
+        self.cap = cv2.VideoCapture(video_name)
 
     def check_game_over(self):
         if self.game_over == 1 and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
-
-    def level_check(self):
-        if self.score < 50:
-            self.level = 1
-        elif self.score >= 50 and self.score < 100:
-            self.level = 2
-        elif self.score >= 100 and self.score < 150:
-            self.level = 3
-        elif self.score >= 150 and self.score < 200:
-            self.level = 4
-        elif self.score >= 200:
-            self.level = 5
-        else:
-            self.level = 1
 
     def print_game_over(self):
         go_font = pygame.font.Font("freesansbold.ttf", 64)
@@ -180,7 +181,8 @@ class Game:
 if __name__ == "__main__":
     game = Game(800, 600)
     main_menu(game, game.clock)
-    game.change_background_video_to(1)
+    game.change_background_music()
+    game.change_background_video_to(levels[game.level]["background_video"])
     game.run()
     pygame.quit()  # Pygame beenden
     exit()  # Programm beenden
