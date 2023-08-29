@@ -149,6 +149,7 @@ class Game:
     def update_background_video(self):
         if self.level in levels:
             video_name = levels[self.level]["background_video"]
+            video_fps = levels[self.level]["video_fps"]
             self.change_background_video_to(video_name, video_fps)
 
     def change_background_video_to(self, video_name, fps=None):

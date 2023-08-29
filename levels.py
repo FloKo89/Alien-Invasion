@@ -9,7 +9,8 @@ levels = {
             {"type": "vertical"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
-        "background_video": "movie/level1.mp4",  # Optional, um die Framerate des Videos zu definieren
+        "background_video": "movie/level1.mp4",
+        "video_fps": 30,  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 7,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
@@ -23,6 +24,7 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/menu_bg_movie.mp4",
+        "video_fps": 30,
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 10,
     },
