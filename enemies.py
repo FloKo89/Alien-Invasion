@@ -67,7 +67,7 @@ class Enemy_vertikal(Enemy):
                 bullet.is_fired = False
                 self.game.score += 2
                 self.x = random.randint(0, 736)
-                self.y = random.randint(-200, -30)
+                self.y = random.randint(-300, -100)
                 pygame.mixer.Sound.play(self.hit)
 
     def update(self):

@@ -38,29 +38,6 @@ class Game:
         self.enemies_horizontal = []
         self.enemies_vertikal = []
 
-        for enemy_config in levels[self.level]["enemies"]:
-            x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal
-            )
-
-            if enemy_config["type"] == "horizontal":
-                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-            elif enemy_config["type"] == "vertical":
-                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
-
-        num_existing_enemies = len(self.enemies_horizontal) + len(self.enemies_vertikal)
-
-        for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
-            enemy_type = random.choice(["horizontal", "vertical"])
-            x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal
-            )
-
-            if enemy_type == "horizontal":
-                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-            else:
-                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
-
     def generate_enemy_position(self, enemies, min_distance=1):
         while True:
             new_x = random.randint(0, 736)
@@ -213,6 +190,7 @@ class Game:
 if __name__ == "__main__":
     game = Game(800, 600)
     main_menu(game, game.clock)
+    game.update_enemies()
     game.change_background_music()
     game.change_background_video_to(levels[game.level]["background_video"])
     game.run()
