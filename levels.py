@@ -37,7 +37,7 @@ levels = {
         ],
         "background_video": "movie/level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 15,
+        "num_enemies": 10,
     },
     4: {
         "enemies": [
@@ -50,7 +50,7 @@ levels = {
         ],
         "background_video": "movie/level4.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 20,
+        "num_enemies": 10,
     },
     5: {
         "enemies": [
@@ -63,7 +63,7 @@ levels = {
         ],
         "background_video": "movie/level5.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 25,
+        "num_enemies": 10,
     },
     6: {
         "enemies": [
@@ -76,7 +76,7 @@ levels = {
         ],
         "background_video": "movie/level6.mp4",
         "background_music": "sound/bg_music_6-10.mpeg",
-        "num_enemies": 30,
+        "num_enemies": 10,
     },
     7: {
         "enemies": [
@@ -89,7 +89,7 @@ levels = {
         ],
         "background_video": "movie/level7.mp4",
         "background_music": "sound/bg_music_6-10.mpeg",
-        "num_enemies": 35,
+        "num_enemies": 10,
     },
 }
 
