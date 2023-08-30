@@ -38,25 +38,8 @@ class Game:
         self.enemies_horizontal = []
         self.enemies_vertikal = []
 
-        def generate_enemy_position(enemies, min_distance=100):
-            while True:
-                new_x = random.randint(0, 736)
-                new_y = random.randint(50, 150)
-                too_close = False
-
-                for enemy in enemies:
-                    distance = math.sqrt(
-                        (new_x - enemy.x) ** 2 + (new_y - enemy.y) ** 2
-                    )
-                    if distance < min_distance:
-                        too_close = True
-                        break
-
-                if not too_close:
-                    return new_x, new_y
-
         for enemy_config in levels[self.level]["enemies"]:
-            x, y = generate_enemy_position(
+            x, y = self.generate_enemy_position(
                 self.enemies_horizontal + self.enemies_vertikal
             )
 
@@ -69,7 +52,7 @@ class Game:
 
         for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
             enemy_type = random.choice(["horizontal", "vertical"])
-            x, y = generate_enemy_position(
+            x, y = self.generate_enemy_position(
                 self.enemies_horizontal + self.enemies_vertikal
             )
 
@@ -77,6 +60,21 @@ class Game:
                 self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
             else:
                 self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+
+    def generate_enemy_position(self, enemies, min_distance=1):
+        while True:
+            new_x = random.randint(0, 736)
+            new_y = random.randint(50, 150)
+            too_close = False
+
+            for enemy in enemies:
+                distance = math.sqrt((new_x - enemy.x) ** 2 + (new_y - enemy.y) ** 2)
+                if distance < min_distance:
+                    too_close = True
+                    break
+
+            if not too_close:
+                return new_x, new_y
 
     def run(self):
         while self.running:
@@ -149,18 +147,43 @@ class Game:
     def update_background_video(self):
         if self.level in levels:
             video_name = levels[self.level]["background_video"]
-            video_fps = levels[self.level]["video_fps"]
-            self.change_background_video_to(video_name, video_fps)
+            self.change_background_video_to(video_name)
 
-    def change_background_video_to(self, video_name, fps=None):
+    def change_background_video_to(self, video_name):
         if self.cap is not None:
             self.cap.release()
 
         self.cap = cv2.VideoCapture(video_name)
-        if fps:
-            self.video_fps = fps
-        else:
-            self.video_fps = self.cap.get(cv2.CAP_PROP_FPS)
+
+    def update_enemies(self):
+        self.enemies_horizontal.clear()
+        self.enemies_vertikal.clear()
+        if self.level in levels:
+            self.generate_enemy_position(
+                self.enemies_horizontal + self.enemies_vertikal, min_distance=10
+            )
+            for enemy_config in levels[self.level]["enemies"]:
+                x, y = self.generate_enemy_position(
+                    self.enemies_horizontal + self.enemies_vertikal
+                )
+
+                if enemy_config["type"] == "horizontal":
+                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                elif enemy_config["type"] == "vertical":
+                    self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+
+        num_existing_enemies = len(self.enemies_horizontal) + len(self.enemies_vertikal)
+
+        for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
+            enemy_type = random.choice(["horizontal", "vertical"])
+            x, y = self.generate_enemy_position(
+                self.enemies_horizontal + self.enemies_vertikal
+            )
+
+            if enemy_type == "horizontal":
+                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+            else:
+                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
 
     def check_game_over(self):
         if self.game_over and not self.game_over_sound_played:

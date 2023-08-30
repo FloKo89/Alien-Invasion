@@ -9,8 +9,7 @@ levels = {
             {"type": "vertical"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
-        "background_video": "movie/level1.mp4",
-        "video_fps": 30,  # Optional, um die Framerate des Videos zu definieren
+        "background_video": "movie/level1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 7,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
@@ -24,7 +23,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level2.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 10,
     },
@@ -38,7 +36,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level3.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 15,
     },
@@ -52,7 +49,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level4.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 20,
     },
@@ -66,7 +62,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level5.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 25,
     },
@@ -80,7 +75,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level6.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_6-10.mpeg",
         "num_enemies": 30,
     },
@@ -94,7 +88,6 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level7.mp4",
-        "video_fps": 30,
         "background_music": "sound/bg_music_6-10.mpeg",
         "num_enemies": 35,
     },
@@ -122,3 +115,4 @@ def level_check(self):
     if current_level != self.level:
         self.update_background_video()
         self.change_background_music()
+        self.update_enemies()
