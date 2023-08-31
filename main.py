@@ -3,7 +3,7 @@ import random
 import math
 import cv2
 
-from enemies import Enemy, Enemy_horizontal, Enemy_vertikal
+from enemies import Enemy_horizontal, Enemy_vertikal, Boss1
 from menu import main_menu, play_video_background
 from player import Spaceship
 from levels import levels, level_check
@@ -34,8 +34,9 @@ class Game:
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
         self.enemies_vertikal = []
+        self.boss1 = []
 
-    def generate_enemy_position(self, enemies, min_distance=1):
+    def generate_enemy_position(self, enemies, min_distance=10):
         while True:
             new_x = random.randint(0, 736)
             new_y = random.randint(50, 150)
@@ -88,6 +89,17 @@ class Game:
                     self.check_game_over()
                     break
 
+            for enemy in self.boss1:
+                enemy.update()
+                enemy.check_collision()
+                if enemy.y > 460:
+                    for i in self.boss1:
+                        i.y = 1000
+                    self.game_over = True
+                    self.print_game_over()
+                    self.check_game_over()
+                    break
+
             self.handle_events()
 
             pygame.display.update()
@@ -127,32 +139,40 @@ class Game:
     def update_enemies(self):
         self.enemies_horizontal.clear()
         self.enemies_vertikal.clear()
+        self.boss1.clear()
         if self.level in levels:
             self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal, min_distance=10
+                self.enemies_horizontal + self.enemies_vertikal + self.boss1,
+                min_distance=10,
             )
             for enemy_config in levels[self.level]["enemies"]:
                 x, y = self.generate_enemy_position(
-                    self.enemies_horizontal + self.enemies_vertikal
+                    self.enemies_horizontal + self.enemies_vertikal + self.boss1
                 )
 
                 if enemy_config["type"] == "horizontal":
                     self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
                 elif enemy_config["type"] == "vertical":
                     self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+                elif enemy_config["type"] == "boss1":
+                    self.boss1.append(Boss1(self, x, y))
 
-        num_existing_enemies = len(self.enemies_horizontal) + len(self.enemies_vertikal)
+        num_existing_enemies = (
+            len(self.enemies_horizontal) + len(self.enemies_vertikal) + len(self.boss1)
+        )
 
         for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
             enemy_type = random.choice(["horizontal", "vertical"])
             x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal
+                self.enemies_horizontal + self.enemies_vertikal, min_distance=10
             )
 
             if enemy_type == "horizontal":
                 self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-            else:
+            elif enemy_type == "vertical":
                 self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+            elif enemy_type == "boss1":
+                self.boss1.append(Boss1(self, x, y))
 
     def check_game_over(self):
         if self.game_over and not self.game_over_sound_played:

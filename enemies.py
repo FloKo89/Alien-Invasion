@@ -73,3 +73,31 @@ class Enemy_vertikal(Enemy):
     def update(self):
         self.y += self.change_y
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
+
+
+class Boss1(Enemy):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.y = 0
+        self.change_x = 1
+        self.hit_img = pygame.image.load("assets/explosion1.png")
+        self.enemy_img = pygame.image.load("assets/Boss1.png")
+
+    def check_collision(self):
+        for bullet in self.game.spaceship.bullets:
+            distance = math.sqrt(
+                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
+            )
+            if distance <= 150:
+                self.game.screen.blit(self.hit_img, (self.x, self.y))
+                bullet.is_fired = False
+                self.game.score += 2
+                pygame.mixer.Sound.play(self.hit)
+
+    def update(self):
+        self.x += self.change_x
+        if self.x >= 540:
+            self.change_x = -(self.change_x)
+        if self.x <= -30:
+            self.change_x = -(self.change_x)
+        self.game.screen.blit(self.enemy_img, (self.x, self.y))
