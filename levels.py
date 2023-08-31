@@ -113,6 +113,6 @@ def level_check(self):
     # ... (restlichen Level-Checks)
 
     if current_level != self.level:
-        self.update_background_video()
+        self.change_background_video()
         self.change_background_music()
         self.update_enemies()
