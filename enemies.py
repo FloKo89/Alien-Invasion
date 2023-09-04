@@ -10,13 +10,9 @@ class Enemy:
         self.y = y
         self.change_x = 0
         self.change_y = 0
-        self.enemy_img = pygame.image.load("assets/enemy1_horizontal.png")
-        self.hit = pygame.mixer.Sound("sound/collision_sound.wav")
-        self.hit_img = None  # Das wird in den abgeleiteten Klassen überschrieben
-
-    def update(self):
-        # Diese Methode kann in den abgeleiteten Klassen überschrieben werden
-        pass
+        self.enemy_img = None
+        self.hit = None
+        self.hit_img = None
 
 
 class Enemy_horizontal(Enemy):
@@ -24,7 +20,33 @@ class Enemy_horizontal(Enemy):
         super().__init__(game, x, y)
         self.change_x = 1
         self.change_y = 1
+        self.enemy_img = pygame.image.load("assets/enemy1_horizontal.png")
         self.hit_img = pygame.image.load("assets/explosion1.png")
+        self.hit = pygame.mixer.Sound("sound/collision_sound.wav")
+
+    def check_collision(self):
+        for bullet in self.game.spaceship.bullets:
+            enemy_center_x = self.x + self.enemy_img.get_width() / 2
+            enemy_center_y = self.y + self.enemy_img.get_height() / 2
+            bullet_center_x = bullet.x + bullet.bullet_img.get_width() / 2
+            bullet_center_y = bullet.y + bullet.bullet_img.get_height() / 2
+            distance = math.sqrt(
+                math.pow(enemy_center_x - bullet_center_x, 2)
+                + math.pow(enemy_center_y - bullet_center_y, 2)
+            )
+            if distance <= 35:
+                self.game.screen.blit(
+                    self.hit_img,
+                    (
+                        bullet_center_x - self.hit_img.get_width() / 2,
+                        bullet_center_y - self.hit_img.get_height() / 2,
+                    ),
+                )
+                bullet.is_fired = False
+                self.game.score += 1
+                self.x = random.randint(0, 736)
+                self.y = random.randint(50, 150)
+                pygame.mixer.Sound.play(self.hit)
 
     def update(self):
         self.x += self.change_x
@@ -36,19 +58,6 @@ class Enemy_horizontal(Enemy):
             self.change_x = -(self.change_x)
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
-    def check_collision(self):
-        for bullet in self.game.spaceship.bullets:
-            distance = math.sqrt(
-                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
-            )
-            if distance <= 35:
-                self.game.screen.blit(self.hit_img, (self.x, self.y))
-                bullet.is_fired = False
-                self.game.score += 1
-                self.x = random.randint(0, 736)
-                self.y = random.randint(50, 150)
-                pygame.mixer.Sound.play(self.hit)
-
 
 class Enemy_vertikal(Enemy):
     def __init__(self, game, x, y):
@@ -56,14 +65,26 @@ class Enemy_vertikal(Enemy):
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/enemy1_vertical.png")
         self.hit_img = pygame.image.load("assets/explosion2.png")
+        self.hit = pygame.mixer.Sound("sound/collision_sound.wav")
 
     def check_collision(self):
         for bullet in self.game.spaceship.bullets:
+            enemy_center_x = self.x + self.enemy_img.get_width() / 2
+            enemy_center_y = self.y + self.enemy_img.get_height() / 2
+            bullet_center_x = bullet.x + bullet.bullet_img.get_width() / 2
+            bullet_center_y = bullet.y + bullet.bullet_img.get_height() / 2
             distance = math.sqrt(
-                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
+                math.pow(enemy_center_x - bullet_center_x, 2)
+                + math.pow(enemy_center_y - bullet_center_y, 2)
             )
             if distance <= 35:
-                self.game.screen.blit(self.hit_img, (self.x - 20, self.y - 22))
+                self.game.screen.blit(
+                    self.hit_img,
+                    (
+                        bullet_center_x - self.hit_img.get_width() / 2,
+                        bullet_center_y - self.hit_img.get_height() / 2,
+                    ),
+                )
                 bullet.is_fired = False
                 self.game.score += 2
                 self.x = random.randint(0, 736)
@@ -78,18 +99,29 @@ class Enemy_vertikal(Enemy):
 class Boss1(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.y = 0
-        self.change_x = 1
+        self.change_x = 0.5
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
+        self.hit = pygame.mixer.Sound("sound/collision_sound.wav")
 
     def check_collision(self):
         for bullet in self.game.spaceship.bullets:
+            boss_center_x = self.x + self.enemy_img.get_width() / 2
+            boss_center_y = self.y + self.enemy_img.get_height() / 2
+            bullet_center_x = bullet.x + bullet.bullet_img.get_width() / 2
+            bullet_center_y = bullet.y + bullet.bullet_img.get_height() / 2
             distance = math.sqrt(
-                math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2)
+                math.pow(boss_center_x - bullet_center_x, 2)
+                + math.pow(boss_center_y - bullet_center_y, 2)
             )
-            if distance <= 150:
-                self.game.screen.blit(self.hit_img, (self.x, self.y))
+            if distance <= 100:
+                self.game.screen.blit(
+                    self.hit_img,
+                    (
+                        bullet_center_x - self.hit_img.get_width() / 2,
+                        bullet_center_y - self.hit_img.get_height() / 2,
+                    ),
+                )
                 bullet.is_fired = False
                 self.game.score += 2
                 pygame.mixer.Sound.play(self.hit)

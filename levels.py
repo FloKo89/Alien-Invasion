@@ -1,18 +1,18 @@
 levels = {
     1: {
         "enemies": [
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "vertical"},
-            {"type": "vertical"},
+            # {"type": "horizontal"},
+            # {"type": "horizontal"},
+            # {"type": "horizontal"},
+            # {"type": "horizontal"},
+            # {"type": "vertical"},
+            # {"type": "vertical"},
             {"type": "boss1"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
         "background_video": "movie/level1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 1,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [

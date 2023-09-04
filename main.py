@@ -155,7 +155,7 @@ class Game:
                 elif enemy_config["type"] == "vertical":
                     self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
                 elif enemy_config["type"] == "boss1":
-                    self.boss1.append(Boss1(self, x, y))
+                    self.boss1.append(Boss1(self, 230, 0))
 
         num_existing_enemies = (
             len(self.enemies_horizontal) + len(self.enemies_vertikal) + len(self.boss1)
