@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time
 
 
 class Enemy:
@@ -106,6 +107,9 @@ class Boss1(Enemy):
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.shield_strength = 10
+        self.max_shield_strength = 10
+        self.last_shield_renewal = time.time()
 
     def check_collision(self):
         for bullet in self.game.spaceship.bullets:
@@ -118,6 +122,12 @@ class Boss1(Enemy):
                 + math.pow(boss_center_y - bullet_center_y, 2)
             )
             if distance <= 100:
+                self.shield_strength -= 1
+                if self.shield_strength <= 0:
+                    # Fügen Sie Schaden-Logik hier hinzu, wenn der Schild 0 erreicht
+                    self.game.score += 2
+                    pygame.mixer.Sound.play(self.hit_sound)
+                    # ... andere Schaden-Logik
                 self.game.screen.blit(
                     self.hit_img,
                     (
@@ -126,8 +136,6 @@ class Boss1(Enemy):
                     ),
                 )
                 bullet.is_fired = False
-                self.game.score += 2
-                pygame.mixer.Sound.play(self.hit_sound)
 
     def update(self):
         self.x += self.change_x * self.speed
@@ -146,6 +154,27 @@ class Boss1(Enemy):
             self.acceleration = -0.1
         if self.speed <= 1:
             self.acceleration = 0.1
+
+        if time.time() - self.last_shield_renewal >= 12:
+            self.shield_strength = self.max_shield_strength
+            self.last_shield_renewal = time.time()
+
+        self.draw_shield()
+
+    def draw_shield(self):
+        if self.shield_strength > 0:
+            # Erstelle eine transparente Oberfläche
+            shield_surface = pygame.Surface(
+                (self.enemy_img.get_width() + 10, self.enemy_img.get_height() + 10),
+                pygame.SRCALPHA,
+            )
+            pygame.draw.circle(
+                shield_surface,
+                (0, 255, 0, 128),  # Semi-transparentes Grün
+                (shield_surface.get_width() // 2, shield_surface.get_height() // 2),
+                shield_surface.get_width() // 2,
+            )
+            self.game.screen.blit(shield_surface, (self.x - 10, self.y - 10))
 
     """def update(self):
         self.x += self.change_x
