@@ -22,7 +22,9 @@ class Game:
         self.game_over_sound_played = False
         self.width = width
         self.height = height
-        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.screen = pygame.display.set_mode(
+            (self.width, self.height), pygame.DOUBLEBUF
+        )
         pygame.display.set_caption("Mein Space Invaders")
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship(self, 370, 515)

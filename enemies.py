@@ -106,6 +106,7 @@ class Boss1(Enemy):
         self.acceleration = 0.1
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
+        self.shield_img = pygame.image.load("assets/boss1_shield.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
         self.shield_strength = 10
         self.max_shield_strength = 10
@@ -159,27 +160,5 @@ class Boss1(Enemy):
             self.shield_strength = self.max_shield_strength
             self.last_shield_renewal = time.time()
 
-        self.draw_shield()
-
-    def draw_shield(self):
         if self.shield_strength > 0:
-            # Erstelle eine transparente Oberfläche
-            shield_surface = pygame.Surface(
-                (self.enemy_img.get_width() + 10, self.enemy_img.get_height() + 10),
-                pygame.SRCALPHA,
-            )
-            pygame.draw.circle(
-                shield_surface,
-                (0, 255, 0, 128),  # Semi-transparentes Grün
-                (shield_surface.get_width() // 2, shield_surface.get_height() // 2),
-                shield_surface.get_width() // 2,
-            )
-            self.game.screen.blit(shield_surface, (self.x - 10, self.y - 10))
-
-    """def update(self):
-        self.x += self.change_x
-        if self.x >= 540:
-            self.change_x = -(self.change_x)
-        if self.x <= -30:
-            self.change_x = -(self.change_x)
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))"""
+            self.game.screen.blit(self.shield_img, (self.x, self.y))
