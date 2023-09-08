@@ -11,12 +11,16 @@ def main_menu_background_music():
     pygame.mixer.music.set_volume(0.5)
 
 
-def play_video_background(game, cap):
-    current_time = pygame.time.get_ticks()
-    frame_duration = 1000.0 / game.video_fps
-    if current_time - game.last_video_update > frame_duration:
-        ret, frame = cap.read()
-        if not ret:
+def play_video_background(game, cap):  # Video im Hintergrund abspielen
+    current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
+    frame_duration = 1000.0 / cap.get(
+        cv2.CAP_PROP_FPS
+    )  # Dauer eines Einzelbildes in Millisekunden
+    if (
+        current_time - game.last_video_update > frame_duration
+    ):  # Wenn genug Zeit verstrichen ist
+        ret, frame = cap.read()  # Einzelbild lesen
+        if not ret:  # Wenn das Video zu Ende ist
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
             ret, frame = cap.read()  # Erneut lesen
 
@@ -82,4 +86,4 @@ def main_menu(game, clock):
             )
 
         pygame.display.update()
-        clock.tick(30)
+        clock.tick(60)

@@ -15,6 +15,7 @@ class Enemy:
         self.enemy_img = None
         self.hit_sound = None
         self.hit_img = None
+        self.score = None
 
 
 class Enemy_horizontal(Enemy):
@@ -25,6 +26,7 @@ class Enemy_horizontal(Enemy):
         self.enemy_img = pygame.image.load("assets/enemy1_horizontal.png")
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.score = 1
 
     def check_collision(self):
         for bullet in self.game.spaceship.bullets:
@@ -45,7 +47,7 @@ class Enemy_horizontal(Enemy):
                     ),
                 )
                 bullet.is_fired = False
-                self.game.score += 1
+                self.game.score += self.score
                 self.x = random.randint(0, 736)
                 self.y = random.randint(50, 150)
                 pygame.mixer.Sound.play(self.hit_sound)
@@ -68,6 +70,7 @@ class Enemy_vertikal(Enemy):
         self.enemy_img = pygame.image.load("assets/enemy1_vertical.png")
         self.hit_img = pygame.image.load("assets/explosion2.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.score = 2
 
     def check_collision(self):
         for bullet in self.game.spaceship.bullets:
@@ -88,7 +91,7 @@ class Enemy_vertikal(Enemy):
                     ),
                 )
                 bullet.is_fired = False
-                self.game.score += 2
+                self.game.score += self.score
                 self.x = random.randint(0, 736)
                 self.y = random.randint(-300, -100)
                 pygame.mixer.Sound.play(self.hit_sound)
@@ -104,6 +107,7 @@ class Boss1(Enemy):
         self.change_x = 0.5
         self.speed = 1
         self.acceleration = 0.1
+        self.score = 1
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
         self.shield_img = pygame.image.load("assets/boss1_shield.png")
@@ -126,7 +130,7 @@ class Boss1(Enemy):
                 self.shield_strength -= 1
                 if self.shield_strength <= 0:
                     # Fügen Sie Schaden-Logik hier hinzu, wenn der Schild 0 erreicht
-                    self.game.score += 2
+                    self.game.score += self.score
                     pygame.mixer.Sound.play(self.hit_sound)
                     # ... andere Schaden-Logik
                 self.game.screen.blit(
@@ -156,9 +160,15 @@ class Boss1(Enemy):
         if self.speed <= 1:
             self.acceleration = 0.1
 
-        if time.time() - self.last_shield_renewal >= 12:
-            self.shield_strength = self.max_shield_strength
-            self.last_shield_renewal = time.time()
+        if (
+            time.time() - self.last_shield_renewal >= 12
+        ):  # Wenn 12 Sekunden vergangen sind
+            self.shield_strength = self.max_shield_strength  # Schild wird erneuert
+            self.last_shield_renewal = (
+                time.time()
+            )  # Zeitpunkt der Erneuerung wird gespeichert
 
-        if self.shield_strength > 0:
-            self.game.screen.blit(self.shield_img, (self.x, self.y))
+        if self.shield_strength > 0:  # Wenn der Schild noch nicht 0 erreicht hat
+            self.game.screen.blit(
+                self.shield_img, (self.x - 20, self.y - 20)
+            )  # Schild wird gezeichnet
