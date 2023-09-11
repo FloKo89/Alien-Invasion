@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 import time
+from player import Bullet
 
 
 class Enemy:
@@ -98,9 +99,10 @@ class Enemy_vertikal(Enemy):
 class Boss1(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.change_x = 0.5
+        self.change_x = random.choice([-0.5, 0.5])
+        self.change_y = random.choice([-0.5, 0.5])
         self.speed = 1
-        self.acceleration = 0.1
+        self.acceleration = 0.5
         self.score = 1
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
@@ -109,6 +111,10 @@ class Boss1(Enemy):
         self.shield_strength = 10
         self.max_shield_strength = 10
         self.last_shield_renewal = time.time()
+        self.last_shot_time = time.time()
+        self.shot_interval = 2
+        self.hp = 100
+        self.bullets = []
 
     def check_collision(self):
         super().check_collision(100, 0, 0)
@@ -117,6 +123,7 @@ class Boss1(Enemy):
         self.shield_strength -= 1
         if self.shield_strength <= 0:
             self.game.score += self.score
+            self.hp -= 1
         self.game.screen.blit(
             self.hit_img,
             (
@@ -124,18 +131,36 @@ class Boss1(Enemy):
                 bullet_center_y - self.hit_img.get_height() / 2,
             ),
         )
+        if self.hp <= 50:  # Phase 2, wenn der Boss nur noch 50 HP hat
+            self.speed = 2  # Geschwindigkeit verdoppeln
+            self.shot_interval = 1  # Schneller schießen
+
+    def shoot(self):
+        bullet = Boss1Bullet(self.game, self.x, self.y, direction="down")
+        self.game.boss1_bullets.append(bullet)
 
     def update(self):
         self.x += self.change_x * self.speed
+        self.y += self.change_y * self.speed
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
         # Wenn der Boss den rechten Rand erreicht, ändern Sie die Richtung
         if self.x + self.enemy_img.get_width() >= self.game.screen.get_width():
             self.change_x = -0.5
+            self.change_y = random.choice([-0.5, 0.5])
 
         # Wenn der Boss den linken Rand erreicht, ändern Sie die Richtung
         if self.x <= 0:
             self.change_x = 0.5
+            self.change_y = random.choice([-0.5, 0.5])
+
+        if (
+            self.y <= 0
+            or self.y + self.enemy_img.get_height() >= self.game.screen.get_height()
+        ):
+            self.change_y = -(
+                self.change_y
+            )  # Wenn der Boss den oberen oder unteren Rand erreicht, ändern Sie die Richtung
 
         self.speed += self.acceleration
         if self.speed >= 5:
@@ -155,3 +180,28 @@ class Boss1(Enemy):
             self.game.screen.blit(
                 self.shield_img, (self.x - 20, self.y - 20)
             )  # Schild wird gezeichnet
+
+        if time.time() - self.last_shot_time >= self.shot_interval:
+            self.shoot()
+            self.last_shot_time = time.time()
+
+
+class Boss1Bullet(Bullet):
+    def __init__(self, game, x, y, direction="down"):
+        super().__init__(game, x, y, direction)
+        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.speed = 2
+        self.damage = 1
+
+    def update(self):
+        super().update()
+
+        if self.direction == "up":
+            self.y -= self.speed
+        elif self.direction == "down":
+            self.y += self.speed
+
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
+
+        if self.y > self.game.screen.get_height():
+            self.game.boss1_bullets.remove(self)

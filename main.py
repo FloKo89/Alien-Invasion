@@ -36,6 +36,7 @@ class Game:
         self.enemies_horizontal = []
         self.enemies_vertikal = []
         self.boss1 = []
+        self.boss1_bullets = []
 
     def generate_enemy_position(self, enemies, min_distance=10):
         while True:
@@ -100,6 +101,12 @@ class Game:
                     self.game_over = True
                     self.print_game_over()
                     self.check_game_over()
+                    break
+
+            for bullet in self.boss1_bullets:
+                bullet.update()
+                if bullet.y > 460:
+                    self.boss1_bullets.remove(bullet)
                     break
 
             self.handle_events()

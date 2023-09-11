@@ -27,9 +27,10 @@ class Spaceship:
 
 
 class Bullet:
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, direction="up"):
         self.x = x
         self.y = y
+        self.direction = direction
         self.is_fired = False
         self.bullet_speed = 10
         self.game = game
@@ -39,7 +40,11 @@ class Bullet:
         self.is_fired = True
 
     def update(self):  # Wird in der Game-Klasse aufgerufen
-        self.y -= self.bullet_speed  # Bewegung der Kugel
+        if self.direction == "up":
+            self.y -= self.bullet_speed
+        elif self.direction == "down":
+            self.y += self.bullet_speed  # Bewegung der Kugel
+
         if self.y < 0:  # Wenn die Kugel den oberen Rand erreicht hat
             self.is_fired = False  # Kugel wird gelöscht
         self.game.screen.blit(
