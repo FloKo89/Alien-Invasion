@@ -55,8 +55,8 @@ class Game:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            play_video_background(self, self.cap)
-            # self.screen.fill((0, 0, 0))
+            # play_video_background(self, self.cap)
+            self.screen.fill((0, 0, 0))
             level_check(self)
             self.spaceship.update()
             self.print_score()
@@ -132,7 +132,7 @@ class Game:
             pygame.mixer.music.play(-1, 0.0, 5)
             pygame.mixer.music.set_volume(0.5)
 
-    def change_background_video(self):  #
+    def change_background_video(self):  # TODO: Fix this
         if self.level in levels:
             self.cap.release()
             self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
