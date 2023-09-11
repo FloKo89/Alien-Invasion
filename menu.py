@@ -5,12 +5,6 @@ import cv2
 clock = pygame.time.Clock()
 
 
-def main_menu_background_music():
-    pygame.mixer.music.load("sound/ES_Empty Space - Etienne Roussel.mp3")
-    pygame.mixer.music.play(-1, 0.0, 5)
-    pygame.mixer.music.set_volume(0.5)
-
-
 def play_video_background(game, cap):  # Video im Hintergrund abspielen
     current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
     frame_duration = 1000.0 / cap.get(
@@ -47,7 +41,7 @@ def resize_frame(frame, target_width, target_height):  #
 
 
 def main_menu(game, clock):
-    main_menu_background_music()
+    # main_menu_background_music()
     menu_font = pygame.font.Font("freesansbold.ttf", 32)
     menu_items = ["Spiel starten", "Beenden"]
     selected_item = 0

@@ -14,7 +14,7 @@ game_over_sound = pygame.mixer.Sound("sound/ES_Trumpet Sad - SFX Producer.wav")
 
 
 class Game:
-    level = 1
+    level = 0
     score = 0
 
     def __init__(self, width, height):
@@ -31,8 +31,7 @@ class Game:
         self.running = True
         self.current_background_music = 0
         self.menu_video = ["movie/menu_bg_movie.mp4"]
-        self.cap = cv2.VideoCapture(self.menu_video[0])
-        # self.video_fps = self.cap.get(cv2.CAP_PROP_FPS)
+        self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
         self.enemies_vertikal = []
@@ -133,11 +132,11 @@ class Game:
             pygame.mixer.music.play(-1, 0.0, 5)
             pygame.mixer.music.set_volume(0.5)
 
-    def change_background_video(self):  # TODO: Fix this
+    def change_background_video(self):  #
         if self.level in levels:
             self.cap.release()
             self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
-            self.last_video_update = pygame.time.get_ticks()
+            play_video_background(self, self.cap)
 
     def update_enemies(self):
         self.enemies_horizontal.clear()
@@ -204,9 +203,8 @@ class Game:
 
 if __name__ == "__main__":
     game = Game(800, 600)
+    game.change_background_music()
     main_menu(game, game.clock)
     game.update_enemies()
-    game.change_background_music()
-    game.change_background_video()
     game.run()
     pygame.quit()

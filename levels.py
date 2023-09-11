@@ -1,4 +1,10 @@
 levels = {
+    0: {
+        "enemies": [],
+        "background_video": "movie/menu_bg_movie.mp4",
+        "background_music": "sound/ES_Empty Space - Etienne Roussel.mp3",
+        "num_enemies": 0,
+    },
     1: {
         "enemies": [
             # {"type": "horizontal"},

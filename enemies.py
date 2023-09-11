@@ -52,6 +52,8 @@ class Enemy_horizontal(Enemy):
                 self.y = random.randint(50, 150)
                 pygame.mixer.Sound.play(self.hit_sound)
 
+                self.game.generate_enemy_position(self.game.enemies_horizontal)
+
     def update(self):
         self.x += self.change_x
         if self.x >= 736:
