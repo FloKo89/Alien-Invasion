@@ -119,6 +119,53 @@ class Boss1(Enemy):
         self.second_bullets = []
         self.third_bullets = []
 
+    def draw_health_bar(self):
+        # Position und Größe des Lebensbalkens definieren
+        bar_width = 200
+        bar_height = 20
+        margin_x = 10
+        margin_y = 10
+        border_thickness = 3
+
+        # Berechnung des prozentualen Anteils der verbleibenden HP
+        hp_percentage = self.hp / 100.0
+
+        # Rahmen für den Balken zeichnen
+        pygame.draw.rect(
+            self.game.screen,
+            (255, 255, 255),
+            (
+                margin_x - border_thickness,
+                margin_y - border_thickness,
+                bar_width + 2 * border_thickness,
+                bar_height + 2 * border_thickness,
+            ),
+        )
+
+        # Farbverlauf: Grün bei 100% HP und Rot bei 0% HP
+        color = (255 * (1 - hp_percentage), 255 * hp_percentage, 0)
+
+        # Hintergrund des Lebensbalkens
+        pygame.draw.rect(
+            self.game.screen,
+            (150, 150, 150),
+            (margin_x, margin_y, bar_width, bar_height),
+        )
+
+        # Vordergrund des Lebensbalkens mit Farbverlauf
+        pygame.draw.rect(
+            self.game.screen,
+            color,
+            (margin_x, margin_y, bar_width * hp_percentage, bar_height),
+        )
+
+        # Text für genaue HP anzeigen
+        font = pygame.font.SysFont(
+            None, 24
+        )  # Sie können hier auch eine benutzerdefinierte Schriftart wählen
+        hp_text = font.render(f"HP: {self.hp}", True, (255, 255, 255))
+        self.game.screen.blit(hp_text, (margin_x + bar_width + 10, margin_y))
+
     def check_collision(self):
         super().check_collision(100, 0, 0)
 
@@ -207,6 +254,8 @@ class Boss1(Enemy):
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
+        self.draw_health_bar()
+
 
 class Boss1Bullet:
     def __init__(self, game, x, y, direction="down"):
@@ -236,7 +285,7 @@ class Boss1SecondBullet:
         self.x = x
         self.y = y
         self.direction = direction
-        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.bullet_img = pygame.image.load("assets/boss1_second_bullet.png")
         self.speed = 3
         self.damage = 2
 
@@ -258,7 +307,7 @@ class Boss1ThirdBullet:
         self.x = x
         self.y = y
         self.direction = direction
-        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.bullet_img = pygame.image.load("assets/boss1_third_bullet.png")
         self.speed = 3
         self.damage = 2
 
