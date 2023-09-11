@@ -2,7 +2,6 @@ import pygame
 import random
 import math
 import time
-from player import Bullet
 
 
 class Enemy:
@@ -103,7 +102,7 @@ class Boss1(Enemy):
         self.change_y = random.choice([-0.5, 0.5])
         self.speed = 1
         self.acceleration = 0.5
-        self.score = 1
+        self.score = 0
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1.png")
         self.shield_img = pygame.image.load("assets/boss1_shield.png")
@@ -112,9 +111,13 @@ class Boss1(Enemy):
         self.max_shield_strength = 10
         self.last_shield_renewal = time.time()
         self.last_shot_time = time.time()
+        self.last_shot_time2 = time.time()
+        self.last_shot_time3 = time.time()
         self.shot_interval = 2
         self.hp = 100
         self.bullets = []
+        self.second_bullets = []
+        self.third_bullets = []
 
     def check_collision(self):
         super().check_collision(100, 0, 0)
@@ -131,13 +134,21 @@ class Boss1(Enemy):
                 bullet_center_y - self.hit_img.get_height() / 2,
             ),
         )
-        if self.hp <= 50:  # Phase 2, wenn der Boss nur noch 50 HP hat
+        if self.hp <= 90:  # Phase 2, wenn der Boss nur noch 50 HP hat
             self.speed = 2  # Geschwindigkeit verdoppeln
             self.shot_interval = 1  # Schneller schießen
 
     def shoot(self):
         bullet = Boss1Bullet(self.game, self.x, self.y, direction="down")
         self.game.boss1_bullets.append(bullet)
+
+    def shoot_second(self):
+        bullet = Boss1SecondBullet(self.game, self.x, self.y, direction="down")
+        self.game.boss1_second_bullets.append(bullet)
+
+    def shoot_third(self):
+        bullet = Boss1ThirdBullet(self.game, self.x, self.y, direction="down")
+        self.game.boss1_third_bullets.append(bullet)
 
     def update(self):
         self.x += self.change_x * self.speed
@@ -184,24 +195,80 @@ class Boss1(Enemy):
         if time.time() - self.last_shot_time >= self.shot_interval:
             self.shoot()
             self.last_shot_time = time.time()
+            self.shot_interval = random.randint(1, 2)
+
+        if time.time() - self.last_shot_time2 >= self.shot_interval and self.hp <= 90:
+            self.shoot_second()
+            self.last_shot_time2 = time.time()
+            self.shot_interval = random.randint(1, 2)
+
+        if time.time() - self.last_shot_time3 >= self.shot_interval and self.hp <= 80:
+            self.shoot_third()
+            self.last_shot_time3 = time.time()
+            self.shot_interval = random.randint(1, 2)
 
 
-class Boss1Bullet(Bullet):
+class Boss1Bullet:
     def __init__(self, game, x, y, direction="down"):
-        super().__init__(game, x, y, direction)
+        self.game = game
+        self.x = x
+        self.y = y
+        self.direction = direction
         self.bullet_img = pygame.image.load("assets/bullet.png")
         self.speed = 2
         self.damage = 1
 
     def update(self):
-        super().update()
-
         if self.direction == "up":
             self.y -= self.speed
         elif self.direction == "down":
             self.y += self.speed
 
-        self.game.screen.blit(self.bullet_img, (self.x, self.y))
+        self.game.screen.blit(self.bullet_img, (self.x + 120, self.y + 135))
 
         if self.y > self.game.screen.get_height():
             self.game.boss1_bullets.remove(self)
+
+
+class Boss1SecondBullet:
+    def __init__(self, game, x, y, direction="down"):
+        self.game = game
+        self.x = x
+        self.y = y
+        self.direction = direction
+        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.speed = 3
+        self.damage = 2
+
+    def update(self):
+        if self.direction == "up":
+            self.y -= self.speed
+        elif self.direction == "down":
+            self.y += self.speed
+
+        self.game.screen.blit(self.bullet_img, (self.x + 60, self.y + 130))
+
+        if self.y > self.game.screen.get_height():
+            self.game.boss1_second_bullets.remove(self)
+
+
+class Boss1ThirdBullet:
+    def __init__(self, game, x, y, direction="down"):
+        self.game = game
+        self.x = x
+        self.y = y
+        self.direction = direction
+        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.speed = 3
+        self.damage = 2
+
+    def update(self):
+        if self.direction == "up":
+            self.y -= self.speed
+        elif self.direction == "down":
+            self.y += self.speed
+
+        self.game.screen.blit(self.bullet_img, (self.x + 180, self.y + 130))
+
+        if self.y > self.game.screen.get_height():
+            self.game.boss1_third_bullets.remove(self)

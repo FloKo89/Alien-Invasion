@@ -37,6 +37,8 @@ class Game:
         self.enemies_vertikal = []
         self.boss1 = []
         self.boss1_bullets = []
+        self.boss1_second_bullets = []
+        self.boss1_third_bullets = []
 
     def generate_enemy_position(self, enemies, min_distance=10):
         while True:
@@ -73,7 +75,7 @@ class Game:
             for enemy in self.enemies_horizontal:
                 enemy.update()
                 enemy.check_collision()
-                if enemy.y > 460:
+                if enemy.y > 500:
                     for i in self.enemies_horizontal + self.enemies_vertikal:
                         i.y = 1000
                     self.game_over = True
@@ -84,7 +86,7 @@ class Game:
             for enemy in self.enemies_vertikal:
                 enemy.update()
                 enemy.check_collision()
-                if enemy.y > 460:
+                if enemy.y > 500:
                     for i in self.enemies_vertikal + self.enemies_horizontal:
                         i.y = 1000
                     self.game_over = True
@@ -95,7 +97,7 @@ class Game:
             for enemy in self.boss1:
                 enemy.update()
                 enemy.check_collision()
-                if enemy.y > 460:
+                if enemy.y > 500:
                     for i in self.boss1:
                         i.y = 1000
                     self.game_over = True
@@ -105,8 +107,20 @@ class Game:
 
             for bullet in self.boss1_bullets:
                 bullet.update()
-                if bullet.y > 460:
+                if bullet.y > 560:
                     self.boss1_bullets.remove(bullet)
+                    break
+
+            for bullet in self.boss1_second_bullets:
+                bullet.update()
+                if bullet.y > 560:
+                    self.boss1_second_bullets.remove(bullet)
+                    break
+
+            for bullet in self.boss1_third_bullets:
+                bullet.update()
+                if bullet.y > 560:
+                    self.boss1_third_bullets.remove(bullet)
                     break
 
             self.handle_events()
