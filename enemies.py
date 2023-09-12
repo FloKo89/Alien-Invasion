@@ -29,7 +29,7 @@ class Enemy:
             )
             distance = math.hypot(
                 bullet_center_x - enemy_center_x, bullet_center_y - enemy_center_y
-            )
+            )  #
 
             if distance <= radius:
                 self.collision_response(bullet_center_x, bullet_center_y)
@@ -260,8 +260,8 @@ class Boss1(Enemy):
 class Boss1Bullet:
     def __init__(self, game, x, y, direction="down"):
         self.game = game
-        self.x = x
-        self.y = y
+        self.x = x + 120
+        self.y = y + 135
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/bullet.png")
         self.speed = 2
@@ -273,7 +273,7 @@ class Boss1Bullet:
         elif self.direction == "down":
             self.y += self.speed
 
-        self.game.screen.blit(self.bullet_img, (self.x + 120, self.y + 135))
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
 
         if self.y > self.game.screen.get_height():
             self.game.boss1_bullets.remove(self)
@@ -282,8 +282,8 @@ class Boss1Bullet:
 class Boss1SecondBullet:
     def __init__(self, game, x, y, direction="down"):
         self.game = game
-        self.x = x
-        self.y = y
+        self.x = x + 60
+        self.y = y + 130
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/boss1_second_bullet.png")
         self.speed = 3
@@ -295,7 +295,7 @@ class Boss1SecondBullet:
         elif self.direction == "down":
             self.y += self.speed
 
-        self.game.screen.blit(self.bullet_img, (self.x + 60, self.y + 130))
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
 
         if self.y > self.game.screen.get_height():
             self.game.boss1_second_bullets.remove(self)
@@ -304,8 +304,8 @@ class Boss1SecondBullet:
 class Boss1ThirdBullet:
     def __init__(self, game, x, y, direction="down"):
         self.game = game
-        self.x = x
-        self.y = y
+        self.x = x + 200
+        self.y = y + 130
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/boss1_third_bullet.png")
         self.speed = 3
@@ -317,7 +317,7 @@ class Boss1ThirdBullet:
         elif self.direction == "down":
             self.y += self.speed
 
-        self.game.screen.blit(self.bullet_img, (self.x + 180, self.y + 130))
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
 
         if self.y > self.game.screen.get_height():
             self.game.boss1_third_bullets.remove(self)

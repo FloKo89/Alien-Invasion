@@ -58,12 +58,14 @@ class Game:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            # play_video_background(self, self.cap)
-            self.screen.fill((0, 0, 0))
+            play_video_background(self, self.cap)
+            # self.screen.fill((0, 0, 0))
             level_check(self)
             self.spaceship.update()
+            self.spaceship.check_collision(radius=35)
             self.print_score()
             self.print_level()
+            self.handle_events()
 
             if len(self.spaceship.bullets) > 0:
                 for bullet in self.spaceship.bullets:
@@ -122,8 +124,6 @@ class Game:
                 if bullet.y > 560:
                     self.boss1_third_bullets.remove(bullet)
                     break
-
-            self.handle_events()
 
             pygame.display.update()
 

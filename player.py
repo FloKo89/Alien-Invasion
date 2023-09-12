@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 class Spaceship:
@@ -8,6 +9,8 @@ class Spaceship:
         self.change_x = 0
         self.game = game
         self.spaceship_img = pygame.image.load("assets/spaceship1.png")
+        self.hit_img = pygame.image.load("assets/explosion2.png")
+        self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
         self.bullets = []
 
     def move(self, speed):
@@ -24,6 +27,49 @@ class Spaceship:
     def fire_bullet(self):
         self.bullets.append(Bullet(self.game, self.x, self.y))
         self.bullets[len(self.bullets) - 1].fired()
+
+    def check_collision(self, radius, bullet_offset=0, spaceship_offset=0):
+        all_bullets = (
+            self.game.boss1_bullets
+            + self.game.boss1_second_bullets
+            + self.game.boss1_third_bullets
+        )
+
+        for bullet in all_bullets:
+            spaceship_center_x = self.x + self.spaceship_img.get_width() / 2
+            spaceship_center_y = self.y + self.spaceship_img.get_height() / 2
+            bullet_center_x = (
+                bullet.x + bullet.bullet_img.get_width() / 2 + bullet_offset
+            )
+            bullet_center_y = (
+                bullet.y + bullet.bullet_img.get_height() / 2 + spaceship_offset
+            )
+            distance = math.hypot(
+                spaceship_center_x - bullet_center_x,
+                spaceship_center_y - bullet_center_y,
+            )
+
+            if distance <= radius:
+                self.collision_response(bullet_center_x, bullet_center_y)
+                bullet.is_fired = False
+                pygame.mixer.Sound.play(self.hit_sound)
+
+                # Bullet aus der entsprechenden Liste entfernen
+                if bullet in self.game.boss1_bullets:
+                    self.game.boss1_bullets.remove(bullet)
+                elif bullet in self.game.boss1_second_bullets:
+                    self.game.boss1_second_bullets.remove(bullet)
+                elif bullet in self.game.boss1_third_bullets:
+                    self.game.boss1_third_bullets.remove(bullet)
+
+    def collision_response(self, bullet_center_x, bullet_center_y):
+        self.game.screen.blit(
+            self.hit_img,
+            (
+                bullet_center_x - self.hit_img.get_width() / 2,
+                bullet_center_y - self.hit_img.get_height() / 2,
+            ),
+        )
 
 
 class Bullet:
