@@ -115,6 +115,7 @@ class Boss1(Enemy):
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
         self.hp = 100
+        self.phase = 1
         self.bullets = []
         self.second_bullets = []
         self.third_bullets = []
@@ -163,8 +164,10 @@ class Boss1(Enemy):
         font = pygame.font.SysFont(
             None, 24
         )  # Sie können hier auch eine benutzerdefinierte Schriftart wählen
-        hp_text = font.render(f"HP: {self.hp}", True, (255, 255, 255))
-        self.game.screen.blit(hp_text, (margin_x + bar_width + 10, margin_y))
+        hp_text = font.render(
+            f"HP: {self.hp} " + f" Phase: {self.phase}", True, (255, 255, 255)
+        )
+        self.game.screen.blit(hp_text, (margin_x + 35, margin_y + 3))
 
     def check_collision(self):
         super().check_collision(100, 0, 0)
@@ -181,9 +184,6 @@ class Boss1(Enemy):
                 bullet_center_y - self.hit_img.get_height() / 2,
             ),
         )
-        if self.hp <= 90:  # Phase 2, wenn der Boss nur noch 50 HP hat
-            self.speed = 2  # Geschwindigkeit verdoppeln
-            self.shot_interval = 1  # Schneller schießen
 
     def shoot(self):
         bullet = Boss1Bullet(self.game, self.x, self.y, direction="down")
@@ -227,34 +227,54 @@ class Boss1(Enemy):
             self.acceleration = 0.1
 
         if (
-            time.time() - self.last_shield_renewal >= 12
+            time.time() - self.last_shield_renewal >= 12 and self.hp > 0
         ):  # Wenn 12 Sekunden vergangen sind
             self.shield_strength = self.max_shield_strength  # Schild wird erneuert
-            self.last_shield_renewal = (
-                time.time()
-            )  # Zeitpunkt der Erneuerung wird gespeichert
+            self.last_shield_renewal = time.time()
+            # Zeitpunkt der Erneuerung wird gespeichert
 
         if self.shield_strength > 0:  # Wenn der Schild noch nicht 0 erreicht hat
             self.game.screen.blit(
                 self.shield_img, (self.x - 20, self.y - 20)
             )  # Schild wird gezeichnet
 
-        if time.time() - self.last_shot_time >= self.shot_interval:
+        if time.time() - self.last_shot_time >= self.shot_interval and self.hp > 0:
             self.shoot()
             self.last_shot_time = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if time.time() - self.last_shot_time2 >= self.shot_interval and self.hp <= 90:
+        if (
+            time.time() - self.last_shot_time2 >= self.shot_interval
+            and self.phase >= 2
+            and self.hp > 0
+        ):
             self.shoot_second()
             self.last_shot_time2 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if time.time() - self.last_shot_time3 >= self.shot_interval and self.hp <= 80:
+        if (
+            time.time() - self.last_shot_time3 >= self.shot_interval
+            and self.phase == 3
+            and self.hp > 0
+        ):
             self.shoot_third()
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        self.draw_health_bar()
+        if self.hp > 0:
+            self.draw_health_bar()
+
+        if self.hp >= 80:  # Wenn der Boss 90% seiner HP verloren hat
+            self.speed = 2  # Geschwindigkeit verdoppeln
+            self.phase = 1
+        elif self.hp >= 50:
+            self.speed = 3
+            self.phase = 2
+        elif self.hp > 0:
+            self.speed = 4
+            self.phase = 3
+        else:
+            self.speed = 0
 
 
 class Boss1Bullet:
@@ -264,7 +284,7 @@ class Boss1Bullet:
         self.y = y + 135
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/bullet.png")
-        self.speed = 2
+        self.speed = 4
         self.damage = 1
 
     def update(self):
@@ -286,7 +306,7 @@ class Boss1SecondBullet:
         self.y = y + 130
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/boss1_second_bullet.png")
-        self.speed = 3
+        self.speed = 2
         self.damage = 2
 
     def update(self):
@@ -308,7 +328,7 @@ class Boss1ThirdBullet:
         self.y = y + 130
         self.direction = direction
         self.bullet_img = pygame.image.load("assets/boss1_third_bullet.png")
-        self.speed = 3
+        self.speed = 2
         self.damage = 2
 
     def update(self):
