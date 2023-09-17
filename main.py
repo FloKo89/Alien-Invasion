@@ -58,8 +58,8 @@ class Game:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            play_video_background(self, self.cap)
-            # self.screen.fill((0, 0, 0))
+            # play_video_background(self, self.cap)
+            self.screen.fill((0, 0, 0))
             level_check(self)
             self.spaceship.update()
             self.spaceship.check_collision(radius=35)

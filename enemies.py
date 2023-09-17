@@ -102,11 +102,13 @@ class Boss1(Enemy):
         self.change_y = random.choice([-0.5, 0.5])
         self.speed = 1
         self.acceleration = 0.5
-        self.score = 0
+        self.score = 100
         self.hit_img = pygame.image.load("assets/explosion1.png")
-        self.enemy_img = pygame.image.load("assets/Boss1.png")
-        self.shield_img = pygame.image.load("assets/boss1_shield.png")
+        self.enemy_img = pygame.image.load("assets/Boss1/Boss1.png")
+        self.shield_img = pygame.image.load("assets/Boss1/boss1_shield.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.is_dying_sound = pygame.mixer.Sound("sound/Boss1_explosion.wav")
+        self.death_sound_played = False
         self.shield_strength = 10
         self.max_shield_strength = 10
         self.last_shield_renewal = time.time()
@@ -114,7 +116,15 @@ class Boss1(Enemy):
         self.last_shot_time2 = time.time()
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
-        self.hp = 100
+        self.hp = 1
+        N = 100
+        self.death_animation_imgs = [
+            pygame.image.load(f"assets/Boss1/death/Boss1_death{i}.png")
+            for i in range(1, N + 1)
+        ]
+        self.is_dying = False
+        self.death_frame_index = 0
+        self.last_death_animation_time = time.time()
         self.phase = 1
         self.bullets = []
         self.second_bullets = []
@@ -175,7 +185,6 @@ class Boss1(Enemy):
     def collision_response(self, bullet_center_x, bullet_center_y):
         self.shield_strength -= 1
         if self.shield_strength <= 0:
-            self.game.score += self.score
             self.hp -= 1
         self.game.screen.blit(
             self.hit_img,
@@ -275,6 +284,37 @@ class Boss1(Enemy):
             self.phase = 3
         else:
             self.speed = 0
+            self.is_dying = True
+
+        if self.is_dying:
+            if not self.death_sound_played:
+                pygame.mixer.Sound.play(self.is_dying_sound)
+                self.death_sound_played = True
+            # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
+            if time.time() - self.last_death_animation_time > 0.1:
+                self.death_frame_index += 1
+                self.last_death_animation_time = time.time()
+
+            # Zeigt den aktuellen Frame der Sterbeanimation
+            if self.death_frame_index < len(self.death_animation_imgs):
+                if self.death_frame_index >= len(self.death_animation_imgs) - 50:
+                    offset_x = -350  # Beispielwert
+                    offset_y = -250  # Beispielwert
+                    self.game.screen.blit(
+                        self.death_animation_imgs[self.death_frame_index],
+                        (self.x + offset_x, self.y + offset_y),
+                    )
+                else:
+                    self.game.screen.blit(
+                        self.death_animation_imgs[self.death_frame_index],
+                        (self.x, self.y),
+                    )
+            else:
+                # Beenden Sie die Sterbeanimation und entfernen Sie den Boss
+                # Hier können Sie auch andere Logik hinzufügen, z.B. den Spieler belohnen oder zum nächsten Level wechseln
+                self.is_dying = False
+                self.game.boss1.remove(self)
+                self.game.score += self.score
 
 
 class Boss1Bullet:
@@ -305,7 +345,7 @@ class Boss1SecondBullet:
         self.x = x + 60
         self.y = y + 130
         self.direction = direction
-        self.bullet_img = pygame.image.load("assets/boss1_second_bullet.png")
+        self.bullet_img = pygame.image.load("assets/Boss1/boss1_second_bullet.png")
         self.speed = 2
         self.damage = 2
 
@@ -327,7 +367,7 @@ class Boss1ThirdBullet:
         self.x = x + 200
         self.y = y + 130
         self.direction = direction
-        self.bullet_img = pygame.image.load("assets/boss1_third_bullet.png")
+        self.bullet_img = pygame.image.load("assets/Boss1/boss1_third_bullet.png")
         self.speed = 2
         self.damage = 2
 
