@@ -117,7 +117,7 @@ class Boss1(Enemy):
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
         self.hp = 1
-        N = 100
+        N = 50
         self.death_animation_imgs = [
             pygame.image.load(f"assets/Boss1/death/Boss1_death{i}.png")
             for i in range(1, N + 1)
@@ -291,15 +291,15 @@ class Boss1(Enemy):
                 pygame.mixer.Sound.play(self.is_dying_sound)
                 self.death_sound_played = True
             # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
-            if time.time() - self.last_death_animation_time > 0.1:
+            if time.time() - self.last_death_animation_time > 0.2:
                 self.death_frame_index += 1
                 self.last_death_animation_time = time.time()
 
             # Zeigt den aktuellen Frame der Sterbeanimation
             if self.death_frame_index < len(self.death_animation_imgs):
-                if self.death_frame_index >= len(self.death_animation_imgs) - 50:
-                    offset_x = -350  # Beispielwert
-                    offset_y = -250  # Beispielwert
+                if self.death_frame_index >= len(self.death_animation_imgs) - 25:
+                    offset_x = -375  # Beispielwert
+                    offset_y = -280  # Beispielwert
                     self.game.screen.blit(
                         self.death_animation_imgs[self.death_frame_index],
                         (self.x + offset_x, self.y + offset_y),
