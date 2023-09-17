@@ -221,6 +221,25 @@ class Game:
         )
         self.screen.blit(level_text, (700, 8))
 
+    def reset(self):
+        self.game_over = False
+        self.game_over_sound_played = False
+        self.score = 0
+        self.level = 0
+        self.running = True
+        self.spaceship = Spaceship(self, 370, 515)
+        self.update_enemies()  # Setzen Sie die Gegner zurück
+        self.change_background_music()
+        self.change_background_video()
+        self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
+        self.last_video_update = pygame.time.get_ticks()
+        self.enemies_horizontal = []
+        self.enemies_vertikal = []
+        self.boss1 = []
+        self.boss1_bullets = []
+        self.boss1_second_bullets = []
+        self.boss1_third_bullets = []
+
 
 if __name__ == "__main__":
     game = Game(800, 600)

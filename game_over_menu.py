@@ -1,4 +1,7 @@
 import pygame
+from menu import main_menu
+
+clock = pygame.time.Clock()
 
 
 def game_over_menu(game):
@@ -46,5 +49,24 @@ def game_over_menu(game):
             game.screen.blit(
                 menu_text, (game.width // 2 - menu_text.get_width() // 2, y_position)
             )
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_over_running = False
+                game.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    selected_item = (selected_item + 1) % len(menu_items)
+                if event.key == pygame.K_UP:
+                    selected_item = (selected_item - 1) % len(menu_items)
+                if event.key == pygame.K_RETURN:
+                    if selected_item == 0:  # "Neustart" wurde ausgewählt
+                        # Füge hier die Logik zum Neustarten des Spiels hinzu
+                        return
+                    elif selected_item == 1:  # "Hauptmenü" wurde ausgewählt
+                        main_menu(game, clock)
+                        return
+                    elif selected_item == 2:  # "Beenden" wurde ausgewählt
+                        game_over_running = False
+                        game.running = False
 
         pygame.display.update()

@@ -1,7 +1,6 @@
 import pygame
 import cv2
 
-
 clock = pygame.time.Clock()
 
 
@@ -65,6 +64,8 @@ def main_menu(game, clock):
                 if event.key == pygame.K_RETURN:
                     if selected_item == 0:  # "Spiel starten" wurde ausgewählt
                         cap.release()
+                        game.reset()
+                        game.run()
                         return
                     elif selected_item == 1:  # "Beenden" wurde ausgewählt
                         cap.release()
