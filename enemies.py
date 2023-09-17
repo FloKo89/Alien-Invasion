@@ -209,7 +209,9 @@ class Boss1(Enemy):
     def update(self):
         self.x += self.change_x * self.speed
         self.y += self.change_y * self.speed
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))
+
+        if self.death_frame_index <= len(self.death_animation_imgs) - 25:
+            self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
         # Wenn der Boss den rechten Rand erreicht, ändern Sie die Richtung
         if self.x + self.enemy_img.get_width() >= self.game.screen.get_width():
