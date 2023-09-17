@@ -108,19 +108,19 @@ class Game:
 
             for bullet in self.boss1_bullets:
                 bullet.update()
-                if bullet.y > 560:
+                if bullet.y > 580:
                     self.boss1_bullets.remove(bullet)
                     break
 
             for bullet in self.boss1_second_bullets:
                 bullet.update()
-                if bullet.y > 560:
+                if bullet.y > 580:
                     self.boss1_second_bullets.remove(bullet)
                     break
 
             for bullet in self.boss1_third_bullets:
                 bullet.update()
-                if bullet.y > 560:
+                if bullet.y > 580:
                     self.boss1_third_bullets.remove(bullet)
                     break
 

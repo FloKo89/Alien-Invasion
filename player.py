@@ -52,7 +52,6 @@ class Spaceship:
             if distance <= radius:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
-                pygame.mixer.Sound.play(self.hit_sound)
 
                 # Bullet aus der entsprechenden Liste entfernen
                 if bullet in self.game.boss1_bullets:
@@ -70,6 +69,8 @@ class Spaceship:
                 bullet_center_y - self.hit_img.get_height() / 2,
             ),
         )
+        pygame.mixer.Sound.play(self.hit_sound)
+        self.game.game_over = True
 
     def get_rect(self):
         return pygame.Rect(
