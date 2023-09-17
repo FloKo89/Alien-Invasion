@@ -7,6 +7,7 @@ from enemies import Enemy_horizontal, Enemy_vertikal, Boss1
 from menu import main_menu, play_video_background
 from player import Spaceship
 from levels import levels, level_check
+from game_over_menu import game_over_menu
 
 pygame.init()
 
@@ -67,6 +68,8 @@ class Game:
             self.print_level()
             self.handle_events()
 
+            spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
+
             if len(self.spaceship.bullets) > 0:
                 for bullet in self.spaceship.bullets:
                     if bullet.is_fired == True:
@@ -78,33 +81,29 @@ class Game:
                 enemy.update()
                 enemy.check_collision()
                 if enemy.y > 500:
-                    for i in self.enemies_horizontal + self.enemies_vertikal:
-                        i.y = 1000
-                    self.game_over = True
-                    self.print_game_over()
-                    self.check_game_over()
-                    break
+                    for i in self.enemies_horizontal:
+                        self.game_over = True
+                        self.check_game_over()
+                        break
 
             for enemy in self.enemies_vertikal:
                 enemy.update()
                 enemy.check_collision()
                 if enemy.y > 500:
-                    for i in self.enemies_vertikal + self.enemies_horizontal:
-                        i.y = 1000
-                    self.game_over = True
-                    self.print_game_over()
-                    self.check_game_over()
-                    break
+                    for i in self.enemies_vertikal:
+                        self.game_over = True
+                        self.check_game_over()
+                        break
 
-            for enemy in self.boss1:
-                enemy.update()
-                enemy.check_collision()
-                if enemy.y > 500:
-                    for i in self.boss1:
-                        i.y = 1000
+            for boss in self.boss1:
+                boss.update()
+                boss.check_collision()
+                boss_rect = boss.get_rect().inflate(-60, -60)
+
+                if boss_rect.colliderect(spaceship_rect):
                     self.game_over = True
-                    self.print_game_over()
                     self.check_game_over()
+                    self.running = False
                     break
 
             for bullet in self.boss1_bullets:
@@ -201,6 +200,7 @@ class Game:
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
+            self.print_game_over()
 
     def print_game_over(self):
         go_font = pygame.font.Font("freesansbold.ttf", 64)
@@ -228,4 +228,8 @@ if __name__ == "__main__":
     main_menu(game, game.clock)
     game.update_enemies()
     game.run()
+
+    if game.game_over:
+        game_over_menu(game)
+
     pygame.quit()

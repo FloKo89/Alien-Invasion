@@ -35,6 +35,7 @@ class Enemy:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
                 pygame.mixer.Sound.play(self.hit_sound)
+                self.game.spaceship.bullets.remove(bullet)
 
     def collision_response(self, bullet_center_x, bullet_center_y):
         self.game.screen.blit(
@@ -192,6 +193,11 @@ class Boss1(Enemy):
                 bullet_center_x - self.hit_img.get_width() / 2,
                 bullet_center_y - self.hit_img.get_height() / 2,
             ),
+        )
+
+    def get_rect(self):
+        return pygame.Rect(
+            self.x, self.y, self.enemy_img.get_width(), self.enemy_img.get_height()
         )
 
     def shoot(self):

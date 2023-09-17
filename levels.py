@@ -7,12 +7,6 @@ levels = {
     },
     1: {
         "enemies": [
-            # {"type": "horizontal"},
-            # {"type": "horizontal"},
-            # {"type": "horizontal"},
-            # {"type": "horizontal"},
-            # {"type": "vertical"},
-            # {"type": "vertical"},
             {"type": "boss1"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
@@ -26,6 +20,8 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
         ],
@@ -41,10 +37,13 @@ levels = {
             {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
         ],
         "background_video": "movie/level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,
+        "num_enemies": 12,
     },
     4: {
         "enemies": [
@@ -54,23 +53,21 @@ levels = {
             {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
         ],
         "background_video": "movie/level4.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,
+        "num_enemies": 15,
     },
     5: {
         "enemies": [
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "vertical"},
-            {"type": "vertical"},
+            {"type": "boss1"},
         ],
         "background_video": "movie/level5.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,
+        "num_enemies": 1,
     },
     6: {
         "enemies": [
@@ -82,7 +79,7 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level6.mp4",
-        "background_music": "sound/bg_music_6-10.mpeg",
+        "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 10,
     },
     7: {
@@ -95,7 +92,7 @@ levels = {
             {"type": "vertical"},
         ],
         "background_video": "movie/level7.mp4",
-        "background_music": "sound/bg_music_6-10.mpeg",
+        "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 10,
     },
 }
@@ -103,19 +100,19 @@ levels = {
 
 def level_check(self):
     current_level = self.level
-    if self.score < 30:
+    if self.score < 50:
         self.level = 1
-    elif self.score >= 30 and self.score < 50:
+    elif self.score >= 50 and self.score < 100:
         self.level = 2
-    elif self.score >= 50 and self.score < 70:
+    elif self.score >= 100 and self.score < 150:
         self.level = 3
-    elif self.score >= 70 and self.score < 90:
+    elif self.score >= 150 and self.score < 200:
         self.level = 4
-    elif self.score >= 90 and self.score < 110:
+    elif self.score >= 200 and self.score < 300:
         self.level = 5
-    elif self.score >= 110 and self.score < 130:
+    elif self.score >= 300 and self.score < 350:
         self.level = 6
-    elif self.score >= 130 and self.score < 150:
+    elif self.score >= 350 and self.score < 400:
         self.level = 7
     # ... (restlichen Level-Checks)
 

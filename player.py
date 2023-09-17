@@ -71,6 +71,14 @@ class Spaceship:
             ),
         )
 
+    def get_rect(self):
+        return pygame.Rect(
+            self.x,
+            self.y,
+            self.spaceship_img.get_width(),
+            self.spaceship_img.get_height(),
+        )
+
 
 class Bullet:
     def __init__(self, game, x, y, direction="up"):
