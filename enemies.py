@@ -34,7 +34,7 @@ class Enemy:
             if distance <= radius:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
-                pygame.mixer.Sound.play(self.hit_sound)
+                random.choice(self.hit_sounds).play()
                 self.game.spaceship.bullets.remove(bullet)
 
     def collision_response(self, bullet_center_x, bullet_center_y):
@@ -57,7 +57,15 @@ class Enemy_horizontal(Enemy):
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/enemy1_horizontal.png")
         self.hit_img = pygame.image.load("assets/explosion1.png")
-        self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.hit_sounds = [
+            pygame.mixer.Sound("sound/enemy_explosion1.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion2.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion3.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion4.wav"),
+        ]
+        volume = 0.5
+        for sound in self.hit_sounds:
+            sound.set_volume(volume)
         self.score = 1
 
     def check_collision(self):
@@ -80,7 +88,15 @@ class Enemy_vertikal(Enemy):
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/enemy1_vertical.png")
         self.hit_img = pygame.image.load("assets/explosion2.png")
-        self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.hit_sounds = [
+            pygame.mixer.Sound("sound/enemy_explosion1.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion2.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion3.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion4.wav"),
+        ]
+        volume = 0.5
+        for sound in self.hit_sounds:
+            sound.set_volume(volume)
         self.score = 2
 
     def check_collision(self):
@@ -107,7 +123,24 @@ class Boss1(Enemy):
         self.hit_img = pygame.image.load("assets/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1/Boss1.png")
         self.shield_img = pygame.image.load("assets/Boss1/boss1_shield.png")
-        self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.hit_sounds = [
+            pygame.mixer.Sound("sound/enemy_explosion1.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion2.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion3.wav"),
+            pygame.mixer.Sound("sound/enemy_explosion4.wav"),
+        ]
+        volume = 0.5
+        for sound in self.hit_sounds:
+            sound.set_volume(volume)
+        self.bullet_sound = pygame.mixer.Sound("sound/Boss1_bullet.wav")
+        self.second_bullet_sound = pygame.mixer.Sound(
+            "sound/Boss1_second_and_third_bullet.wav"
+        )
+        self.second_bullet_sound.set_volume(0.1)
+        self.third_bullet_sound = pygame.mixer.Sound(
+            "sound/Boss1_second_and_third_bullet.wav"
+        )
+        self.third_bullet_sound.set_volume(0.1)
         self.is_dying_sound = pygame.mixer.Sound("sound/Boss1_explosion.wav")
         self.death_sound_played = False
         self.shield_strength = 10
@@ -203,14 +236,19 @@ class Boss1(Enemy):
     def shoot(self):
         bullet = Boss1Bullet(self.game, self.x, self.y, direction="down")
         self.game.boss1_bullets.append(bullet)
+        pygame.mixer.Sound.play(
+            self.bullet_sound,
+        )
 
     def shoot_second(self):
         bullet = Boss1SecondBullet(self.game, self.x, self.y, direction="down")
         self.game.boss1_second_bullets.append(bullet)
+        pygame.mixer.Sound.play(self.second_bullet_sound)
 
     def shoot_third(self):
         bullet = Boss1ThirdBullet(self.game, self.x, self.y, direction="down")
         self.game.boss1_third_bullets.append(bullet)
+        pygame.mixer.Sound.play(self.third_bullet_sound)
 
     def update(self):
         self.x += self.change_x * self.speed

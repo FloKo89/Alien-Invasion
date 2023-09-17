@@ -11,6 +11,7 @@ class Spaceship:
         self.spaceship_img = pygame.image.load("assets/spaceship1.png")
         self.hit_img = pygame.image.load("assets/explosion2.png")
         self.hit_sound = pygame.mixer.Sound("sound/collision_sound.wav")
+        self.shoot_sound = pygame.mixer.Sound("sound/Boss1_bullet.wav")
         self.bullets = []
 
     def move(self, speed):
@@ -27,6 +28,7 @@ class Spaceship:
     def fire_bullet(self):
         self.bullets.append(Bullet(self.game, self.x, self.y))
         self.bullets[len(self.bullets) - 1].fired()
+        pygame.mixer.Sound.play(self.shoot_sound)
 
     def check_collision(self, radius, bullet_offset=0, spaceship_offset=0):
         all_bullets = (
