@@ -246,7 +246,6 @@ if __name__ == "__main__":
     game.change_background_music()
     main_menu(game, game.clock)
     game.update_enemies()
-    game.run()
 
     if game.game_over:
         game_over_menu(game)
