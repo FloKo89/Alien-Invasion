@@ -60,7 +60,8 @@ def game_over_menu(game):
                     selected_item = (selected_item - 1) % len(menu_items)
                 if event.key == pygame.K_RETURN:
                     if selected_item == 0:  # "Neustart" wurde ausgewählt
-                        # Füge hier die Logik zum Neustarten des Spiels hinzu
+                        game.reset()
+                        game.run()
                         return
                     elif selected_item == 1:  # "Hauptmenü" wurde ausgewählt
                         main_menu(game, clock)
