@@ -80,6 +80,14 @@ class Game:
             for enemy in self.enemies_horizontal:
                 enemy.update()
                 enemy.check_collision()
+                enemy_rect = enemy.get_rect()
+
+                if enemy_rect.colliderect(spaceship_rect):
+                    self.game_over = True
+                    self.check_game_over()
+                    self.running = False
+                    break
+
                 if enemy.y > 550:
                     for i in self.enemies_horizontal:
                         self.game_over = True
@@ -90,6 +98,14 @@ class Game:
             for enemy in self.enemies_vertikal:
                 enemy.update()
                 enemy.check_collision()
+                enemy_rect = enemy.get_rect()
+
+                if enemy_rect.colliderect(spaceship_rect):
+                    self.game_over = True
+                    self.check_game_over()
+                    self.running = False
+                    break
+
                 if enemy.y > 550:
                     for i in self.enemies_vertikal:
                         self.game_over = True
