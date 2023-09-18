@@ -80,19 +80,21 @@ class Game:
             for enemy in self.enemies_horizontal:
                 enemy.update()
                 enemy.check_collision()
-                if enemy.y > 500:
+                if enemy.y > 550:
                     for i in self.enemies_horizontal:
                         self.game_over = True
                         self.check_game_over()
+                        self.running = False
                         break
 
             for enemy in self.enemies_vertikal:
                 enemy.update()
                 enemy.check_collision()
-                if enemy.y > 500:
+                if enemy.y > 550:
                     for i in self.enemies_vertikal:
                         self.game_over = True
                         self.check_game_over()
+                        self.running = False
                         break
 
             for boss in self.boss1:

@@ -63,7 +63,7 @@ class Enemy_horizontal(Enemy):
             pygame.mixer.Sound("sound/enemy_explosion3.wav"),
             pygame.mixer.Sound("sound/enemy_explosion4.wav"),
         ]
-        volume = 0.5
+        volume = 0.3
         for sound in self.hit_sounds:
             sound.set_volume(volume)
         self.score = 1
