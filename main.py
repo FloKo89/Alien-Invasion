@@ -250,6 +250,6 @@ if __name__ == "__main__":
     main_menu(game, game.clock)
     game.update_enemies()
 
-    while game.game_over:
+    if game.game_over:
         game_over_menu(game)
         game.reset()
