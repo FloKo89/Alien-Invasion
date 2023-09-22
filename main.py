@@ -30,8 +30,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship(self, 370, 515)
         self.running = True
-        self.current_background_music = 0
-        self.menu_video = ["movie/menu_bg_movie.mp4"]
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
@@ -142,7 +140,7 @@ class Game:
             pygame.mixer.music.play(-1, 0.0, 5)
             pygame.mixer.music.set_volume(0.5)
 
-    def change_background_video(self):  # TODO: Fix this
+    def change_background_video(self):
         if self.level in levels:
             self.cap.release()
             self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
