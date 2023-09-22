@@ -76,5 +76,6 @@ def game_over_menu(game):
                         game_over_running = False
                         game.running = False
                         pygame.quit()
+                        exit()
 
         pygame.display.update()
