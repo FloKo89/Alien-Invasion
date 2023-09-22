@@ -60,14 +60,18 @@ def game_over_menu(game):
                     selected_item = (selected_item - 1) % len(menu_items)
                 if event.key == pygame.K_RETURN:
                     if selected_item == 0:  # "Neustart" wurde ausgewählt
+                        game_over_running = False
                         game.reset()
                         game.run()
                         return
                     elif selected_item == 1:  # "Hauptmenü" wurde ausgewählt
+                        game_over_running = False
+                        game.reset()
                         main_menu(game, clock)
                         return
                     elif selected_item == 2:  # "Beenden" wurde ausgewählt
                         game_over_running = False
                         game.running = False
+                        pygame.quit()
 
         pygame.display.update()

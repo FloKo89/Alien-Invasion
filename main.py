@@ -40,6 +40,7 @@ class Game:
         self.boss1_bullets = []
         self.boss1_second_bullets = []
         self.boss1_third_bullets = []
+        self.spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
 
     def generate_enemy_position(self, enemies, min_distance=10):
         while True:
@@ -67,8 +68,7 @@ class Game:
             self.print_score()
             self.print_level()
             self.handle_events()
-
-            spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
+            self.spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
 
             if len(self.spaceship.bullets) > 0:
                 for bullet in self.spaceship.bullets:
@@ -78,47 +78,19 @@ class Game:
                         self.spaceship.bullets.remove(bullet)
 
             for enemy in self.enemies_horizontal:
-                enemy.update()
-                enemy.check_collision()
-                enemy_rect = enemy.get_rect()
-
-                if enemy_rect.colliderect(spaceship_rect):
-                    self.game_over = True
-                    self.check_game_over()
-                    self.running = False
+                if self.check_collision_and_game_over(enemy):
                     break
-
-                if enemy.y > 550:
-                    for i in self.enemies_horizontal:
-                        self.game_over = True
-                        self.check_game_over()
-                        self.running = False
-                        break
 
             for enemy in self.enemies_vertikal:
-                enemy.update()
-                enemy.check_collision()
-                enemy_rect = enemy.get_rect()
-
-                if enemy_rect.colliderect(spaceship_rect):
-                    self.game_over = True
-                    self.check_game_over()
-                    self.running = False
+                if self.check_collision_and_game_over(enemy):
                     break
-
-                if enemy.y > 550:
-                    for i in self.enemies_vertikal:
-                        self.game_over = True
-                        self.check_game_over()
-                        self.running = False
-                        break
 
             for boss in self.boss1:
                 boss.update()
                 boss.check_collision()
                 boss_rect = boss.get_rect().inflate(-60, -60)
 
-                if boss_rect.colliderect(spaceship_rect):
+                if boss_rect.colliderect(self.spaceship_rect):
                     self.game_over = True
                     self.check_game_over()
                     self.running = False
@@ -214,6 +186,19 @@ class Game:
             elif enemy_type == "boss1":
                 self.boss1.append(Boss1(self, x, y))
 
+    def check_collision_and_game_over(self, enemy):
+        enemy.update()
+        enemy.check_collision()
+        enemy_rect = enemy.get_rect()
+
+        if enemy_rect.colliderect(self.spaceship_rect) or enemy.y > 550:
+            self.game_over = True
+            self.check_game_over()
+            self.running = False
+            return True
+
+        return False
+
     def check_game_over(self):
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
@@ -265,7 +250,6 @@ if __name__ == "__main__":
     main_menu(game, game.clock)
     game.update_enemies()
 
-    if game.game_over:
+    while game.game_over:
         game_over_menu(game)
-
-    pygame.quit()
+        game.reset()
