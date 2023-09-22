@@ -32,6 +32,7 @@ class Game:
         self.running = True
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
+        self.change_background_music()
         self.enemies_horizontal = []
         self.enemies_vertikal = []
         self.boss1 = []
@@ -195,13 +196,13 @@ class Game:
             self.running = False
             return True
 
-        return False
-
     def check_game_over(self):
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
             self.print_game_over()
+            game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
+            self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
 
     def print_game_over(self):
         go_font = pygame.font.Font("freesansbold.ttf", 64)
@@ -244,10 +245,9 @@ class Game:
 
 if __name__ == "__main__":
     game = Game(800, 600)
-    game.change_background_music()
-    main_menu(game, game.clock)
-    game.update_enemies()
 
-    if game.game_over:
-        game_over_menu(game)
+    while True:
+        main_menu(game, game.clock)
+        game.update_enemies()
+        game.run()
         game.reset()
