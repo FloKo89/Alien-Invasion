@@ -67,6 +67,8 @@ def main_menu(game, clock):
                         game.reset()
                         game.run()
                         return
+                    # elif selected_item == 1:  # "Steuerung" wurde ausgewählt
+
                     elif selected_item == 1:  # "Beenden" wurde ausgewählt
                         cap.release()
                         pygame.quit()

@@ -8,6 +8,7 @@ from menu import main_menu, play_video_background
 from player import Spaceship
 from levels import levels, level_check
 from game_over_menu import game_over_menu
+from pause_menu import pause_menu
 
 pygame.init()
 
@@ -118,7 +119,7 @@ class Game:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running = False
+                pygame.quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -133,6 +134,10 @@ class Game:
                     self.spaceship.move(10)
                 if event.key == pygame.K_RIGHT:
                     self.spaceship.move(-10)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    pause_menu(self, self.clock)
 
     def change_background_music(self):
         if self.level in levels:
