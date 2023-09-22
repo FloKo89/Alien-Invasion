@@ -42,17 +42,20 @@ def game_over_menu(game):
         menu_bg.fill((0, 0, 0))
         game.screen.blit(menu_bg, (0, 350))  # Zeichnet den Hintergrund
 
+        menu_font = pygame.font.Font("freesansbold.ttf", 32)
+
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)
-            menu_text = go_font.render(item, True, color)
-            y_position = 370 + index * 50  # Reduzierter Abstand zwischen den Einträgen
+            menu_text = menu_font.render(item, True, color)
+            y_position = 200 + index * 40  # Reduzierter Abstand zwischen den Einträgen
             game.screen.blit(
-                menu_text, (game.width // 2 - menu_text.get_width() // 2, y_position)
+                menu_text,
+                (game.width // 2 - menu_text.get_width() // 2, y_position + 250),
             )
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over_running = False
-                game.running = False
+                pygame.quit()
+                exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
                     selected_item = (selected_item + 1) % len(menu_items)
