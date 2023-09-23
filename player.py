@@ -1,6 +1,8 @@
 import pygame
 import math
 
+from enemies import *
+
 
 class Spaceship:
     def __init__(self, game, x, y):
@@ -13,6 +15,39 @@ class Spaceship:
         self.hit_sound = pygame.mixer.Sound("sound/enemy_explosion1.wav")
         self.shoot_sound = pygame.mixer.Sound("sound/Boss1_bullet.wav")
         self.bullets = []
+        self.hp = 4
+        self.hp_images = [
+            pygame.image.load("assets/Player/player_25_hp.png"),
+            pygame.image.load("assets/Player/player_50_hp.png"),
+            pygame.image.load("assets/Player/player_75_hp.png"),
+            pygame.image.load("assets/Player/player_100_hp.png"),
+        ]
+        self.last_damage_time = 0
+        self.blink_end_time = 0
+
+    def lose_life(self, damage=1):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_damage_time > 2000:
+            self.hp -= damage
+            self.last_damage_time = current_time
+            self.blink_end_time = current_time + 2000  # Blinken endet in 2 Sekunden
+            if self.hp <= 0:
+                self.game.game_over = True
+                self.game.check_game_over()
+                self.game.running = False
+                return True
+
+    def draw_lives(self, screen):
+        screen_width, _ = screen.get_size()
+        heart_img = self.hp_images[self.hp - 1]  # Da die Indizierung bei 0 beginnt
+
+        # Position des Herzens unten rechts
+        pos_x = screen_width - heart_img.get_width() - 10  # 10 Pixel Abstand vom Rand
+        pos_y = (
+            screen.get_height() - heart_img.get_height() - 10
+        )  # 10 Pixel Abstand vom Rand
+
+        screen.blit(heart_img, (pos_x, pos_y))
 
     def move(self, speed):
         self.change_x += speed
@@ -23,6 +58,14 @@ class Spaceship:
             self.x = 0
         elif self.x >= 736:
             self.x = 736
+
+        current_time = pygame.time.get_ticks()
+        if current_time < self.blink_end_time:
+            if (
+                current_time % 200 < 100
+            ):  # Ändern Sie die Zahl für die Blinkgeschwindigkeit
+                return  # Bild wird nicht gezeichnet, damit es aussieht, als würde es blinken
+
         self.game.screen.blit(self.spaceship_img, (self.x, self.y))
 
     def fire_bullet(self):
@@ -51,9 +94,11 @@ class Spaceship:
                 spaceship_center_y - bullet_center_y,
             )
 
-            if distance <= radius:
+            if distance <= radius:  # Sie können den Radius anpassen
                 self.collision_response(bullet_center_x, bullet_center_y)
-                bullet.is_fired = False
+                self.lose_life(
+                    bullet.damage
+                )  # Hier geben wir den Schadenswert des Projektils an die Methode weiter
 
                 # Bullet aus der entsprechenden Liste entfernen
                 if bullet in self.game.boss1_bullets:
@@ -63,7 +108,11 @@ class Spaceship:
                 elif bullet in self.game.boss1_third_bullets:
                     self.game.boss1_third_bullets.remove(bullet)
 
-    def collision_response(self, bullet_center_x, bullet_center_y):
+    def collision_response(
+        self,
+        bullet_center_x,
+        bullet_center_y,
+    ):
         self.game.screen.blit(
             self.hit_img,
             (
@@ -72,7 +121,6 @@ class Spaceship:
             ),
         )
         pygame.mixer.Sound.play(self.hit_sound)
-        self.game.game_over = True
 
     def get_rect(self):
         return pygame.Rect(

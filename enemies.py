@@ -16,6 +16,7 @@ class Enemy:
         self.hit_sound = None
         self.hit_img = None
         self.score = None
+        self.damage = 1
 
     def check_collision(self, radius, bullet_offset=0, enemy_offset=0):
         for bullet in self.game.spaceship.bullets:
@@ -35,7 +36,9 @@ class Enemy:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
                 random.choice(self.hit_sounds).play()
-                self.game.spaceship.bullets.remove(bullet)
+                self.game.spaceship.bullets.remove(
+                    bullet
+                )  # Übergeben Sie den Schadenswert hier
 
     def collision_response(self, bullet_center_x, bullet_center_y):
         self.game.screen.blit(

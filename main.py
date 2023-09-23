@@ -68,6 +68,7 @@ class Game:
             self.print_score()
             self.print_level()
             self.handle_events()
+            self.spaceship.draw_lives(self.screen)
             self.spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
 
             if len(self.spaceship.bullets) > 0:
@@ -91,9 +92,7 @@ class Game:
                 boss_rect = boss.get_rect().inflate(-60, -60)
 
                 if boss_rect.colliderect(self.spaceship_rect):
-                    self.game_over = True
-                    self.check_game_over()
-                    self.running = False
+                    self.spaceship.lose_life(boss.damage)
                     break
 
             for bullet in self.boss1_bullets:
@@ -196,10 +195,7 @@ class Game:
         enemy_rect = enemy.get_rect()
 
         if enemy_rect.colliderect(self.spaceship_rect) or enemy.y > 550:
-            self.game_over = True
-            self.check_game_over()
-            self.running = False
-            return True
+            self.spaceship.lose_life(enemy.damage)
 
     def check_game_over(self):
         if self.game_over and not self.game_over_sound_played:
