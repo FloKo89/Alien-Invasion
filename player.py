@@ -73,7 +73,7 @@ class Spaceship:
         self.bullets[len(self.bullets) - 1].fired()
         pygame.mixer.Sound.play(self.shoot_sound)
 
-    def check_collision(self, radius, bullet_offset=0, spaceship_offset=0):
+    def check_collision(self, radius):
         all_bullets = (
             self.game.boss1_bullets
             + self.game.boss1_second_bullets
@@ -83,12 +83,8 @@ class Spaceship:
         for bullet in all_bullets:
             spaceship_center_x = self.x + self.spaceship_img.get_width() / 2
             spaceship_center_y = self.y + self.spaceship_img.get_height() / 2
-            bullet_center_x = (
-                bullet.x + bullet.bullet_img.get_width() / 2 + bullet_offset
-            )
-            bullet_center_y = (
-                bullet.y + bullet.bullet_img.get_height() / 2 + spaceship_offset
-            )
+            bullet_center_x = bullet.x + bullet.bullet_img.get_width() / 2
+            bullet_center_y = bullet.y + bullet.bullet_img.get_height() / 2
             distance = math.hypot(
                 spaceship_center_x - bullet_center_x,
                 spaceship_center_y - bullet_center_y,
