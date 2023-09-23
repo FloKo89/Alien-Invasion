@@ -155,7 +155,7 @@ class Boss1(Enemy):
         self.last_shot_time2 = time.time()
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
-        self.hp = 1
+        self.hp = 100
         N = 50
         self.death_animation_imgs = [
             pygame.image.load(f"assets/Boss1/death/Boss1_death{i}.png")
@@ -233,12 +233,17 @@ class Boss1(Enemy):
             ),
         )
 
-    def shoot(self):
-        bullet = Boss1Bullet(self.game, self.x, self.y, direction="down")
+    def spawn_bullet(self, change_x, change_y):
+        bullet = Boss1Bullet(self.game, self.x, self.y, change_x, change_y)
         self.game.boss1_bullets.append(bullet)
-        pygame.mixer.Sound.play(
-            self.bullet_sound,
-        )
+        pygame.mixer.Sound.play(self.bullet_sound)
+
+    def shoot(self):
+        self.spawn_bullet(0, 1)
+
+        if self.phase == 3:
+            self.spawn_bullet(0.5, 1)
+            self.spawn_bullet(-0.5, 1)
 
     def shoot_second(self):
         bullet = Boss1SecondBullet(self.game, self.x, self.y, direction="down")
@@ -319,10 +324,10 @@ class Boss1(Enemy):
         if self.hp > 0:
             self.draw_health_bar()
 
-        if self.hp >= 80:  # Wenn der Boss 90% seiner HP verloren hat
+        if self.hp >= 75:  # Wenn der Boss 90% seiner HP verloren hat
             self.speed = 2  # Geschwindigkeit verdoppeln
             self.phase = 1
-        elif self.hp >= 50:
+        elif self.hp >= 35:
             self.speed = 3
             self.phase = 2
         elif self.hp > 0:
@@ -364,20 +369,19 @@ class Boss1(Enemy):
 
 
 class Boss1Bullet:
-    def __init__(self, game, x, y, direction="down"):
+    def __init__(self, game, x, y, change_x=0, change_y=0):
         self.game = game
         self.x = x + 120
         self.y = y + 135
-        self.direction = direction
-        self.bullet_img = pygame.image.load("assets/bullet.png")
+        self.change_x = change_x
+        self.change_y = change_y
+        self.bullet_img = pygame.image.load("assets/Boss1/boss1_bullet.png")
         self.speed = 4
         self.damage = 1
 
     def update(self):
-        if self.direction == "up":
-            self.y -= self.speed
-        elif self.direction == "down":
-            self.y += self.speed
+        self.x += self.change_x * self.speed
+        self.y += self.change_y * self.speed
 
         self.game.screen.blit(self.bullet_img, (self.x, self.y))
 
