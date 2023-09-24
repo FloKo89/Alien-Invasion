@@ -63,8 +63,8 @@ class Enemy_horizontal(Enemy):
         super().__init__(game, x, y)
         self.change_x = 1
         self.change_y = 1
-        self.enemy_img = pygame.image.load("assets/enemy1_horizontal.png")
-        self.hit_img = pygame.image.load("assets/explosion1.png")
+        self.enemy_img = pygame.image.load("assets/Enemies/enemy_horizontal.png")
+        self.hit_img = pygame.image.load("assets/Explosions/explosion1.png")
         self.hit_sounds = [
             pygame.mixer.Sound("sound/enemy_explosion1.wav"),
             pygame.mixer.Sound("sound/enemy_explosion2.wav"),
@@ -94,8 +94,8 @@ class Enemy_vertikal(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.change_y = 1
-        self.enemy_img = pygame.image.load("assets/enemy1_vertical.png")
-        self.hit_img = pygame.image.load("assets/explosion2.png")
+        self.enemy_img = pygame.image.load("assets/Enemies/enemy_vertical.png")
+        self.hit_img = pygame.image.load("assets/Explosions/explosion2.png")
         self.hit_sounds = [
             pygame.mixer.Sound("sound/enemy_explosion1.wav"),
             pygame.mixer.Sound("sound/enemy_explosion2.wav"),
@@ -128,7 +128,7 @@ class Boss1(Enemy):
         self.speed = 1
         self.acceleration = 0.5
         self.score = 100
-        self.hit_img = pygame.image.load("assets/explosion1.png")
+        self.hit_img = pygame.image.load("assets/Explosions/explosion1.png")
         self.enemy_img = pygame.image.load("assets/Boss1/Boss1.png")
         self.shield_img = pygame.image.load("assets/Boss1/boss1_shield.png")
         self.hit_sounds = [
