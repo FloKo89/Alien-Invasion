@@ -2,13 +2,15 @@ import pygame
 import random
 import math
 import cv2
+import sys
 
 from enemies import Enemy_horizontal, Enemy_vertikal, Boss1
 from menu import main_menu, play_video_background
 from player import Spaceship
-from levels import levels, level_check
+from level import levels, level_check
 from game_over_menu import game_over_menu
 from pause_menu import pause_menu
+from win_menu import win_menu
 
 pygame.init()
 
@@ -33,6 +35,7 @@ class Game:
         self.running = True
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
+        self.current_background_music = None
         self.change_background_music()
         self.enemies_horizontal = []
         self.enemy_horizontal_bullets = []
@@ -64,6 +67,7 @@ class Game:
             # play_video_background(self, self.cap)
             self.screen.fill((0, 0, 0))
             level_check(self)
+            self.check_win()
             self.spaceship.update()
             self.spaceship.check_collision(radius=35)
             self.print_score()
@@ -126,6 +130,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -230,6 +235,10 @@ class Game:
             "Level: " + str(self.level), True, (255, 255, 255)
         )
         self.screen.blit(level_text, (700, 8))
+
+    def check_win(self):
+        if self.level == 6:
+            win_menu(self)
 
     def reset(self):
         self.game_over = False
