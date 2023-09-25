@@ -61,10 +61,11 @@ class Enemy:
 class Enemy_horizontal(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.change_x = 1
+        self.change_x = random.choice([1, -1])
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_horizontal.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion1.png")
+        self.death_img = pygame.image.load("assets/Explosions/explosion2.png")
         self.hit_sounds = [
             pygame.mixer.Sound("sound/enemy_explosion1.wav"),
             pygame.mixer.Sound("sound/enemy_explosion2.wav"),
@@ -74,10 +75,37 @@ class Enemy_horizontal(Enemy):
         volume = 0.3
         for sound in self.hit_sounds:
             sound.set_volume(volume)
-        self.score = 1
+        self.score = 10
+        self.bullet_img = pygame.image.load("assets/Enemies/bullet.png")
+        self.bullet_sound = pygame.mixer.Sound("sound/boss1_bullet.wav")
+        self.damage = 1
+        self.bullets = []
+        self.last_shot_time = time.time()
+        self.shot_interval = 2
+        self.hp = 25
 
     def check_collision(self):
         super().check_collision(35)
+
+    def collision_response(self, bullet_center_x, bullet_center_y):
+        self.hp -= self.game.spaceship.damage
+        self.game.screen.blit(
+            self.hit_img,
+            (
+                bullet_center_x - self.hit_img.get_width() / 2,
+                bullet_center_y - self.hit_img.get_height() / 2,
+            ),
+        )
+        if self.hp == 0:
+            self.game.score += self.score
+            self.game.screen.blit(
+                self.death_img,
+                (
+                    self.x - self.death_img.get_width() / 2,
+                    self.y - self.death_img.get_height() / 2,
+                ),
+            )
+            self.game.enemies_horizontal.remove(self)
 
     def update(self):
         self.x += self.change_x
@@ -88,6 +116,40 @@ class Enemy_horizontal(Enemy):
             self.y += self.change_y
             self.change_x = -(self.change_x)
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
+
+        if time.time() - self.last_shot_time >= self.shot_interval:
+            self.shoot()
+            self.last_shot_time = time.time()
+            self.shot_interval = random.randint(2, 4)
+
+    def shoot(self):
+        self.spawn_bullet(0, 1)
+
+    def spawn_bullet(self, change_x, change_y):
+        bullet = EnemyHorizontalBullets(self.game, self.x, self.y, change_x, change_y)
+        self.game.enemy_horizontal_bullets.append(bullet)
+        pygame.mixer.Sound.play(self.bullet_sound)
+
+
+class EnemyHorizontalBullets:
+    def __init__(self, game, x, y, change_x=0, change_y=0):
+        self.game = game
+        self.x = x + 25
+        self.y = y + 20
+        self.change_x = change_x
+        self.change_y = change_y
+        self.bullet_img = pygame.image.load("assets/Enemies/bullet.png")
+        self.speed = 2
+        self.damage = 1
+
+    def update(self):
+        self.x += self.change_x * self.speed
+        self.y += self.change_y * self.speed
+
+        self.game.screen.blit(self.bullet_img, (self.x, self.y))
+
+        if self.y > self.game.screen.get_height():
+            self.game.enemy_horizontal_bullets.remove(self)
 
 
 class Enemy_vertikal(Enemy):

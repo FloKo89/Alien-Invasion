@@ -15,6 +15,7 @@ class Spaceship:
         self.hit_sound = pygame.mixer.Sound("sound/enemy_explosion1.wav")
         self.shoot_sound = pygame.mixer.Sound("sound/Boss1_bullet.wav")
         self.bullets = []
+        self.damage = 1
         self.hp = 4
         self.hp_images = [
             pygame.image.load("assets/Player/player_25_hp.png"),
@@ -78,6 +79,7 @@ class Spaceship:
             self.game.boss1_bullets
             + self.game.boss1_second_bullets
             + self.game.boss1_third_bullets
+            + self.game.enemy_horizontal_bullets
         )
 
         for bullet in all_bullets:
@@ -99,6 +101,8 @@ class Spaceship:
                 # Bullet aus der entsprechenden Liste entfernen
                 if bullet in self.game.boss1_bullets:
                     self.game.boss1_bullets.remove(bullet)
+                elif bullet in self.game.enemy_horizontal_bullets:
+                    self.game.enemy_horizontal_bullets.remove(bullet)
                 elif bullet in self.game.boss1_second_bullets:
                     self.game.boss1_second_bullets.remove(bullet)
                 elif bullet in self.game.boss1_third_bullets:

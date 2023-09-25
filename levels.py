@@ -7,27 +7,30 @@ levels = {
     },
     1: {
         "enemies": [
-            {"type": "boss1"},
+            {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
         "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 1,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 5,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [
             {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
         ],
         "background_video": "movie/level2.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,
+        "num_enemies": 7,
     },
     3: {
         "enemies": [
@@ -35,7 +38,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
-            {"type": "vertical"},
+            {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
@@ -43,7 +46,7 @@ levels = {
         ],
         "background_video": "movie/level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 12,
+        "num_enemies": 8,
     },
     4: {
         "enemies": [
@@ -59,7 +62,7 @@ levels = {
         ],
         "background_video": "movie/level4.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 15,
+        "num_enemies": 10,
     },
     5: {
         "enemies": [

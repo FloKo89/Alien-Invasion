@@ -35,6 +35,7 @@ class Game:
         self.last_video_update = pygame.time.get_ticks()
         self.change_background_music()
         self.enemies_horizontal = []
+        self.enemy_horizontal_bullets = []
         self.enemies_vertikal = []
         self.boss1 = []
         self.boss1_bullets = []
@@ -69,7 +70,7 @@ class Game:
             self.print_level()
             self.handle_events()
             self.spaceship.draw_lives(self.screen)
-            self.spaceship_rect = self.spaceship.get_rect()  # .inflate(-60, -60)
+            self.spaceship_rect = self.spaceship.get_rect()
 
             if len(self.spaceship.bullets) > 0:
                 for bullet in self.spaceship.bullets:
@@ -80,10 +81,12 @@ class Game:
 
             for enemy in self.enemies_horizontal:
                 if self.check_collision_and_game_over(enemy):
+                    enemy.check_collision()
                     break
 
             for enemy in self.enemies_vertikal:
                 if self.check_collision_and_game_over(enemy):
+                    enemy.check_collision()
                     break
 
             for boss in self.boss1:
@@ -93,6 +96,12 @@ class Game:
 
                 if boss_rect.colliderect(self.spaceship_rect):
                     self.spaceship.lose_life(boss.damage)
+                    break
+
+            for bullet in self.enemy_horizontal_bullets:
+                bullet.update()
+                if bullet.y > 580:
+                    self.enemy_horizontal_bullets.remove(bullet)
                     break
 
             for bullet in self.boss1_bullets:
