@@ -81,12 +81,10 @@ class Game:
 
             for enemy in self.enemies_horizontal:
                 if self.check_collision_and_game_over(enemy):
-                    enemy.check_collision()
                     break
 
             for enemy in self.enemies_vertikal:
                 if self.check_collision_and_game_over(enemy):
-                    enemy.check_collision()
                     break
 
             for boss in self.boss1:

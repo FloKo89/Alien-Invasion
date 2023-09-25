@@ -36,21 +36,7 @@ class Enemy:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
                 random.choice(self.hit_sounds).play()
-                self.game.spaceship.bullets.remove(
-                    bullet
-                )  # Übergeben Sie den Schadenswert hier
-
-    def collision_response(self, bullet_center_x, bullet_center_y):
-        self.game.screen.blit(
-            self.hit_img,
-            (
-                bullet_center_x - self.hit_img.get_width() / 2,
-                bullet_center_y - self.hit_img.get_height() / 2,
-            ),
-        )
-        self.game.score += self.score
-        self.x = random.randint(0, 736)
-        self.y = random.randint(50, 150)
+                self.game.spaceship.bullets.remove(bullet)
 
     def get_rect(self):
         return pygame.Rect(
@@ -158,6 +144,7 @@ class Enemy_vertikal(Enemy):
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_vertical.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion2.png")
+        self.death_img = pygame.image.load("assets/Explosions/explosion1.png")
         self.hit_sounds = [
             pygame.mixer.Sound("sound/enemy_explosion1.wav"),
             pygame.mixer.Sound("sound/enemy_explosion2.wav"),
@@ -168,17 +155,39 @@ class Enemy_vertikal(Enemy):
         for sound in self.hit_sounds:
             sound.set_volume(volume)
         self.score = 2
+        self.hp = 2
 
     def check_collision(self):
         super().check_collision(35, 10, 10)
 
     def collision_response(self, bullet_center_x, bullet_center_y):
-        super().collision_response(bullet_center_x, bullet_center_y)
-        self.x = random.randint(0, 736)
-        self.y = random.randint(-200, -50)
+        self.hp -= self.game.spaceship.damage
+        self.game.screen.blit(
+            self.hit_img,
+            (
+                bullet_center_x - self.hit_img.get_width() / 2,
+                bullet_center_y - self.hit_img.get_height() / 2,
+            ),
+        )
+        if self.hp == 0:
+            self.game.score += self.score
+            self.game.screen.blit(
+                self.death_img,
+                (
+                    self.x - self.death_img.get_width() / 2,
+                    self.y - self.death_img.get_height() / 2,
+                ),
+            )
+
+            self.x = random.randint(0, 736)
+            self.y = random.randint(-200, -50)
+            self.hp = 2
 
     def update(self):
         self.y += self.change_y
+        if self.y >= 600:
+            self.x = random.randint(0, 736)
+            self.y = random.randint(-200, -50)
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
 
