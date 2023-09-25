@@ -40,7 +40,7 @@ class Game:
         self.boss1_bullets = []
         self.boss1_second_bullets = []
         self.boss1_third_bullets = []
-        self.spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
+        self.spaceship_rect = self.spaceship.get_rect()
 
     def generate_enemy_position(self, enemies, min_distance=10):
         while True:
@@ -69,7 +69,7 @@ class Game:
             self.print_level()
             self.handle_events()
             self.spaceship.draw_lives(self.screen)
-            self.spaceship_rect = self.spaceship.get_rect().inflate(-60, -60)
+            self.spaceship_rect = self.spaceship.get_rect()  # .inflate(-60, -60)
 
             if len(self.spaceship.bullets) > 0:
                 for bullet in self.spaceship.bullets:

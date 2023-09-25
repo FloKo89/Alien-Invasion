@@ -69,7 +69,7 @@ class Spaceship:
         self.game.screen.blit(self.spaceship_img, (self.x, self.y))
 
     def fire_bullet(self):
-        self.bullets.append(Bullet(self.game, self.x, self.y))
+        self.bullets.append(Bullet(self.game, self.x + 27, self.y))
         self.bullets[len(self.bullets) - 1].fired()
         pygame.mixer.Sound.play(self.shoot_sound)
 
