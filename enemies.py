@@ -47,6 +47,8 @@ class Enemy:
 class Enemy_horizontal(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
+        self.x = x
+        self.y = y
         self.change_x = random.choice([1, -1])
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_horizontal.png")
@@ -68,7 +70,7 @@ class Enemy_horizontal(Enemy):
         self.bullets = []
         self.last_shot_time = time.time()
         self.shot_interval = 2
-        self.hp = 25
+        self.hp = 5
 
     def check_collision(self):
         super().check_collision(35)

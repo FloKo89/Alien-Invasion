@@ -75,9 +75,10 @@ levels = {
 
 def level_check(self):
     current_level = self.level
-    if self.score < 50:
+    level_changed = False
+    if self.score < 5:
         self.level = 1
-    elif self.score >= 50 and self.score < 150:
+    elif self.score >= 5 and self.score < 150:
         self.level = 2
     elif self.score >= 150 and self.score < 250:
         self.level = 3
@@ -91,8 +92,10 @@ def level_check(self):
     if current_level != self.level:
         self.change_background_video()
         self.update_enemies()
+        level_changed = True
 
         new_music = levels[self.level]["background_music"]
         if self.current_background_music != new_music:
             self.change_background_music()
             self.current_background_music = new_music
+    return level_changed

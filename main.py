@@ -36,6 +36,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship(self, 370, 515)
         self.running = True
+        self.level_up = False
+        self.level_up_timestamp = None
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.current_background_music = None
@@ -48,6 +50,9 @@ class Game:
         self.boss1_second_bullets = []
         self.boss1_third_bullets = []
         self.spaceship_rect = self.spaceship.get_rect()
+        self.level_up_fade_state = None
+        self.level_up_fade_alpha = 0
+        self.level_up_start_time = None
 
     def generate_enemy_position(self, enemies, min_distance=10):
         while True:
@@ -69,7 +74,8 @@ class Game:
             self.clock.tick(60)
             # play_video_background(self, self.cap)
             self.screen.fill((0, 0, 0))
-            level_check(self)
+            # level_check(self)
+            self.level_up = level_check(self)
             self.check_win()
             self.spaceship.update()
             self.spaceship.check_collision(radius=35)
@@ -85,6 +91,15 @@ class Game:
                         bullet.update()
                     else:
                         self.spaceship.bullets.remove(bullet)
+            if self.level_up:
+                self.level_up_fade_state = "in"
+                self.level_up_timestamp = pygame.time.get_ticks()
+
+            if (
+                self.level_up_timestamp
+                and pygame.time.get_ticks() - self.level_up_timestamp < 2000
+            ):
+                self.print_level_up()
 
             for enemy in self.enemies_horizontal:
                 if self.check_collision_and_game_over(enemy):
@@ -127,6 +142,8 @@ class Game:
                     self.boss1_third_bullets.remove(bullet)
                     break
 
+            self.update_level_up_fade()
+            self.print_level_up()
             pygame.display.update()
 
     def handle_events(self):
@@ -238,6 +255,37 @@ class Game:
             "Level: " + str(self.level), True, (255, 255, 255)
         )
         self.screen.blit(level_text, (700, 8))
+
+    def print_level_up(self):
+        if self.level in levels:
+            level_up_font = pygame.font.Font("freesansbold.ttf", 64)
+            level_up_text = level_up_font.render(
+                "Level: " + str(self.level), True, (255, 255, 255)
+            )
+            level_up_text.set_alpha(self.level_up_fade_alpha)
+            self.screen.blit(
+                level_up_text, (self.width // 2 - level_up_text.get_width() // 2, 250)
+            )
+
+    def update_level_up_fade(self):
+        if self.level_up_fade_state == "in":
+            self.level_up_fade_alpha += 5
+            if self.level_up_fade_alpha >= 255:
+                self.level_up_fade_alpha = 255
+                self.level_up_fade_state = "hold"
+                self.level_up_start_time = pygame.time.get_ticks()
+
+        elif self.level_up_fade_state == "hold":
+            if (
+                pygame.time.get_ticks() - self.level_up_start_time > 1000
+            ):  # Halten Sie für 1 Sekunde
+                self.level_up_fade_state = "out"
+
+        elif self.level_up_fade_state == "out":
+            self.level_up_fade_alpha -= 5
+            if self.level_up_fade_alpha <= 0:
+                self.level_up_fade_alpha = 0
+                self.level_up_fade_state = None
 
     def check_win(self):
         if self.level == 6:
