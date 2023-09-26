@@ -4,7 +4,7 @@ import math
 import cv2
 import sys
 
-from enemies import Enemy_horizontal, Enemy_vertikal, Boss1
+from enemies import Enemy_horizontal, Enemy_vertical, Boss1
 from menu import main_menu, play_video_background
 from player import Spaceship
 from level import levels, level_check
@@ -44,7 +44,7 @@ class Game:
         self.change_background_music()
         self.enemies_horizontal = []
         self.enemy_horizontal_bullets = []
-        self.enemies_vertikal = []
+        self.enemies_vertical = []
         self.boss1 = []
         self.boss1_bullets = []
         self.boss1_second_bullets = []
@@ -54,10 +54,15 @@ class Game:
         self.level_up_fade_alpha = 0
         self.level_up_start_time = None
 
-    def generate_enemy_position(self, enemies, min_distance=10):
+    def generate_enemy_position(self, enemies, enemy_type, min_distance=10):
         while True:
             new_x = random.randint(0, 736)
-            new_y = random.randint(50, 150)
+
+            if enemy_type == "vertical":
+                new_y = random.randint(10, 100)
+            else:
+                new_y = random.randint(50, 150)
+
             too_close = False
 
             for enemy in enemies:
@@ -91,6 +96,15 @@ class Game:
                         bullet.update()
                     else:
                         self.spaceship.bullets.remove(bullet)
+
+            if (
+                len(self.enemies_horizontal)
+                + len(self.enemies_vertical)
+                + len(self.boss1)
+                < levels[self.level]["num_enemies"]
+            ):
+                self.update_enemies()
+
             if self.level_up:
                 self.level_up_fade_state = "in"
                 self.level_up_timestamp = pygame.time.get_ticks()
@@ -105,7 +119,9 @@ class Game:
                 if self.check_collision_and_game_over(enemy):
                     break
 
-            for enemy in self.enemies_vertikal:
+            for enemy in self.enemies_vertical:
+                if enemy.y > 600:
+                    self.enemies_vertical.remove(enemy)
                 if self.check_collision_and_game_over(enemy):
                     break
 
@@ -184,42 +200,73 @@ class Game:
             play_video_background(self, self.cap)
 
     def update_enemies(self):
+        if self.level in levels:
+            current_enemies_horizontal = len(self.enemies_horizontal)
+            current_enemies_vertical = len(self.enemies_vertical)
+            current_boss1 = len(self.boss1)
+
+            for enemy_config in levels[self.level]["enemies"]:
+                x, y = self.generate_enemy_position(
+                    self.enemies_horizontal + self.enemies_vertical + self.boss1,
+                    enemy_config["type"],
+                )
+
+                if (
+                    enemy_config["type"] == "horizontal"
+                    and current_enemies_horizontal < levels[self.level]["num_enemies"]
+                ):
+                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                    current_enemies_horizontal += 1
+                elif (
+                    enemy_config["type"] == "vertical"
+                    and current_enemies_vertical < levels[self.level]["num_enemies"]
+                ):
+                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                    current_enemies_vertical += 1
+                elif (
+                    enemy_config["type"] == "boss1"
+                    and current_boss1 < levels[self.level]["num_enemies"]
+                ):
+                    self.boss1.append(Boss1(self, 230, 0))
+                    current_boss1 += 1
+
+    """def update_enemies(self):
         self.enemies_horizontal.clear()
-        self.enemies_vertikal.clear()
+        self.enemies_vertical.clear()
         self.boss1.clear()
         if self.level in levels:
             self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal + self.boss1,
+                self.enemies_horizontal + self.enemies_vertical + self.boss1,
                 min_distance=10,
             )
             for enemy_config in levels[self.level]["enemies"]:
                 x, y = self.generate_enemy_position(
-                    self.enemies_horizontal + self.enemies_vertikal + self.boss1
+                    self.enemies_horizontal + self.enemies_vertical + self.boss1
                 )
 
                 if enemy_config["type"] == "horizontal":
                     self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
                 elif enemy_config["type"] == "vertical":
-                    self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
                 elif enemy_config["type"] == "boss1":
                     self.boss1.append(Boss1(self, 230, 0))
 
         num_existing_enemies = (
-            len(self.enemies_horizontal) + len(self.enemies_vertikal) + len(self.boss1)
+            len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
         )
 
         for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
             enemy_type = random.choice(["horizontal", "vertical"])
             x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertikal, min_distance=10
+                self.enemies_horizontal + self.enemies_vertical, min_distance=10
             )
 
             if enemy_type == "horizontal":
                 self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
             elif enemy_type == "vertical":
-                self.enemies_vertikal.append(Enemy_vertikal(self, x, y))
+                self.enemies_vertical.append(Enemy_vertical(self, x, y))
             elif enemy_type == "boss1":
-                self.boss1.append(Boss1(self, x, y))
+                self.boss1.append(Boss1(self, x, y))"""
 
     def check_collision_and_game_over(self, enemy):
         enemy.update()
@@ -304,7 +351,7 @@ class Game:
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
-        self.enemies_vertikal = []
+        self.enemies_vertical = []
         self.boss1 = []
         self.boss1_bullets = []
         self.boss1_second_bullets = []

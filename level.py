@@ -8,7 +8,7 @@ levels = {
     1: {
         "enemies": [
             {"type": "horizontal"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
@@ -76,9 +76,9 @@ levels = {
 def level_check(self):
     current_level = self.level
     level_changed = False
-    if self.score < 5:
+    if self.score < 50:
         self.level = 1
-    elif self.score >= 5 and self.score < 150:
+    elif self.score >= 50 and self.score < 150:
         self.level = 2
     elif self.score >= 150 and self.score < 250:
         self.level = 3

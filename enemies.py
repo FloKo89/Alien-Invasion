@@ -70,7 +70,7 @@ class Enemy_horizontal(Enemy):
         self.bullets = []
         self.last_shot_time = time.time()
         self.shot_interval = 2
-        self.hp = 5
+        self.hp = 25
 
     def check_collision(self):
         super().check_collision(35)
@@ -140,7 +140,7 @@ class EnemyHorizontalBullets:
             self.game.enemy_horizontal_bullets.remove(self)
 
 
-class Enemy_vertikal(Enemy):
+class Enemy_vertical(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.change_y = 1
@@ -180,10 +180,10 @@ class Enemy_vertikal(Enemy):
                     self.y - self.death_img.get_height() / 2,
                 ),
             )
-
-            self.x = random.randint(0, 736)
-            self.y = random.randint(-200, -50)
-            self.hp = 2
+            self.game.enemies_vertical.remove(self)
+            # self.x = random.randint(0, 736)
+            # self.y = random.randint(-200, -50)
+            # self.hp = 2
 
     def update(self):
         self.y += self.change_y
