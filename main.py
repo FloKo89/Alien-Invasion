@@ -59,7 +59,7 @@ class Game:
             new_x = random.randint(0, 736)
 
             if enemy_type == "vertical":
-                new_y = random.randint(0, 10)
+                new_y = random.randint(-150, -100)
             else:
                 new_y = random.randint(50, 150)
 
