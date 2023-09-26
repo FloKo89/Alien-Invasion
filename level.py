@@ -7,11 +7,11 @@ levels = {
     },
     1: {
         "enemies": [
-            {"type": "horizontal"},
             {"type": "vertical"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
         "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren

@@ -59,7 +59,7 @@ class Game:
             new_x = random.randint(0, 736)
 
             if enemy_type == "vertical":
-                new_y = random.randint(10, 100)
+                new_y = random.randint(0, 10)
             else:
                 new_y = random.randint(50, 150)
 
@@ -200,35 +200,50 @@ class Game:
             play_video_background(self, self.cap)
 
     def update_enemies(self):
-        if self.level in levels:
+        if self.level not in levels:
+            return
+
+        total_enemies = (
+            len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
+        )
+
+        # Frühes Beenden, wenn die maximale Anzahl von Feinden erreicht ist
+        if total_enemies >= levels[self.level]["num_enemies"]:
+            return
+
+        for enemy_config in levels[self.level]["enemies"]:
+            # Aktualisieren der Zahlen, da wir innerhalb der Schleife Feinde hinzufügen
             current_enemies_horizontal = len(self.enemies_horizontal)
             current_enemies_vertical = len(self.enemies_vertical)
             current_boss1 = len(self.boss1)
 
-            for enemy_config in levels[self.level]["enemies"]:
-                x, y = self.generate_enemy_position(
-                    self.enemies_horizontal + self.enemies_vertical + self.boss1,
-                    enemy_config["type"],
-                )
+            total_enemies = (
+                current_enemies_horizontal + current_enemies_vertical + current_boss1
+            )
 
-                if (
-                    enemy_config["type"] == "horizontal"
-                    and current_enemies_horizontal < levels[self.level]["num_enemies"]
-                ):
-                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-                    current_enemies_horizontal += 1
-                elif (
-                    enemy_config["type"] == "vertical"
-                    and current_enemies_vertical < levels[self.level]["num_enemies"]
-                ):
-                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
-                    current_enemies_vertical += 1
-                elif (
-                    enemy_config["type"] == "boss1"
-                    and current_boss1 < levels[self.level]["num_enemies"]
-                ):
-                    self.boss1.append(Boss1(self, 230, 0))
-                    current_boss1 += 1
+            if total_enemies >= levels[self.level]["num_enemies"]:
+                break
+
+            x, y = self.generate_enemy_position(
+                self.enemies_horizontal + self.enemies_vertical + self.boss1,
+                enemy_config["type"],
+            )
+
+            if (
+                enemy_config["type"] == "horizontal"
+                and current_enemies_horizontal < levels[self.level]["num_enemies"]
+            ):
+                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+            elif (
+                enemy_config["type"] == "vertical"
+                and current_enemies_vertical < levels[self.level]["num_enemies"]
+            ):
+                self.enemies_vertical.append(Enemy_vertical(self, x, y))
+            elif (
+                enemy_config["type"] == "boss1"
+                and current_boss1 < levels[self.level]["num_enemies"]
+            ):
+                self.boss1.append(Boss1(self, 230, 0))
 
     """def update_enemies(self):
         self.enemies_horizontal.clear()
