@@ -49,8 +49,11 @@ class Enemy_horizontal(Enemy):
         super().__init__(game, x, y)
         self.x = x
         self.y = y
-        self.change_x = random.choice([1, -1])
-        self.change_y = 1
+        if x < 0:
+            self.change_x = 1
+        else:
+            self.change_x = -1
+        self.change_y = 0
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_horizontal.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion1.png")
         self.death_img = pygame.image.load("assets/Explosions/explosion2.png")
@@ -70,7 +73,7 @@ class Enemy_horizontal(Enemy):
         self.bullets = []
         self.last_shot_time = time.time()
         self.shot_interval = 2
-        self.hp = 25
+        self.hp = 1
 
     def check_collision(self):
         super().check_collision(35)
@@ -97,12 +100,23 @@ class Enemy_horizontal(Enemy):
 
     def update(self):
         self.x += self.change_x
-        if self.x >= 736:
-            self.y += self.change_y
+
+        # Wenn der Gegner von der linken Seite ins Fenster kommt und den rechten Rand erreicht
+        if self.change_x == 1 and self.x >= 736:
             self.change_x = -(self.change_x)
-        if self.x <= 0:
-            self.y += self.change_y
+
+        # Wenn der Gegner, der von der linken Seite ins Fenster kam, den linken Rand erreicht
+        elif self.change_x == -1 and self.x <= 0:
             self.change_x = -(self.change_x)
+
+        # Wenn der Gegner von der rechten Seite ins Fenster kommt und den linken Rand erreicht
+        elif self.change_x == -1 and self.x <= 0:
+            self.change_x = -(self.change_x)
+
+        # Wenn der Gegner, der von der rechten Seite ins Fenster kam, den rechten Rand erreicht
+        elif self.change_x == 1 and self.x >= 736:
+            self.change_x = -(self.change_x)
+
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
         if time.time() - self.last_shot_time >= self.shot_interval:
@@ -143,6 +157,9 @@ class EnemyHorizontalBullets:
 class Enemy_vertical(Enemy):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
+        self.x = x
+        self.y = y
+        self.change_x = 0
         self.change_y = 1
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_vertical.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion2.png")
@@ -181,15 +198,10 @@ class Enemy_vertical(Enemy):
                 ),
             )
             self.game.enemies_vertical.remove(self)
-            # self.x = random.randint(0, 736)
-            # self.y = random.randint(-200, -50)
-            # self.hp = 2
 
     def update(self):
+        print("wird aufgerufen")
         self.y += self.change_y
-        if self.y >= 600:
-            self.x = random.randint(0, 736)
-            self.y = random.randint(-200, -50)
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
 

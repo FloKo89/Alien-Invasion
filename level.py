@@ -7,16 +7,16 @@ levels = {
     },
     1: {
         "enemies": [
+            {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
-            {"type": "vertical"},
-            {"type": "vertical"},
+            {"type": "horizontal"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
         "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 5,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 7,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [
@@ -90,7 +90,7 @@ def level_check(self):
         self.level = 6
 
     if current_level != self.level:
-        self.change_background_video()
+        # self.change_background_video()
         self.update_enemies()
         level_changed = True
 

@@ -56,15 +56,24 @@ class Game:
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=10):
         while True:
-            new_x = random.randint(0, 736)
-
             if enemy_type == "vertical":
-                new_y = random.randint(-150, -100)
-            else:
-                new_y = random.randint(50, 150)
+                new_x = random.randint(0, 736)
+                new_y = random.randint(
+                    -100, -50
+                )  # Startposition oberhalb des Bildschirms
+            else:  # horizontal
+                new_y = random.randint(25, 250)
+                # Abhängig vom Wert von change_x startet der Feind entweder links oder rechts außerhalb des Bildschirms
+                if random.choice([1, -1]) == 1:
+                    new_x = random.randint(
+                        -250, -50
+                    )  # Startposition links außerhalb des Bildschirms
+                else:
+                    new_x = random.randint(
+                        800, 1000
+                    )  # Startposition rechts außerhalb des Bildschirms
 
             too_close = False
-
             for enemy in enemies:
                 distance = math.sqrt((new_x - enemy.x) ** 2 + (new_y - enemy.y) ** 2)
                 if distance < min_distance:
