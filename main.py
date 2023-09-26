@@ -13,6 +13,9 @@ from pause_menu import pause_menu
 from win_menu import win_menu
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.set_num_channels(32)
+
 
 game_over_sound = pygame.mixer.Sound("sound/ES_Trumpet Sad - SFX Producer.wav")
 
