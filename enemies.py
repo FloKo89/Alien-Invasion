@@ -200,7 +200,6 @@ class Enemy_vertical(Enemy):
             self.game.enemies_vertical.remove(self)
 
     def update(self):
-        print("wird aufgerufen")
         self.y += self.change_y
         self.game.screen.blit(self.enemy_img, (self.x, self.y))
 

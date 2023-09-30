@@ -248,6 +248,8 @@ class Game:
                 and current_enemies_vertical < levels[self.level]["num_enemies"]
             ):
                 self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                print("enemie_vertical hinzugefügt")
+                print("Position x: ", x, "Position y: ", y)
             elif (
                 enemy_config["type"] == "boss1"
                 and current_boss1 < levels[self.level]["num_enemies"]
