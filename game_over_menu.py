@@ -1,17 +1,57 @@
 import pygame
+import cv2
 from menu import main_menu
 
 clock = pygame.time.Clock()
+
+
+def play_video_background(game, cap):  # Video im Hintergrund abspielen
+    current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
+    frame_duration = 1000.0 / cap.get(
+        cv2.CAP_PROP_FPS
+    )  # Dauer eines Einzelbildes in Millisekunden
+    if (
+        current_time - game.last_video_update > frame_duration
+    ):  # Wenn genug Zeit verstrichen ist
+        ret, frame = cap.read()  # Einzelbild lesen
+        if not ret:  # Wenn das Video zu Ende ist
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
+            ret, frame = cap.read()  # Erneut lesen
+
+        frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
+        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
+        game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        game.last_video_update = current_time
+    else:
+        # Das gleiche Bild sollte beibehalten werden, da nicht genug Zeit verstrichen ist
+        pass
+
+
+def resize_frame(frame, target_width, target_height):  #
+    height, width, channels = frame.shape
+    aspect_ratio = width / height
+    new_width = int(target_height * aspect_ratio)
+    new_height = target_height
+    if new_width > target_width:
+        new_width = target_width
+        new_height = int(target_width / aspect_ratio)
+    resized_frame = cv2.resize(frame, (new_width, new_height))
+    return resized_frame
 
 
 def game_over_menu(game):
     menu_items = ["Neustart", "Hauptmenü", "Beenden"]
 
     selected_item = 0
+
+    cap = cv2.VideoCapture("movie/game_over_menu_bg_movie.mp4")
+
     # Hauptloop für das Game Over-Menü
     game_over_running = True
     while game_over_running:
-        game.screen.fill((0, 0, 0))  # Hintergrund schwarz setzen
+        # game.screen.fill((0, 0, 0))  # Hintergrund schwarz setzen
+        play_video_background(game, cap)
 
         # Game Over Text
         go_font = pygame.font.Font("freesansbold.ttf", 64)
@@ -35,12 +75,6 @@ def game_over_menu(game):
         game.screen.blit(
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
         )
-
-        # Semitransparenter Hintergrund für das Menü
-        menu_bg = pygame.Surface((game.width, 200))
-        menu_bg.set_alpha(128)  # Alphawert setzen für Transparenz
-        menu_bg.fill((0, 0, 0))
-        game.screen.blit(menu_bg, (0, 350))  # Zeichnet den Hintergrund
 
         menu_font = pygame.font.Font("freesansbold.ttf", 32)
 
