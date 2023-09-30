@@ -7,24 +7,26 @@ levels = {
     },
     1: {
         "enemies": [
-            {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
             # Weitere Gegner hinzufügen nach Bedarf
         ],
         "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 3,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 5,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
             {"type": "horizontal"},
             {"type": "horizontal"},
             {"type": "horizontal"},
-            {"type": "vertical"},
-            {"type": "vertical"},
-            {"type": "vertical"},
-            {"type": "vertical"},
         ],
         "background_video": "movie/level2.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
@@ -32,33 +34,33 @@ levels = {
     },
     3: {
         "enemies": [
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
         ],
         "background_video": "movie/level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 8,
+        "num_enemies": 10,
     },
     4: {
         "enemies": [
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
         ],
         "background_video": "movie/level4.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 10,
+        "num_enemies": 12,
     },
     5: {
         "enemies": [
