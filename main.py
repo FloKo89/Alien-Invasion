@@ -221,36 +221,37 @@ class Game:
         if total_enemies >= levels[self.level]["num_enemies"]:
             return
 
+        # Erstelle eine Liste der fest definierten Gegner, die bereits im Spiel sind
+        existing_enemies = []
+        existing_enemies.extend(["horizontal"] * len(self.enemies_horizontal))
+        existing_enemies.extend(["vertical"] * len(self.enemies_vertical))
+        existing_enemies.extend(["boss1"] * len(self.boss1))
+
+        # Gehe durch die fest definierten Gegner in levels und füge fehlende hinzu
         for enemy_config in levels[self.level]["enemies"]:
-            # Aktualisieren der Zahlen, da wir innerhalb der Schleife Feinde hinzufügen
-            current_enemies_horizontal = len(self.enemies_horizontal)
-            current_enemies_vertical = len(self.enemies_vertical)
-            current_boss1 = len(self.boss1)
-
-            x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertical + self.boss1,
-                enemy_config["type"],
-            )
-
-            if (
-                enemy_config["type"] == "horizontal"
-                and current_enemies_horizontal < levels[self.level]["num_enemies"]
+            enemy_type = enemy_config["type"]
+            if existing_enemies.count(enemy_type) < levels[self.level]["enemies"].count(
+                enemy_config
             ):
-                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-                print("Gegner horizontal erstelt :" + " " + str(x) + " " + str(y))
-            elif (
-                enemy_config["type"] == "vertical"
-                and current_enemies_vertical < levels[self.level]["num_enemies"]
-            ):
-                self.enemies_vertical.append(Enemy_vertical(self, x, y))
-                print("Gegner vertikal erstelt :" + " " + str(x) + " " + str(y))
-            elif (
-                enemy_config["type"] == "boss1"
-                and current_boss1 < levels[self.level]["num_enemies"]
-            ):
-                self.boss1.append(Boss1(self, 230, 0))
+                x, y = self.generate_enemy_position(
+                    self.enemies_horizontal + self.enemies_vertical + self.boss1,
+                    enemy_type,
+                )
+                if enemy_type == "horizontal":
+                    print("Gegner horizontal hinzugefügt")
+                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                elif enemy_type == "vertical":
+                    print("Gegner vertikal hinzugefügt")
+                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                elif enemy_type == "boss1":
+                    print("Boss hinzugefügt")
+                    self.boss1.append(Boss1(self, 230, 0))
 
-        # Nachdem alle fest definierten Gegner hinzugefügt wurden, füllen wir den Rest mit zufällig generierten Gegnern auf
+                total_enemies += 1
+                if total_enemies >= levels[self.level]["num_enemies"]:
+                    return
+
+        # Nachdem alle fehlenden fest definierten Gegner hinzugefügt wurden, füllen Sie den Rest mit zufällig generierten Gegnern auf
         num_existing_enemies = (
             len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
         )
@@ -262,44 +263,12 @@ class Game:
                 enemy_type,
                 min_distance=10,
             )
-
             if enemy_type == "horizontal":
+                print("Zufälligen Gegner horizontal hinzugefügt")
                 self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-                print(
-                    "Zufälligen Gegner horizontal erstelt :"
-                    + " "
-                    + str(x)
-                    + " "
-                    + str(y)
-                )
             elif enemy_type == "vertical":
+                print("Zufälligen Gegner vertikal hinzugefügt")
                 self.enemies_vertical.append(Enemy_vertical(self, x, y))
-                print(
-                    "Zufälligen Gegner vertikal erstelt :" + " " + str(x) + " " + str(y)
-                )
-            elif enemy_type == "boss1":
-                self.boss1.append(Boss1(self, 230, 0))
-
-    """def update_enemies(self):
-        self.enemies_horizontal.clear()
-        self.enemies_vertical.clear()
-        self.boss1.clear()
-        if self.level in levels:
-            self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertical + self.boss1,
-                min_distance=10,
-            )
-            for enemy_config in levels[self.level]["enemies"]:
-                x, y = self.generate_enemy_position(
-                    self.enemies_horizontal + self.enemies_vertical + self.boss1
-                )
-
-                if enemy_config["type"] == "horizontal":
-                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-                elif enemy_config["type"] == "vertical":
-                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
-                elif enemy_config["type"] == "boss1":
-                    # self.boss1.append(Boss1(self, 230, 0)"""
 
     def check_collision_and_game_over(self, enemy):
         enemy.update()

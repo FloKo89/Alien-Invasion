@@ -21,7 +21,7 @@ levels = {
         ],
         "background_video": "movie/level2.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 2,
+        "num_enemies": 3,
     },
     3: {
         "enemies": [
