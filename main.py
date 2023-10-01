@@ -256,6 +256,27 @@ class Game:
             ):
                 self.boss1.append(Boss1(self, 230, 0))
 
+            num_existing_enemies = (
+                len(self.enemies_horizontal)
+                + len(self.enemies_vertical)
+                + len(self.boss1)
+            )
+
+            for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
+                enemy_type = random.choice(["horizontal", "vertical"])
+                x, y = self.generate_enemy_position(
+                    self.enemies_horizontal + self.enemies_vertical,
+                    enemy_type,
+                    min_distance=10,
+                )
+
+                if enemy_type == "horizontal":
+                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                elif enemy_type == "vertical":
+                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                elif enemy_type == "boss1":
+                    self.boss1.append(Boss1(self, x, y))
+
     """def update_enemies(self):
         self.enemies_horizontal.clear()
         self.enemies_vertical.clear()
@@ -275,24 +296,7 @@ class Game:
                 elif enemy_config["type"] == "vertical":
                     self.enemies_vertical.append(Enemy_vertical(self, x, y))
                 elif enemy_config["type"] == "boss1":
-                    self.boss1.append(Boss1(self, 230, 0))
-
-        num_existing_enemies = (
-            len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
-        )
-
-        for _ in range(levels[self.level]["num_enemies"] - num_existing_enemies):
-            enemy_type = random.choice(["horizontal", "vertical"])
-            x, y = self.generate_enemy_position(
-                self.enemies_horizontal + self.enemies_vertical, min_distance=10
-            )
-
-            if enemy_type == "horizontal":
-                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
-            elif enemy_type == "vertical":
-                self.enemies_vertical.append(Enemy_vertical(self, x, y))
-            elif enemy_type == "boss1":
-                self.boss1.append(Boss1(self, x, y))"""
+                    # self.boss1.append(Boss1(self, 230, 0)"""
 
     def check_collision_and_game_over(self, enemy):
         enemy.update()
