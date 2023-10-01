@@ -244,8 +244,13 @@ class Game:
                     print("Gegner vertikal hinzugefügt")
                     self.enemies_vertical.append(Enemy_vertical(self, x, y))
                 elif enemy_type == "boss1":
-                    print("Boss hinzugefügt")
-                    self.boss1.append(Boss1(self, 230, 0))
+                    screen_center_x = self.screen.get_width() / 2
+                    boss_width = Boss1(
+                        self, 0, 0
+                    ).enemy_img.get_width()  # Temporärer Boss, um die Breite zu erhalten
+                    self.boss1.append(
+                        Boss1(self, screen_center_x - boss_width / 2, -boss_width)
+                    )
 
                 total_enemies += 1
                 if total_enemies >= levels[self.level]["num_enemies"]:

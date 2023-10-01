@@ -235,7 +235,7 @@ class Boss1(Enemy):
         self.third_bullet_sound.set_volume(0.1)
         self.is_dying_sound = pygame.mixer.Sound("sound/Boss1_explosion.wav")
         self.death_sound_played = False
-        self.shield_strength = 10
+        self.shield_strength = self.max_shield_strength = 10
         self.max_shield_strength = 10
         self.last_shield_renewal = time.time()
         self.last_shot_time = time.time()
@@ -251,6 +251,7 @@ class Boss1(Enemy):
         self.is_dying = False
         self.death_frame_index = 0
         self.last_death_animation_time = time.time()
+        self.state = "entering"
         self.phase = 1
         self.bullets = []
         self.second_bullets = []
@@ -342,7 +343,17 @@ class Boss1(Enemy):
         self.game.boss1_third_bullets.append(bullet)
         pygame.mixer.Sound.play(self.third_bullet_sound)
 
-    def update(self):
+    def entering_behavior(self):
+        target_y = (
+            self.game.screen.get_height() / 2 - self.enemy_img.get_height() / 2
+        )  # Korrektur hier
+        entering_speed = 1
+        if self.y < target_y:
+            self.y += entering_speed
+        else:
+            self.state = "moving"
+
+    def moving_behavior(self):
         self.x += self.change_x * self.speed
         self.y += self.change_y * self.speed
 
@@ -373,18 +384,6 @@ class Boss1(Enemy):
         if self.speed <= 1:
             self.acceleration = 0.1
 
-        if (
-            time.time() - self.last_shield_renewal >= 12 and self.hp > 0
-        ):  # Wenn 12 Sekunden vergangen sind
-            self.shield_strength = self.max_shield_strength  # Schild wird erneuert
-            self.last_shield_renewal = time.time()
-            # Zeitpunkt der Erneuerung wird gespeichert
-
-        if self.shield_strength > 0:  # Wenn der Schild noch nicht 0 erreicht hat
-            self.game.screen.blit(
-                self.shield_img, (self.x - 20, self.y - 20)
-            )  # Schild wird gezeichnet
-
         if time.time() - self.last_shot_time >= self.shot_interval and self.hp > 0:
             self.shoot()
             self.last_shot_time = time.time()
@@ -408,9 +407,6 @@ class Boss1(Enemy):
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if self.hp > 0:
-            self.draw_health_bar()
-
         if self.hp >= 75:  # Wenn der Boss 90% seiner HP verloren hat
             self.speed = 2  # Geschwindigkeit verdoppeln
             self.phase = 1
@@ -423,6 +419,27 @@ class Boss1(Enemy):
         else:
             self.speed = 0
             self.is_dying = True
+
+    def update(self):
+        if self.state == "entering":
+            self.entering_behavior()
+        elif self.state == "moving":
+            self.moving_behavior()
+
+        if self.hp > 0:
+            self.draw_health_bar()
+
+        if (
+            time.time() - self.last_shield_renewal >= 12 and self.hp > 0
+        ):  # Wenn 12 Sekunden vergangen sind
+            self.shield_strength = self.max_shield_strength  # Schild wird erneuert
+            self.last_shield_renewal = time.time()
+            # Zeitpunkt der Erneuerung wird gespeichert
+
+        if self.shield_strength > 0:  # Wenn der Schild noch nicht 0 erreicht hat
+            self.game.screen.blit(
+                self.shield_img, (self.x - 20, self.y - 20)
+            )  # Schild wird gezeichnet
 
         if self.is_dying:
             if not self.death_sound_played:
@@ -447,9 +464,8 @@ class Boss1(Enemy):
                         self.death_animation_imgs[self.death_frame_index],
                         (self.x, self.y),
                     )
+
             else:
-                # Beenden Sie die Sterbeanimation und entfernen Sie den Boss
-                # Hier können Sie auch andere Logik hinzufügen, z.B. den Spieler belohnen oder zum nächsten Level wechseln
                 self.is_dying = False
                 self.game.boss1.remove(self)
                 self.game.score += self.score
