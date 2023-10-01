@@ -54,7 +54,7 @@ class Game:
         self.level_up_fade_alpha = 0
         self.level_up_start_time = None
 
-    def generate_enemy_position(self, enemies, enemy_type, min_distance=10):
+    def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
         while True:
             if enemy_type == "vertical":
                 new_x = random.randint(0, 736)
@@ -138,7 +138,7 @@ class Game:
             for boss in self.boss1:
                 boss.update()
                 boss.check_collision()
-                boss_rect = boss.get_rect().inflate(-60, -60)
+                boss_rect = boss.get_rect().inflate(-75, -75)
 
                 if boss_rect.colliderect(self.spaceship_rect):
                     self.spaceship.lose_life(boss.damage)
