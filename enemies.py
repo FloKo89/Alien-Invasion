@@ -307,9 +307,13 @@ class Boss1(Enemy):
         self.game.screen.blit(hp_text, (margin_x + 35, margin_y + 3))
 
     def check_collision(self):
+        if self.state == "entering":
+            return
         super().check_collision(100, 0, 0)
 
     def collision_response(self, bullet_center_x, bullet_center_y):
+        if self.state == "entering":
+            return
         self.shield_strength -= 1
         if self.shield_strength <= 0:
             self.hp -= 1

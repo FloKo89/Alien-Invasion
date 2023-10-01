@@ -34,7 +34,7 @@ class Game:
         )
         pygame.display.set_caption("Mein Space Invaders")
         self.clock = pygame.time.Clock()
-        self.spaceship = Spaceship(self, 370, 515)
+        self.spaceship = Spaceship(self, self.screen.get_width() / 2 - 32, 515)
         self.running = True
         self.level_up = False
         self.level_up_timestamp = None
@@ -91,12 +91,12 @@ class Game:
             # level_check(self)
             self.level_up = level_check(self)
             self.check_win()
+            self.spaceship.draw_lives(self.screen)
             self.spaceship.update()
             self.spaceship.check_collision(radius=35)
             self.print_score()
             self.print_level()
             self.handle_events()
-            self.spaceship.draw_lives(self.screen)
             self.spaceship_rect = self.spaceship.get_rect()
 
             if len(self.spaceship.bullets) > 0:
@@ -351,8 +351,8 @@ class Game:
         self.score = 0
         self.level = 0
         self.running = True
-        self.spaceship = Spaceship(self, 370, 515)
-        self.update_enemies()  # Setzen Sie die Gegner zurück
+        self.spaceship = Spaceship(self, self.screen.get_width() / 2 - 32, 515)
+        self.update_enemies()
         self.change_background_music()
         self.change_background_video()
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
