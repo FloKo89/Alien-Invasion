@@ -7,7 +7,7 @@ from enemies import *
 class Spaceship:
     def __init__(self, game, x, y):
         self.x = x
-        self.y = y
+        self.y = 550
         self.change_x = 0
         self.game = game
         self.spaceship_img = pygame.image.load("assets/Player/spaceship.png")
