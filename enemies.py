@@ -430,9 +430,6 @@ class Boss1(Enemy):
         elif self.state == "moving":
             self.moving_behavior()
 
-        if self.hp > 0:
-            self.draw_health_bar()
-
         if (
             time.time() - self.last_shield_renewal >= 12 and self.hp > 0
         ):  # Wenn 12 Sekunden vergangen sind
@@ -473,6 +470,9 @@ class Boss1(Enemy):
                 self.is_dying = False
                 self.game.boss1.remove(self)
                 self.game.score += self.score
+        
+        if self.hp > 0:
+            self.draw_health_bar()
 
 
 class Boss1Bullet:
