@@ -11,6 +11,13 @@ from level import levels, level_check
 from game_over_menu import game_over_menu
 from pause_menu import pause_menu
 from win_menu import win_menu
+from highscore_manager import (
+    load_highscores,
+    save_highscores,
+    add_highscore,
+    display_highscores,
+    MAX_HIGHSCORES,
+)
 
 pygame.init()
 pygame.mixer.init()
@@ -53,6 +60,8 @@ class Game:
         self.level_up_fade_state = None
         self.level_up_fade_alpha = 0
         self.level_up_start_time = None
+        self.player_name = ""
+        self.highscores = load_highscores()
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
         while True:
@@ -288,7 +297,10 @@ class Game:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
             self.print_game_over()
-            game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
+            player_name = game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
+            if player_name:  # Überprüfen, ob ein Name eingegeben wurde
+                add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
+            print(player_name)
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
 
     def print_game_over(self):

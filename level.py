@@ -7,11 +7,12 @@ levels = {
     },
     1: {
         "enemies": [
-            {"type": "boss1"},
+            {"type": "vertical"},
+            {"type": "horizontal"},
         ],
         "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 1,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 3,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [

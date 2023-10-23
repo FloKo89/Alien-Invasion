@@ -47,21 +47,29 @@ def game_over_menu(game):
 
     cap = cv2.VideoCapture("movie/game_over_menu_bg_movie.mp4")
 
+    font = pygame.font.Font(None, 36)
+    input_box = pygame.Rect(game.width // 2 - 70, 350, 140, 32)
+    color = pygame.Color("OrangeRed2")
+    active = True
+    text = ""
+    name_entered = False
+    prompt_font = pygame.font.Font(None, 36)  # Schriftart für den Aufforderungstext
+    prompt_text = prompt_font.render("Spielername:", True, (238, 64, 0))
+
     # Hauptloop für das Game Over-Menü
     game_over_running = True
     while game_over_running:
-        # game.screen.fill((0, 0, 0))  # Hintergrund schwarz setzen
         play_video_background(game, cap)
 
         # Game Over Text
         go_font = pygame.font.Font("freesansbold.ttf", 64)
-        go_text = go_font.render("GAME OVER", True, (255, 255, 255))
+        go_text = go_font.render("GAME OVER", True, (139, 37, 0))
         game.screen.blit(go_text, (game.width // 2 - go_text.get_width() // 2, 150))
 
         # Anzeige des erreichten Levels
         level_font = pygame.font.Font("freesansbold.ttf", 32)
         level_text = level_font.render(
-            f"Erreichtes Level: {game.level}", True, (255, 255, 255)
+            f"Erreichtes Level: {game.level}", True, (238, 64, 0)
         )
         game.screen.blit(
             level_text, (game.width // 2 - level_text.get_width() // 2, 250)
@@ -70,7 +78,7 @@ def game_over_menu(game):
         # Anzeige der erreichten Punkte
         score_font = pygame.font.Font("freesansbold.ttf", 32)
         score_text = score_font.render(
-            f"Erzielte Punkte: {game.score}", True, (255, 255, 255)
+            f"Erzielte Punkte: {game.score}", True, (238, 64, 0)
         )
         game.screen.blit(
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
@@ -78,38 +86,80 @@ def game_over_menu(game):
 
         menu_font = pygame.font.Font("freesansbold.ttf", 32)
 
-        for index, item in enumerate(menu_items):
-            color = (255, 0, 0) if index == selected_item else (255, 255, 255)
-            menu_text = menu_font.render(item, True, color)
-            y_position = 200 + index * 40  # Reduzierter Abstand zwischen den Einträgen
-            game.screen.blit(
-                menu_text,
-                (game.width // 2 - menu_text.get_width() // 2, y_position + 250),
-            )
+        if name_entered:  # Wenn ein Name eingegeben wurde
+            for index, item in enumerate(menu_items):
+                color = (255, 0, 0) if index == selected_item else (255, 255, 255)
+                menu_text = menu_font.render(item, True, color)
+                y_position = 200 + index * 40
+                game.screen.blit(
+                    menu_text,
+                    (game.width // 2 - menu_text.get_width() // 2, y_position + 250),
+                )
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
-                    selected_item = (selected_item + 1) % len(menu_items)
-                if event.key == pygame.K_UP:
-                    selected_item = (selected_item - 1) % len(menu_items)
-                if event.key == pygame.K_RETURN:
-                    if selected_item == 0:  # "Neustart" wurde ausgewählt
-                        game_over_running = False
-                        game.reset()
-                        game.run()
-                        return
-                    elif selected_item == 1:  # "Hauptmenü" wurde ausgewählt
-                        game_over_running = False
-                        game.reset()
-                        main_menu(game, clock)
-                        return
-                    elif selected_item == 2:  # "Beenden" wurde ausgewählt
-                        game_over_running = False
-                        game.running = False
-                        pygame.quit()
-                        exit()
+                if active:  # Wenn das Eingabefeld aktiv ist
+                    if event.key == pygame.K_RETURN:
+                        if text:  # Überprüfen, ob Text vorhanden ist
+                            name_entered = True  # Name wurde eingegeben
+                            active = False  # Eingabefeld deaktivieren
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+                elif (
+                    name_entered
+                ):  # Wenn der Name eingegeben wurde und das Eingabefeld nicht aktiv ist
+                    if event.key == pygame.K_DOWN:
+                        selected_item = (selected_item + 1) % len(menu_items)
+                    if event.key == pygame.K_UP:
+                        selected_item = (selected_item - 1) % len(menu_items)
+                    if event.key == pygame.K_RETURN:
+                        if selected_item == 0:
+                            game_over_running = False
+                            game.reset()
+                            game.run()
+                            return
+                        elif selected_item == 1:
+                            game_over_running = False
+                            game.reset()
+                            main_menu(game, clock)
+                            return
+                        elif selected_item == 2:
+                            game_over_running = False
+                            game.running = False
+                            pygame.quit()
+                            exit()
+
+        # Zeichnen des Eingabefeldes
+        if not name_entered:
+            txt_surface = font.render(text, True, color)
+
+            # Gesamtbreite von "Spielername:" und dem Eingabefeld berechnen
+            combined_width = (
+                prompt_text.get_width() + 10 + max(140, txt_surface.get_width())
+            )
+
+            # Startposition von "Spielername:" so anpassen, dass die gesamte Kombination zentriert ist
+            prompt_x = game.width // 2 - combined_width // 2
+            txt_surface_x = prompt_x + prompt_text.get_width() + 10
+
+            # Position von input_box aktualisieren
+            input_box.topleft = (txt_surface_x, input_box.y)
+
+            # Zeichnen des "Spielername:"-Texts und des Eingabefelds
+            game.screen.blit(prompt_text, (prompt_x, input_box.y))
+            text_y = input_box.y + (input_box.height - txt_surface.get_height()) // 2
+            game.screen.blit(txt_surface, (txt_surface_x + 6, text_y))
+            pygame.draw.rect(game.screen, color, input_box, 2)
 
         pygame.display.update()
+
+    if name_entered:
+        return text
+    else:
+        return None

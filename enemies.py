@@ -470,7 +470,7 @@ class Boss1(Enemy):
                 self.is_dying = False
                 self.game.boss1.remove(self)
                 self.game.score += self.score
-        
+
         if self.hp > 0:
             self.draw_health_bar()
 
