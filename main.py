@@ -298,9 +298,9 @@ class Game:
             self.game_over_sound_played = True
             self.print_game_over()
             player_name = game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
+            print(f"Returned name: {player_name}")
             if player_name:  # Überprüfen, ob ein Name eingegeben wurde
                 add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
-            print(player_name)
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
 
     def print_game_over(self):

@@ -55,6 +55,7 @@ def game_over_menu(game):
     name_entered = False
     prompt_font = pygame.font.Font(None, 36)  # Schriftart für den Aufforderungstext
     prompt_text = prompt_font.render("Spielername:", True, (238, 64, 0))
+    display_error = False
 
     # Hauptloop für das Game Over-Menü
     game_over_running = True
@@ -96,6 +97,15 @@ def game_over_menu(game):
                     (game.width // 2 - menu_text.get_width() // 2, y_position + 250),
                 )
 
+        if display_error:
+            error_font = pygame.font.Font(None, 24)
+            error_msg = error_font.render(
+                "Bitte geben Sie einen Namen ein!", True, (255, 0, 0)
+            )
+            game.screen.blit(
+                error_msg, (game.width // 2 - error_msg.get_width() // 2, 500)
+            )
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -104,9 +114,12 @@ def game_over_menu(game):
             if event.type == pygame.KEYDOWN:
                 if active:  # Wenn das Eingabefeld aktiv ist
                     if event.key == pygame.K_RETURN:
-                        if text:  # Überprüfen, ob Text vorhanden ist
+                        if not text:
+                            display_error = True
+                        else:
                             name_entered = True  # Name wurde eingegeben
                             active = False  # Eingabefeld deaktivieren
+                            display_error = False  # Fehlermeldung zurücksetzen
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:
