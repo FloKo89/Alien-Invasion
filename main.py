@@ -60,7 +60,6 @@ class Game:
         self.level_up_fade_state = None
         self.level_up_fade_alpha = 0
         self.level_up_start_time = None
-        self.player_name = ""
         self.highscores = load_highscores()
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
@@ -298,7 +297,7 @@ class Game:
             self.game_over_sound_played = True
             self.print_game_over()
             player_name = game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
-            print(f"Returned name: {player_name}")
+            print(f"Returned from game_over_menu with name: {player_name}")
             if player_name:  # Überprüfen, ob ein Name eingegeben wurde
                 add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
