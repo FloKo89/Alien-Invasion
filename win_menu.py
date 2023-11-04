@@ -8,8 +8,8 @@ def win_menu(game):
     menu_items = ["Neustart", "Hauptmenü", "Beenden"]
 
     selected_item = 0
-    level_six_running = True
-    while level_six_running:
+    showing_win_menu = True
+    while showing_win_menu:
         game.screen.fill((0, 0, 0))  # Hintergrund schwarz setzen
 
         # Nachricht für das Erreichen von Level 6
@@ -51,17 +51,17 @@ def win_menu(game):
                     selected_item = (selected_item - 1) % len(menu_items)
                 if event.key == pygame.K_RETURN:
                     if selected_item == 0:  # "Neustart" wurde ausgewählt
-                        level_six_running = False
+                        showing_win_menu = False
                         game.reset()
                         game.run()
                         return
                     elif selected_item == 1:  # "Hauptmenü" wurde ausgewählt
-                        level_six_running = False
+                        showing_win_menu = False
                         game.reset()
                         main_menu(game, clock)
                         return
                     elif selected_item == 2:  # "Beenden" wurde ausgewählt
-                        level_six_running = False
+                        showing_win_menu = False
                         game.running = False
                         pygame.quit()
                         exit()

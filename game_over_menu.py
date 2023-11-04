@@ -1,6 +1,7 @@
 import pygame
 import cv2
 from menu import main_menu
+from highscore_manager import add_highscore
 
 clock = pygame.time.Clock()
 
@@ -120,6 +121,10 @@ def game_over_menu(game):
                             name_entered = True  # Name wurde eingegeben
                             active = False  # Eingabefeld deaktivieren
                             display_error = False  # Fehlermeldung zurücksetzen
+                            print(
+                                f"Adding highscore for {text} with score {game.score}"
+                            )
+                            add_highscore(text, game.score)  # Highscore hinzufügen
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:
