@@ -1,7 +1,11 @@
 import pygame
 import cv2
 
+from highscore_manager import show_highscores_screen
+
 clock = pygame.time.Clock()
+
+cap = cv2.VideoCapture("movie/game_over_menu_bg_movie.mp4")
 
 
 def play_video_background(game, cap):  # Video im Hintergrund abspielen
@@ -42,7 +46,7 @@ def resize_frame(frame, target_width, target_height):  #
 def main_menu(game, clock):
     # main_menu_background_music()
     menu_font = pygame.font.Font("freesansbold.ttf", 32)
-    menu_items = ["Spiel starten", "Beenden"]
+    menu_items = ["Spiel starten", "Bestenliste", "Beenden"]
     selected_item = 0
 
     cap = cv2.VideoCapture("movie/menu_bg_movie.mp4")
@@ -67,9 +71,13 @@ def main_menu(game, clock):
                         game.reset()
                         game.run()
                         return
-                    # elif selected_item == 1:  # "Steuerung" wurde ausgewählt
 
-                    elif selected_item == 1:  # "Beenden" wurde ausgewählt
+                    elif selected_item == 1:  # "Bestenliste" wurde ausgewählt
+                        cap.release()
+                        show_highscores_screen(game)
+                        main_menu(game, clock)
+
+                    elif selected_item == 2:  # "Beenden" wurde ausgewählt
                         cap.release()
                         pygame.quit()
                         exit()
@@ -77,7 +85,7 @@ def main_menu(game, clock):
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)
             menu_text = menu_font.render(item, True, color)
-            y_position = 480 + index * 60
+            y_position = 400 + index * 60
             game.screen.blit(
                 menu_text, (game.width // 2 - menu_text.get_width() // 2, y_position)
             )

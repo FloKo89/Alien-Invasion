@@ -13,9 +13,7 @@ from pause_menu import pause_menu
 from win_menu import win_menu
 from highscore_manager import (
     load_highscores,
-    save_highscores,
     add_highscore,
-    display_highscores,
     MAX_HIGHSCORES,
 )
 

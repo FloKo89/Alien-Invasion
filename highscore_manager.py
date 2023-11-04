@@ -1,5 +1,45 @@
+import pygame
 import pickle
+import cv2
 import os
+
+clock = pygame.time.Clock()
+
+
+def play_video_background(game, cap):  # Video im Hintergrund abspielen
+    current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
+    frame_duration = 1000.0 / cap.get(
+        cv2.CAP_PROP_FPS
+    )  # Dauer eines Einzelbildes in Millisekunden
+    if (
+        current_time - game.last_video_update > frame_duration
+    ):  # Wenn genug Zeit verstrichen ist
+        ret, frame = cap.read()  # Einzelbild lesen
+        if not ret:  # Wenn das Video zu Ende ist
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
+            ret, frame = cap.read()  # Erneut lesen
+
+        frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
+        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
+        game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        game.last_video_update = current_time
+    else:
+        # Das gleiche Bild sollte beibehalten werden, da nicht genug Zeit verstrichen ist
+        pass
+
+
+def resize_frame(frame, target_width, target_height):  #
+    height, width, channels = frame.shape
+    aspect_ratio = width / height
+    new_width = int(target_height * aspect_ratio)
+    new_height = target_height
+    if new_width > target_width:
+        new_width = target_width
+        new_height = int(target_width / aspect_ratio)
+    resized_frame = cv2.resize(frame, (new_width, new_height))
+    return resized_frame
+
 
 HIGHSCORE_FILE = os.path.join(os.path.dirname(__file__), "highscores.dat")
 MAX_HIGHSCORES = 10
@@ -36,10 +76,42 @@ def add_highscore(name, score):
         print(f"Error adding highscore: {e}")
 
 
-def display_highscores():
-    try:
-        highscores = load_highscores()
-        for name, score in highscores:
-            print(f"{name}: {score}")
-    except Exception as e:
-        print(f"Error displaying highscores: {e}")
+def show_highscores_screen(game):
+    highscores = load_highscores()  # Highscores laden
+    game.screen.fill(
+        (0, 0, 0)
+    )  # Bildschirm mit Schwarz füllen, oder was auch immer Ihr Hintergrund ist
+
+    title_font = pygame.font.Font("freesansbold.ttf", 50)
+    title_text = title_font.render("Bestenliste", True, (255, 255, 255))
+    game.screen.blit(title_text, (game.width // 2 - title_text.get_width() // 2, 50))
+
+    score_font = pygame.font.Font("freesansbold.ttf", 32)
+    start_y = 150  # Startposition für die Highscores
+    for index, (name, score) in enumerate(highscores):
+        score_text = score_font.render(
+            f"{index + 1}. {name}:           {score} Punkte", True, (255, 255, 255)
+        )
+        game.screen.blit(
+            score_text,
+            (game.width // 2 - score_text.get_width() // 2, start_y + index * 40),
+        )
+
+    back_font = pygame.font.Font("freesansbold.ttf", 24)
+    back_text = back_font.render(
+        "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
+        True,
+        (255, 255, 255),
+    )
+    game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 550))
+
+    pygame.display.update()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                waiting = False
