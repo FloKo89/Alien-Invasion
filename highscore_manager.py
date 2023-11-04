@@ -78,30 +78,46 @@ def add_highscore(name, score):
 
 def show_highscores_screen(game):
     highscores = load_highscores()  # Highscores laden
-    game.screen.fill(
-        (0, 0, 0)
-    )  # Bildschirm mit Schwarz füllen, oder was auch immer Ihr Hintergrund ist
+    game.screen.fill((0, 0, 0))  # Bildschirm mit Schwarz füllen
 
     title_font = pygame.font.Font("freesansbold.ttf", 50)
     title_text = title_font.render("Bestenliste", True, (255, 255, 255))
     game.screen.blit(title_text, (game.width // 2 - title_text.get_width() // 2, 50))
 
     score_font = pygame.font.Font("freesansbold.ttf", 32)
+
+    # Platz für die Spalten festlegen
+    place_x = game.width // 4
+    name_x = place_x + 100  # Verschiebung um 100 Pixel von der Platzierung
+    score_right_margin = 160  # Rechter Abstand für die Punktzahlen
+
     start_y = 150  # Startposition für die Highscores
     for index, (name, score) in enumerate(highscores):
-        score_text = score_font.render(
-            f"{index + 1}. {name}:           {score} Punkte", True, (255, 255, 255)
+        # Rendern und blitten der Platzierung
+        place_text = score_font.render(f"{index + 1}.", True, (255, 255, 255))
+        game.screen.blit(
+            place_text, (place_x - place_text.get_width() // 2, start_y + index * 40)
         )
+
+        # Rendern und blitten des Namens
+        name_text = score_font.render(name, True, (255, 255, 255))
+        game.screen.blit(name_text, (name_x, start_y + index * 40))
+
+        # Rendern und blitten der Punktzahl rechtsbündig
+        score_text = score_font.render(f"{score} Punkte", True, (255, 255, 255))
         game.screen.blit(
             score_text,
-            (game.width // 2 - score_text.get_width() // 2, start_y + index * 40),
+            (
+                game.width - score_right_margin - score_text.get_width(),
+                start_y + index * 40,
+            ),
         )
 
     back_font = pygame.font.Font("freesansbold.ttf", 24)
     back_text = back_font.render(
         "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
         True,
-        (255, 255, 255),
+        (255, 0, 0),
     )
     game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 550))
 
