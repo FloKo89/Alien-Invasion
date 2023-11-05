@@ -144,7 +144,7 @@ def game_over_menu(game):
                             return
                         elif selected_item == 1:
                             game_over_running = False
-                            game.reset()
+                            game.reset(to_main_menu=True)
                             main_menu(game, clock)
                             return
                         elif selected_item == 2:

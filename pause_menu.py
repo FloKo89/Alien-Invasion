@@ -45,7 +45,7 @@ def pause_menu(game, clock):
                         game.run()
                     elif selected_item == 2:
                         paused = False
-                        game.reset()
+                        game.reset(to_main_menu=True)
                         main_menu(game, clock)
                     elif selected_item == 3:
                         pygame.quit()

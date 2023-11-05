@@ -203,6 +203,7 @@ class Game:
                     pause_menu(self, self.clock)
 
     def change_background_music(self):
+        self.current_background_music = levels[self.level]["background_music"]
         if self.level in levels:
             pygame.mixer.music.stop()
             pygame.mixer.music.load(levels[self.level]["background_music"])
@@ -354,11 +355,11 @@ class Game:
         if self.level == 6:
             win_menu(self)
 
-    def reset(self):
+    def reset(self, to_main_menu=False):
         self.game_over = False
         self.game_over_sound_played = False
         self.score = 0
-        self.level = 0
+        self.level = 0 if to_main_menu else 1
         self.running = True
         self.spaceship = Spaceship(self, self.screen.get_width() / 2 - 32, 515)
         self.update_enemies()
@@ -367,6 +368,7 @@ class Game:
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
+        self.enemy_horizontal_bullets = []
         self.enemies_vertical = []
         self.boss1 = []
         self.boss1_bullets = []

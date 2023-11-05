@@ -76,6 +76,7 @@ def main_menu(game, clock):
                         cap.release()
                         show_highscores_screen(game)
                         main_menu(game, clock)
+                        return
 
                     elif selected_item == 2:  # "Beenden" wurde ausgewählt
                         cap.release()
