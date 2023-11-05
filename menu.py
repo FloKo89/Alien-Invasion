@@ -2,6 +2,7 @@ import pygame
 import cv2
 
 from highscore_manager import show_highscores_screen
+from help_screen import show_help_screen
 
 clock = pygame.time.Clock()
 
@@ -79,6 +80,7 @@ def main_menu(game, clock):
                         return
 
                     elif selected_item == 2:  # "Spielhilfe" wurde ausgewählt
+                        show_help_screen(game)
                         pass
 
                     elif selected_item == 3:  # "Beenden" wurde ausgewählt
