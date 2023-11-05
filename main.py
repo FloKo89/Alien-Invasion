@@ -135,11 +135,19 @@ class Game:
                 if self.check_collision_and_game_over(enemy):
                     break
 
+            self.enemies_horizontal = [
+                enemy for enemy in self.enemies_horizontal if enemy.alive
+            ]
+
             for enemy in self.enemies_vertical:
                 if enemy.y > 600:
                     self.enemies_vertical.remove(enemy)
                 if self.check_collision_and_game_over(enemy):
                     break
+
+            self.enemies_vertical = [
+                enemy for enemy in self.enemies_vertical if enemy.alive
+            ]
 
             for boss in self.boss1:
                 boss.update()

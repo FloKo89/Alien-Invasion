@@ -74,6 +74,7 @@ class Enemy_horizontal(Enemy):
         self.last_shot_time = time.time()
         self.shot_interval = 2
         self.hp = 5
+        self.alive = True
 
     def check_collision(self):
         super().check_collision(35)
@@ -96,28 +97,28 @@ class Enemy_horizontal(Enemy):
                     self.y - self.death_img.get_height() / 2,
                 ),
             )
-            self.game.enemies_horizontal.remove(self)
+            self.alive = False
 
     def update(self):
-        self.x += self.change_x
+        if self.alive:
+            self.x += self.change_x
+            # Wenn der Gegner von der linken Seite ins Fenster kommt und den rechten Rand erreicht
+            if self.change_x == 1 and self.x >= 736:
+                self.change_x = -(self.change_x)
 
-        # Wenn der Gegner von der linken Seite ins Fenster kommt und den rechten Rand erreicht
-        if self.change_x == 1 and self.x >= 736:
-            self.change_x = -(self.change_x)
+            # Wenn der Gegner, der von der linken Seite ins Fenster kam, den linken Rand erreicht
+            elif self.change_x == -1 and self.x <= 0:
+                self.change_x = -(self.change_x)
 
-        # Wenn der Gegner, der von der linken Seite ins Fenster kam, den linken Rand erreicht
-        elif self.change_x == -1 and self.x <= 0:
-            self.change_x = -(self.change_x)
+            # Wenn der Gegner von der rechten Seite ins Fenster kommt und den linken Rand erreicht
+            elif self.change_x == -1 and self.x <= 0:
+                self.change_x = -(self.change_x)
 
-        # Wenn der Gegner von der rechten Seite ins Fenster kommt und den linken Rand erreicht
-        elif self.change_x == -1 and self.x <= 0:
-            self.change_x = -(self.change_x)
+            # Wenn der Gegner, der von der rechten Seite ins Fenster kam, den rechten Rand erreicht
+            elif self.change_x == 1 and self.x >= 736:
+                self.change_x = -(self.change_x)
 
-        # Wenn der Gegner, der von der rechten Seite ins Fenster kam, den rechten Rand erreicht
-        elif self.change_x == 1 and self.x >= 736:
-            self.change_x = -(self.change_x)
-
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))
+            self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
         if time.time() - self.last_shot_time >= self.shot_interval:
             self.shoot()
@@ -175,6 +176,7 @@ class Enemy_vertical(Enemy):
             sound.set_volume(volume)
         self.score = 2
         self.hp = 2
+        self.alive = True
 
     def check_collision(self):
         super().check_collision(35, 10, 10)
@@ -197,11 +199,12 @@ class Enemy_vertical(Enemy):
                     self.y - self.death_img.get_height() / 2,
                 ),
             )
-            self.game.enemies_vertical.remove(self)
+            self.alive = False
 
     def update(self):
-        self.y += self.change_y
-        self.game.screen.blit(self.enemy_img, (self.x, self.y))
+        if self.alive:
+            self.y += self.change_y
+            self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
 
 class Boss1(Enemy):
