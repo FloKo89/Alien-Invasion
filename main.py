@@ -92,8 +92,8 @@ class Game:
     def run(self):
         while self.running:
             self.clock.tick(60)
-            # play_video_background(self, self.cap)
-            self.screen.fill((0, 0, 0))
+            play_video_background(self, self.cap)
+            # self.screen.fill((0, 0, 0))
             # level_check(self)
             self.level_up = level_check(self)
             self.check_win()
@@ -304,7 +304,6 @@ class Game:
             self.game_over_sound_played = True
             self.print_game_over()
             player_name = game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
-            print(f"Returned from game_over_menu with name: {player_name}")
             if player_name:  # Überprüfen, ob ein Name eingegeben wurde
                 add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück

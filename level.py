@@ -22,7 +22,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/level2.mp4",
+        "background_video": "movie/test1.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 6,
     },
@@ -35,7 +35,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/level3.mp4",
+        "background_video": "movie/test1.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 8,
     },
@@ -50,7 +50,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/level4.mp4",
+        "background_video": "movie/test1.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 9,
     },
@@ -58,7 +58,7 @@ levels = {
         "enemies": [
             {"type": "boss1"},
         ],
-        "background_video": "movie/level5.mp4",
+        "background_video": "movie/test1.mp4",
         "background_music": "sound/Groove Metalcore 2020.wav",
         "num_enemies": 1,
     },
@@ -88,7 +88,7 @@ def level_check(self):
         self.level = 6
 
     if current_level != self.level:
-        # self.change_background_video()
+        self.change_background_video()
         self.update_enemies()
         level_changed = True
 
