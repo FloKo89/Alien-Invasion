@@ -88,7 +88,7 @@ def level_check(self):
         self.level = 6
 
     if current_level != self.level:
-        self.change_background_video()
+        # self.change_background_video()
         self.update_enemies()
         level_changed = True
 
@@ -96,4 +96,10 @@ def level_check(self):
         if self.current_background_music != new_music:
             self.change_background_music()
             self.current_background_music = new_music
+
+        new_video = levels[self.level]["background_video"]
+        if self.current_background_video != new_video:
+            self.change_background_video()
+            self.current_background_video = new_video
+
     return level_changed

@@ -44,6 +44,7 @@ class Game:
         self.level_up = False
         self.level_up_timestamp = None
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
+        self.current_background_video = self.cap
         self.last_video_update = pygame.time.get_ticks()
         self.current_background_music = None
         self.change_background_music()
