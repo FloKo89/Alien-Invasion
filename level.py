@@ -17,20 +17,27 @@ levels = {
     2: {
         "enemies": [
             {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
             {"type": "horizontal"},
         ],
         "background_video": "movie/level2.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 3,
+        "num_enemies": 6,
     },
     3: {
         "enemies": [
             {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "vertical"},
+            {"type": "horizontal"},
+            {"type": "horizontal"},
             {"type": "horizontal"},
         ],
         "background_video": "movie/level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
-        "num_enemies": 4,
+        "num_enemies": 8,
     },
     4: {
         "enemies": [

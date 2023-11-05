@@ -66,14 +66,14 @@ class Enemy_horizontal(Enemy):
         volume = 0.3
         for sound in self.hit_sounds:
             sound.set_volume(volume)
-        self.score = 10
+        self.score = 5
         self.bullet_img = pygame.image.load("assets/Enemies/bullet.png")
         self.bullet_sound = pygame.mixer.Sound("sound/boss1_bullet.wav")
         self.damage = 1
         self.bullets = []
         self.last_shot_time = time.time()
         self.shot_interval = 2
-        self.hp = 1
+        self.hp = 5
 
     def check_collision(self):
         super().check_collision(35)
@@ -242,7 +242,7 @@ class Boss1(Enemy):
         self.last_shot_time2 = time.time()
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
-        self.hp = 1
+        self.hp = 100
         N = 50
         self.death_animation_imgs = [
             pygame.image.load(f"assets/Boss1/death/Boss1_death{i}.png")
