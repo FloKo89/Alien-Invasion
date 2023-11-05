@@ -55,6 +55,12 @@ levels = {
         "background_music": "sound/Groove Metalcore 2020.wav",
         "num_enemies": 1,
     },
+    6: {
+        "enemies": [],
+        "background_video": "movie/level5.mp4",
+        "background_music": "sound/Groove Metalcore 2020.wav",
+        "num_enemies": 0,
+    },
 }
 
 

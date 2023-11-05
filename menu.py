@@ -46,7 +46,7 @@ def resize_frame(frame, target_width, target_height):  #
 def main_menu(game, clock):
     # main_menu_background_music()
     menu_font = pygame.font.Font("freesansbold.ttf", 32)
-    menu_items = ["Spiel starten", "Bestenliste", "Beenden"]
+    menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Beenden"]
     selected_item = 0
 
     cap = cv2.VideoCapture("movie/menu_bg_movie.mp4")
@@ -78,7 +78,10 @@ def main_menu(game, clock):
                         main_menu(game, clock)
                         return
 
-                    elif selected_item == 2:  # "Beenden" wurde ausgewählt
+                    elif selected_item == 2:  # "Spielhilfe" wurde ausgewählt
+                        pass
+
+                    elif selected_item == 3:  # "Beenden" wurde ausgewählt
                         cap.release()
                         pygame.quit()
                         exit()
@@ -86,7 +89,7 @@ def main_menu(game, clock):
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)
             menu_text = menu_font.render(item, True, color)
-            y_position = 400 + index * 60
+            y_position = 415 + index * 40
             game.screen.blit(
                 menu_text, (game.width // 2 - menu_text.get_width() // 2, y_position)
             )

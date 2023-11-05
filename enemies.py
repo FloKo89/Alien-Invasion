@@ -242,7 +242,7 @@ class Boss1(Enemy):
         self.last_shot_time2 = time.time()
         self.last_shot_time3 = time.time()
         self.shot_interval = 2
-        self.hp = 100
+        self.hp = 1
         N = 50
         self.death_animation_imgs = [
             pygame.image.load(f"assets/Boss1/death/Boss1_death{i}.png")
