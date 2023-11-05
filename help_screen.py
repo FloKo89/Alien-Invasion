@@ -20,7 +20,7 @@ def show_help_screen(game):
             True,
             (255, 0, 0),
         )
-        game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 550))
+        game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 573))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
