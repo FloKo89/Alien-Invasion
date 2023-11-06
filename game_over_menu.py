@@ -1,7 +1,7 @@
 import pygame
 import cv2
 from menu import main_menu
-from highscore_manager import add_highscore
+from highscore_manager import add_highscore, show_highscores_screen
 
 clock = pygame.time.Clock()
 
@@ -42,7 +42,7 @@ def resize_frame(frame, target_width, target_height):  #
 
 
 def game_over_menu(game):
-    menu_items = ["Neustart", "Hauptmenü", "Beenden"]
+    menu_items = ["Neustart", "Bestenliste", "Hauptmenü", "Beenden"]
 
     selected_item = 0
 
@@ -92,10 +92,10 @@ def game_over_menu(game):
             for index, item in enumerate(menu_items):
                 color = (255, 0, 0) if index == selected_item else (255, 255, 255)
                 menu_text = menu_font.render(item, True, color)
-                y_position = 200 + index * 40
+                y_position = 415 + index * 40
                 game.screen.blit(
                     menu_text,
-                    (game.width // 2 - menu_text.get_width() // 2, y_position + 250),
+                    (game.width // 2 - menu_text.get_width() // 2, y_position),
                 )
 
         if display_error:
@@ -144,10 +144,15 @@ def game_over_menu(game):
                             return
                         elif selected_item == 1:
                             game_over_running = False
-                            game.reset(to_main_menu=True)
+                            show_highscores_screen(game)
                             main_menu(game, clock)
                             return
                         elif selected_item == 2:
+                            game_over_running = False
+                            game.reset(to_main_menu=True)
+                            main_menu(game, clock)
+                            return
+                        elif selected_item == 3:
                             game_over_running = False
                             game.running = False
                             pygame.quit()
