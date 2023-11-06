@@ -80,9 +80,9 @@ def level_check(self):
         self.level = 2
     elif self.score >= 15 and self.score < 25:
         self.level = 3
-    elif self.score >= 25 and self.score < 35:
+    elif self.score >= 25 and self.score < 60:
         self.level = 4
-    elif self.score >= 35 and self.score < 45:
+    elif self.score >= 60 and self.score < 100:
         self.level = 5
     elif self.score >= 120:
         self.level = 6
