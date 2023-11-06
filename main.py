@@ -43,6 +43,8 @@ class Game:
         self.running = True
         self.level_up = False
         self.level_up_timestamp = None
+        self.menu_button_sound = pygame.mixer.Sound("sound/menu_button.wav")
+        self.menu_button_sound.set_volume(0.4)
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.current_background_video = self.cap
         self.last_video_update = pygame.time.get_ticks()
@@ -210,6 +212,9 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     pause_menu(self, self.clock)
+
+    def play_menu_button_sound(self):
+        pygame.mixer.Sound.play(self.menu_button_sound)
 
     def change_background_music(self):
         self.current_background_music = levels[self.level]["background_music"]

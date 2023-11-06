@@ -134,8 +134,10 @@ def game_over_menu(game):
                 ):  # Wenn der Name eingegeben wurde und das Eingabefeld nicht aktiv ist
                     if event.key == pygame.K_DOWN:
                         selected_item = (selected_item + 1) % len(menu_items)
+                        game.play_menu_button_sound()
                     if event.key == pygame.K_UP:
                         selected_item = (selected_item - 1) % len(menu_items)
+                        game.play_menu_button_sound()
                     if event.key == pygame.K_RETURN:
                         if selected_item == 0:
                             game_over_running = False
