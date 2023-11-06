@@ -231,6 +231,16 @@ class Boss1(Enemy):
             pygame.mixer.Sound("sound/enemy_explosion3.wav"),
             pygame.mixer.Sound("sound/enemy_explosion4.wav"),
         ]
+        self.alien_vocals = [
+            pygame.mixer.Sound("sound/Alien_vocal1.wav"),
+            pygame.mixer.Sound("sound/Alien_vocal2.wav"),
+            pygame.mixer.Sound("sound/Alien_dying.wav"),
+            pygame.mixer.Sound("sound/Alien_entering.wav"),
+        ]
+        self.alien_vocal1_played = False
+        self.alien_vocal2_played = False
+        self.alien_entering_played = False
+
         volume = 0.5
         for sound in self.hit_sounds:
             sound.set_volume(volume)
@@ -358,6 +368,10 @@ class Boss1(Enemy):
         pygame.mixer.Sound.play(self.third_bullet_sound)
 
     def entering_behavior(self):
+        if not self.alien_entering_played:
+            pygame.mixer.Sound.play(self.alien_vocals[3])
+            self.alien_entering_played = True
+
         target_y = (
             self.game.screen.get_height() / 2 - self.enemy_img.get_height() / 2
         )  # Korrektur hier
@@ -443,6 +457,14 @@ class Boss1(Enemy):
         elif self.state == "moving":
             self.moving_behavior()
 
+        if self.hp <= 80 and not self.alien_vocal1_played:
+            pygame.mixer.Sound.play(self.alien_vocals[0])
+            self.alien_vocal1_played = True
+
+        if self.hp <= 60 and not self.alien_vocal2_played:
+            pygame.mixer.Sound.play(self.alien_vocals[1])
+            self.alien_vocal2_played = True
+
         if (
             time.time() - self.last_shield_renewal >= 12 and self.hp > 0
         ):  # Wenn 12 Sekunden vergangen sind
@@ -458,6 +480,7 @@ class Boss1(Enemy):
         if self.is_dying:
             if not self.death_sound_played:
                 pygame.mixer.Sound.play(self.is_dying_sound)
+                pygame.mixer.Sound.play(self.alien_vocals[2])
                 self.death_sound_played = True
             # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
             if time.time() - self.last_death_animation_time > 0.2:
