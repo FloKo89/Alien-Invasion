@@ -54,6 +54,7 @@ class Enemy_horizontal(Enemy):
         else:
             self.change_x = -1
         self.change_y = 0
+        self.acceleration = 0.5
         self.enemy_img = pygame.image.load("assets/Enemies/enemy_horizontal.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion1.png")
         self.death_img = pygame.image.load("assets/Explosions/explosion2.png")
@@ -101,7 +102,7 @@ class Enemy_horizontal(Enemy):
 
     def update(self):
         if self.alive:
-            self.x += self.change_x
+            self.x += self.change_x * self.speed
             # Wenn der Gegner von der linken Seite ins Fenster kommt und den rechten Rand erreicht
             if self.change_x == 1 and self.x >= 736:
                 self.change_x = -(self.change_x)
@@ -117,6 +118,12 @@ class Enemy_horizontal(Enemy):
             # Wenn der Gegner, der von der rechten Seite ins Fenster kam, den rechten Rand erreicht
             elif self.change_x == 1 and self.x >= 736:
                 self.change_x = -(self.change_x)
+
+            self.speed += self.acceleration
+            if self.speed >= 5:
+                self.acceleration = -0.1
+            if self.speed <= 1:
+                self.acceleration = 0.1
 
             self.game.screen.blit(self.enemy_img, (self.x, self.y))
 

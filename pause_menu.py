@@ -1,10 +1,11 @@
 import pygame
 from menu import main_menu
+from help_screen import show_help_screen
 
 
 def pause_menu(game, clock):
     paused = True
-    menu_items = ["Fortsetzen", "Neustarten", "Hauptmenü", "Beenden"]
+    menu_items = ["Fortsetzen", "Spielhilfe", "Neustarten", "Hauptmenü", "Beenden"]
     selected_item = 0
     pause_font = pygame.font.Font("freesansbold.ttf", 64)
     menu_font = pygame.font.Font("freesansbold.ttf", 32)
@@ -22,7 +23,7 @@ def pause_menu(game, clock):
             y_position = 200 + index * 40
             game.screen.blit(
                 menu_text,
-                (game.width // 2 - menu_text.get_width() // 2, y_position + 200),
+                (game.width // 2 - menu_text.get_width() // 2, y_position + 175),
             )
 
         pygame.display.update()
@@ -40,13 +41,15 @@ def pause_menu(game, clock):
                     if selected_item == 0:
                         paused = False
                     elif selected_item == 1:
+                        show_help_screen(game)
+                    elif selected_item == 2:
                         paused = False
                         game.reset()
                         game.run()
-                    elif selected_item == 2:
+                    elif selected_item == 3:
                         paused = False
                         game.reset(to_main_menu=True)
                         main_menu(game, clock)
-                    elif selected_item == 3:
+                    elif selected_item == 4:
                         pygame.quit()
                         exit()
