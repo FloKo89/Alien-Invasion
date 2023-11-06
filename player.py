@@ -13,7 +13,9 @@ class Spaceship:
         self.spaceship_img = pygame.image.load("assets/Player/spaceship.png")
         self.hit_img = pygame.image.load("assets/Explosions/explosion2.png")
         self.hit_sound = pygame.mixer.Sound("sound/enemy_explosion1.wav")
+        self.hit_sound.set_volume(0.3)
         self.shoot_sound = pygame.mixer.Sound("sound/Boss1_bullet.wav")
+        self.shoot_sound.set_volume(0.3)
         self.bullets = []
         self.damage = 1
         self.hp = 4

@@ -217,7 +217,7 @@ class Game:
             pygame.mixer.music.stop()
             pygame.mixer.music.load(levels[self.level]["background_music"])
             pygame.mixer.music.play(-1, 0.0, 5)
-            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.set_volume(0.4)
 
     def change_background_video(self):
         if self.level in levels:
