@@ -1,7 +1,7 @@
 levels = {
     0: {
         "enemies": [],
-        "background_video": "movie/menu_bg_movie.mp4",
+        "background_video": "movie/main_menu.mp4",
         "background_music": "sound/ES_Empty Space - Etienne Roussel.mp3",
         "num_enemies": 0,
     },
@@ -10,7 +10,7 @@ levels = {
             {"type": "vertical"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/test1.mp4",  # Optional, um die Framerate des Videos zu definieren
+        "background_video": "movie/level1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 3,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
@@ -22,7 +22,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/test1.mp4",
+        "background_video": "movie/level2.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 6,
     },
@@ -35,7 +35,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/test1.mp4",
+        "background_video": "movie\level3.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 8,
     },
@@ -50,7 +50,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie/test1.mp4",
+        "background_video": "movie/level4.mp4",
         "background_music": "sound/bg_music_1-5.mpeg",
         "num_enemies": 9,
     },
@@ -58,13 +58,13 @@ levels = {
         "enemies": [
             {"type": "boss1"},
         ],
-        "background_video": "movie/test1.mp4",
+        "background_video": "movie/level5.mp4",
         "background_music": "sound/Groove Metalcore 2020.wav",
         "num_enemies": 1,
     },
     6: {
         "enemies": [],
-        "background_video": "movie/level5.mp4",
+        "background_video": "movie/win_menu.mp4",
         "background_music": "sound/Groove Metalcore 2020.wav",
         "num_enemies": 0,
     },
@@ -74,17 +74,17 @@ levels = {
 def level_check(self):
     current_level = self.level
     level_changed = False
-    if self.score < 50:
+    if self.score < 5:
         self.level = 1
-    elif self.score >= 50 and self.score < 150:
+    elif self.score >= 5 and self.score < 15:
         self.level = 2
-    elif self.score >= 150 and self.score < 250:
+    elif self.score >= 15 and self.score < 25:
         self.level = 3
-    elif self.score >= 250 and self.score < 350:
+    elif self.score >= 25 and self.score < 35:
         self.level = 4
-    elif self.score >= 350 and self.score < 450:
+    elif self.score >= 35 and self.score < 45:
         self.level = 5
-    elif self.score >= 450:
+    elif self.score >= 120:
         self.level = 6
 
     if current_level != self.level:

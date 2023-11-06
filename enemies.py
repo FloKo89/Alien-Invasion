@@ -343,7 +343,7 @@ class Boss1(Enemy):
     def shoot(self):
         self.spawn_bullet(0, 1)
 
-        if self.phase == 3:
+        if self.phase == 4:
             self.spawn_bullet(0.5, 1)
             self.spawn_bullet(-0.5, 1)
 
@@ -414,22 +414,25 @@ class Boss1(Enemy):
 
         if (
             time.time() - self.last_shot_time3 >= self.shot_interval
-            and self.phase == 3
+            and self.phase >= 3
             and self.hp > 0
         ):
             self.shoot_third()
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if self.hp >= 75:  # Wenn der Boss 90% seiner HP verloren hat
+        if self.hp >= 80:  # Wenn der Boss 90% seiner HP verloren hat
             self.speed = 2  # Geschwindigkeit verdoppeln
             self.phase = 1
-        elif self.hp >= 35:
+        elif self.hp >= 60:
             self.speed = 3
             self.phase = 2
+        elif self.hp >= 35:
+            self.speed = 3
+            self.phase = 3
         elif self.hp > 0:
             self.speed = 4
-            self.phase = 3
+            self.phase = 4
         else:
             self.speed = 0
             self.is_dying = True

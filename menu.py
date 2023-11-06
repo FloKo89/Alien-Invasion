@@ -6,8 +6,6 @@ from help_screen import show_help_screen
 
 clock = pygame.time.Clock()
 
-cap = cv2.VideoCapture("movie/game_over_menu_bg_movie.mp4")
-
 
 def play_video_background(game, cap):  # Video im Hintergrund abspielen
     current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
@@ -50,7 +48,7 @@ def main_menu(game, clock):
     menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Beenden"]
     selected_item = 0
 
-    cap = cv2.VideoCapture("movie/menu_bg_movie.mp4")
+    cap = cv2.VideoCapture("movie/main_menu.mp4")
 
     while True:
         play_video_background(game, cap)
