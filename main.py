@@ -185,8 +185,6 @@ class Game:
                     self.boss1_third_bullets.remove(bullet)
                     break
 
-            self.update_level_up_fade()
-            self.print_level_up()
             pygame.display.update()
 
     def handle_events(self):
@@ -343,6 +341,7 @@ class Game:
             self.screen.blit(
                 level_up_text, (self.width // 2 - level_up_text.get_width() // 2, 250)
             )
+            self.update_level_up_fade()
 
     def update_level_up_fade(self):
         if self.level_up_fade_state == "in":
