@@ -509,6 +509,7 @@ class Boss1(Enemy):
             else:
                 self.is_dying = False
                 self.game.boss1.remove(self)
+                self.game.level += 1
                 self.game.score += self.score
 
         if self.hp > 0:

@@ -74,21 +74,18 @@ levels = {
 def level_check(self):
     current_level = self.level
     level_changed = False
-    if self.score < 5:
+    if self.score < 50:
         self.level = 1
-    elif self.score >= 5 and self.score < 15:
+    elif self.score >= 50 and self.score < 150:
         self.level = 2
-    elif self.score >= 15 and self.score < 25:
+    elif self.score >= 150 and self.score < 250:
         self.level = 3
-    elif self.score >= 25 and self.score < 60:
+    elif self.score >= 250 and self.score < 285:
         self.level = 4
-    elif self.score >= 60 and self.score < 100:
+    elif self.score >= 285:
         self.level = 5
-    elif self.score >= 120:
-        self.level = 6
 
     if current_level != self.level:
-        # self.change_background_video()
         self.update_enemies()
         level_changed = True
 
