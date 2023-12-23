@@ -44,7 +44,7 @@ def resize_frame(frame, target_width, target_height):  #
 def win_menu(game):
     menu_items = ["Neustart", "Hauptmenü", "Beenden"]
 
-    cap = cv2.VideoCapture("movie\win_menu.mp4")
+    cap = cv2.VideoCapture(r"movie\win_menu.mp4")
 
     selected_item = 0
     font = pygame.font.Font(None, 36)

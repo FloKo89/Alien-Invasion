@@ -10,20 +10,20 @@ class Spaceship:
         self.y = 550
         self.change_x = 0
         self.game = game
-        self.spaceship_img = pygame.image.load("assets\Player\spaceship.png")
-        self.hit_img = pygame.image.load("assets\Explosions\explosion2.png")
-        self.hit_sound = pygame.mixer.Sound("sound\enemy_explosion1.wav")
+        self.spaceship_img = pygame.image.load(r"assets\Player\spaceship.png")
+        self.hit_img = pygame.image.load(r"assets\Explosions\explosion2.png")
+        self.hit_sound = pygame.mixer.Sound(r"sound\enemy_explosion1.wav")
         self.hit_sound.set_volume(0.3)
-        self.shoot_sound = pygame.mixer.Sound("sound\boss1_bullet.wav")
+        self.shoot_sound = pygame.mixer.Sound(r"sound\boss1_bullet.wav")
         self.shoot_sound.set_volume(0.3)
         self.bullets = []
         self.damage = 1
         self.hp = 4
         self.hp_images = [
-            pygame.image.load("assets\Player\player_25_hp.png"),
-            pygame.image.load("assets\Player\player_50_hp.png"),
-            pygame.image.load("assets\Player\player_75_hp.png"),
-            pygame.image.load("assets\Player\player_100_hp.png"),
+            pygame.image.load(r"assets\Player\player_25_hp.png"),
+            pygame.image.load(r"assets\Player\player_50_hp.png"),
+            pygame.image.load(r"assets\Player\player_75_hp.png"),
+            pygame.image.load(r"assets\Player\player_100_hp.png"),
         ]
         self.last_damage_time = 0
         self.blink_end_time = 0
@@ -141,7 +141,7 @@ class Bullet:
         self.is_fired = False
         self.bullet_speed = 10
         self.game = game
-        self.bullet_img = pygame.image.load("assets\Player\bullet.png")
+        self.bullet_img = pygame.image.load(r"assets\Player\bullet.png")
 
     def fired(self):
         self.is_fired = True

@@ -48,7 +48,7 @@ def main_menu(game, clock):
     menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Beenden"]
     selected_item = 0
 
-    cap = cv2.VideoCapture("movie\main_menu.mp4")
+    cap = cv2.VideoCapture(r"movie\main_menu.mp4")
 
     while True:
         play_video_background(game, cap)

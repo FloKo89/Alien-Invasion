@@ -2,7 +2,7 @@ import pygame
 
 
 def show_help_screen(game):
-    help_image = pygame.image.load("assets\help_screen.png")  # Laden des Hilfebildes
+    help_image = pygame.image.load(r"assets\help_screen.png")  # Laden des Hilfebildes
     help_image = pygame.transform.scale(
         help_image, (game.width, game.height)
     )  # Skalieren des Bildes auf Fenstergröße

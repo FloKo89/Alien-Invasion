@@ -22,7 +22,7 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
 
 
-game_over_sound = pygame.mixer.Sound("sound\ES_Trumpet_Sad.wav")
+game_over_sound = pygame.mixer.Sound(r"sound\ES_Trumpet_Sad.wav")
 
 
 class Game:
@@ -43,7 +43,7 @@ class Game:
         self.running = True
         self.level_up = False
         self.level_up_timestamp = None
-        self.menu_button_sound = pygame.mixer.Sound("sound\menu_button.wav")
+        self.menu_button_sound = pygame.mixer.Sound(r"sound\menu_button.wav")
         self.menu_button_sound.set_volume(0.4)
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.current_background_video = self.cap

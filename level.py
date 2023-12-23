@@ -1,8 +1,8 @@
 levels = {
     0: {
         "enemies": [],
-        "background_video": "movie\main_menu.mp4",
-        "background_music": "sound\ES_Empty Space - Etienne Roussel.mp3",
+        "background_video": r"movie\main_menu.mp4",
+        "background_music": r"sound\ES_Empty Space - Etienne Roussel.mp3",
         "num_enemies": 0,
     },
     1: {
@@ -10,8 +10,8 @@ levels = {
             {"type": "vertical"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie\level1.mp4",  # Optional, um die Framerate des Videos zu definieren
-        "background_music": "sound\bg_music_1-5.mpeg",
+        "background_video": r"movie\level1.mp4",  # Optional, um die Framerate des Videos zu definieren
+        "background_music": r"sound\bg_music_1-5.mpeg",
         "num_enemies": 3,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
@@ -22,8 +22,8 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie\level2.mp4",
-        "background_music": "sound\bg_music_1-5.mpeg",
+        "background_video": r"movie\level2.mp4",
+        "background_music": r"sound\bg_music_1-5.mpeg",
         "num_enemies": 6,
     },
     3: {
@@ -35,8 +35,8 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie\level3.mp4",
-        "background_music": "sound\bg_music_1-5.mpeg",
+        "background_video": r"movie\level3.mp4",
+        "background_music": r"sound\bg_music_1-5.mpeg",
         "num_enemies": 8,
     },
     4: {
@@ -50,22 +50,22 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "background_video": "movie\level4.mp4",
-        "background_music": "sound\bg_music_1-5.mpeg",
+        "background_video": r"movie\level4.mp4",
+        "background_music": r"sound\bg_music_1-5.mpeg",
         "num_enemies": 9,
     },
     5: {
         "enemies": [
             {"type": "boss1"},
         ],
-        "background_video": "movie\level5.mp4",
-        "background_music": "sound\Groove Metalcore 2020.wav",
+        "background_video": r"movie\level5.mp4",
+        "background_music": r"sound\Groove Metalcore 2020.wav",
         "num_enemies": 1,
     },
     6: {
         "enemies": [],
-        "background_video": "movie/win_menu.mp4",
-        "background_music": "sound\Groove Metalcore 2020.wav",
+        "background_video": r"movie/win_menu.mp4",
+        "background_music": r"sound\Groove Metalcore 2020.wav",
         "num_enemies": 0,
     },
 }

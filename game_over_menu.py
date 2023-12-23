@@ -46,7 +46,7 @@ def game_over_menu(game):
 
     selected_item = 0
 
-    cap = cv2.VideoCapture("movie\game_over_menu_bg_movie.mp4")
+    cap = cv2.VideoCapture(r"movie\game_over_menu_bg_movie.mp4")
 
     font = pygame.font.Font(None, 36)
     input_box = pygame.Rect(game.width // 2 - 70, 350, 140, 32)
