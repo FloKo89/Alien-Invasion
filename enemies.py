@@ -215,29 +215,22 @@ class Enemy_vertical(Enemy):
 
 
 class Boss1(Enemy):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, resources):
         super().__init__(game, x, y)
+        self.resources = resources
         self.change_x = random.choice([-0.5, 0.5])
         self.change_y = random.choice([-0.5, 0.5])
         self.speed = 1
         self.acceleration = 0.5
         self.score = 100
-        self.hit_img = pygame.image.load(r"assets\Explosions\explosion1.png")
-        self.enemy_img = pygame.image.load(r"assets\Boss1\Boss1.png")
-        self.shield_img = pygame.image.load(r"assets\Boss1\boss1_shield.png")
-        self.hit_sounds = [
-            pygame.mixer.Sound(r"sound\enemy_explosion1.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion2.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion3.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion4.wav"),
-        ]
-        self.alien_vocals = [
-            pygame.mixer.Sound(r"sound\Alien_vocal1.wav"),
-            pygame.mixer.Sound(r"sound\Alien_vocal2.wav"),
-            pygame.mixer.Sound(r"sound\Alien_vocal3.wav"),
-            pygame.mixer.Sound(r"sound\Alien_entering.wav"),
-            pygame.mixer.Sound(r"sound\Alien_dying.wav"),
-        ]
+        self.hit_img = resources.images["explosion1"]
+        self.enemy_img = resources.images["boss1"]
+        self.shield_img = resources.images["boss1_shield"]
+        self.hit_sounds = resources.sounds["hit_sounds"]
+        self.alien_vocal1 = resources.sounds["alien_vocals"]["vocal1"]
+        self.alien_vocal2 = resources.sounds["alien_vocals"]["vocal2"]
+        self.alien_entering_sound = resources.sounds["alien_vocals"]["entering"]
+        self.is_dying_sound = resources.sounds["alien_vocals"]["dying"]
         self.alien_vocal1_played = False
         self.alien_vocal2_played = False
         self.alien_vocal3_played = False
@@ -246,16 +239,12 @@ class Boss1(Enemy):
         volume = 0.5
         for sound in self.hit_sounds:
             sound.set_volume(volume)
-        self.bullet_sound = pygame.mixer.Sound(r"sound\boss1_bullet.wav")
-        self.second_bullet_sound = pygame.mixer.Sound(
-            r"sound\Boss1_second_and_third_bullet.wav"
-        )
+        self.bullet_sound = resources.sounds["bullet_sounds"][0]
+        self.second_bullet_sound = resources.sounds["bullet_sounds"][1]
         self.second_bullet_sound.set_volume(0.1)
-        self.third_bullet_sound = pygame.mixer.Sound(
-            r"sound\Boss1_second_and_third_bullet.wav"
-        )
+        self.third_bullet_sound = resources.sounds["bullet_sounds"][2]
         self.third_bullet_sound.set_volume(0.1)
-        self.is_dying_sound = pygame.mixer.Sound(r"sound\Boss1_explosion.wav")
+
         self.death_sound_played = False
         self.shield_strength = self.max_shield_strength = 10
         self.max_shield_strength = 10
@@ -266,10 +255,7 @@ class Boss1(Enemy):
         self.shot_interval = 2
         self.hp = 100
         N = 50
-        self.death_animation_imgs = [
-            pygame.image.load(rf"assets\Boss1\death\Boss1_death{i}.png")
-            for i in range(1, N + 1)
-        ]
+        self.death_animation_imgs = resources.images["boss1_death_animation"]
         self.is_dying = False
         self.death_frame_index = 0
         self.last_death_animation_time = time.time()
@@ -348,7 +334,9 @@ class Boss1(Enemy):
         )
 
     def spawn_bullet(self, change_x, change_y):
-        bullet = Boss1Bullet(self.game, self.x, self.y, change_x, change_y)
+        bullet = Boss1Bullet(
+            self.game, self.x, self.y, self.resources, change_x, change_y
+        )
         self.game.boss1_bullets.append(bullet)
         pygame.mixer.Sound.play(self.bullet_sound)
 
@@ -360,7 +348,9 @@ class Boss1(Enemy):
             self.spawn_bullet(-0.5, 1)
 
     def shoot_second(self):
-        bullet = Boss1SecondBullet(self.game, self.x, self.y, direction="down")
+        bullet = Boss1SecondBullet(
+            self.game, self.x, self.y, self.resources, direction="down"
+        )
         self.game.boss1_second_bullets.append(bullet)
         pygame.mixer.Sound.play(self.second_bullet_sound)
 
@@ -371,7 +361,7 @@ class Boss1(Enemy):
 
     def entering_behavior(self):
         if not self.alien_entering_played:
-            pygame.mixer.Sound.play(self.alien_vocals[3])
+            pygame.mixer.Sound.play(self.alien_entering_sound)
             self.alien_entering_played = True
 
         target_y = (
@@ -460,13 +450,13 @@ class Boss1(Enemy):
             self.moving_behavior()
 
         if self.hp <= 80 and not self.alien_vocal1_played:
-            pygame.mixer.Sound.play(self.alien_vocals[0])
+            pygame.mixer.Sound.play(self.alien_vocal1)
             self.alien_vocal1_played = True
         elif self.hp <= 60 and not self.alien_vocal2_played:
-            pygame.mixer.Sound.play(self.alien_vocals[1])
+            pygame.mixer.Sound.play(self.alien_vocal2)
             self.alien_vocal2_played = True
         elif self.hp <= 35 and not self.alien_vocal3_played:
-            pygame.mixer.Sound.play(self.alien_vocals[2])
+            pygame.mixer.Sound.play(self.alien_vocal1)
             self.alien_vocal3_played = True
 
         if (
@@ -484,7 +474,6 @@ class Boss1(Enemy):
         if self.is_dying:
             if not self.death_sound_played:
                 pygame.mixer.Sound.play(self.is_dying_sound)
-                pygame.mixer.Sound.play(self.alien_vocals[4])
                 self.death_sound_played = True
             # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
             if time.time() - self.last_death_animation_time > 0.2:
@@ -517,13 +506,21 @@ class Boss1(Enemy):
 
 
 class Boss1Bullet:
-    def __init__(self, game, x, y, change_x=0, change_y=0):
+    def __init__(
+        self,
+        game,
+        x,
+        y,
+        resources,
+        change_x=0,
+        change_y=0,
+    ):
         self.game = game
-        self.x = x + 120
-        self.y = y + 135
+        self.x = x + 143
+        self.y = y + 148
         self.change_x = change_x
         self.change_y = change_y
-        self.bullet_img = pygame.image.load(r"assets\Boss1\boss1_bullet.png")
+        self.bullet_img = resources.images["boss1_bullet"]
         self.speed = 4
         self.damage = 1
 
@@ -538,12 +535,12 @@ class Boss1Bullet:
 
 
 class Boss1SecondBullet:
-    def __init__(self, game, x, y, direction="down"):
+    def __init__(self, game, x, y, resources, direction="down"):
         self.game = game
         self.x = x + 60
         self.y = y + 130
         self.direction = direction
-        self.bullet_img = pygame.image.load(r"assets\Boss1\boss1_second_bullet.png")
+        self.bullet_img = resources.images["boss1_second_and_third_bullet"]
         self.speed = 2
         self.damage = 2
 

@@ -4,6 +4,7 @@ import math
 import cv2
 import sys
 
+from resources import GameResources
 from enemies import Enemy_horizontal, Enemy_vertical, Boss1
 from menu import main_menu, play_video_background
 from player import Spaceship
@@ -21,7 +22,7 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
 
-
+resources = GameResources()
 game_over_sound = pygame.mixer.Sound(r"sound\ES_Trumpet_Sad.wav")
 
 
@@ -29,7 +30,8 @@ class Game:
     level = 0
     score = 0
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, resources):
+        self.resources = resources
         self.game_over = False
         self.game_over_sound_played = False
         self.width = width
@@ -265,10 +267,15 @@ class Game:
                 elif enemy_type == "boss1":
                     screen_center_x = self.screen.get_width() / 2
                     boss_width = Boss1(
-                        self, 0, 0
+                        self, 0, 0, resources
                     ).enemy_img.get_width()  # Temporärer Boss, um die Breite zu erhalten
                     self.boss1.append(
-                        Boss1(self, screen_center_x - boss_width / 2, -boss_width)
+                        Boss1(
+                            self,
+                            screen_center_x - boss_width / 2,
+                            -boss_width,
+                            resources,
+                        )
                     )
 
                 total_enemies += 1
@@ -389,7 +396,7 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(800, 600)
+    game = Game(800, 600, resources)
 
     while True:
         main_menu(game, game.clock)
