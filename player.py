@@ -1,7 +1,10 @@
 import pygame
 import math
 
-from enemies import *
+import pygame
+import math
+
+# from enemies import *
 
 
 class Spaceship:
