@@ -38,6 +38,15 @@ class GameResources:
                 "hit_image": pygame.image.load(r"assets\Explosions\explosion2.png"),
                 "death_image": pygame.image.load(r"assets\Explosions\explosion1.png"),
             },
+            "player_images": {
+                "spaceship_image": pygame.image.load(r"assets\Player\spaceship.png"),
+                "hit_image": pygame.image.load(r"assets\Explosions\explosion2.png"),
+                "bullet_image": pygame.image.load(r"assets\Player\bullet.png"),
+                "100hp_image": pygame.image.load(r"assets\Player\player_100_hp.png"),
+                "75hp_image": pygame.image.load(r"assets\Player\player_75_hp.png"),
+                "50hp_image": pygame.image.load(r"assets\Player\player_50_hp.png"),
+                "25hp_image": pygame.image.load(r"assets\Player\player_25_hp.png"),
+            },
         }
 
     def load_sounds(self):
@@ -63,5 +72,9 @@ class GameResources:
             },
             "enemy_horizontal_sounds": {
                 "bullet": pygame.mixer.Sound(r"sound\boss1_bullet.wav"),
+            },
+            "player_sounds": {
+                "hit_sound": pygame.mixer.Sound(r"sound\enemy_explosion1.wav"),
+                "shoot_sound": pygame.mixer.Sound(r"sound\boss1_bullet.wav"),
             },
         }

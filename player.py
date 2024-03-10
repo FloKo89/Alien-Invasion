@@ -5,35 +5,36 @@ from enemies import *
 
 
 class Spaceship:
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, resources):
+        self.resources = resources
         self.x = x
         self.y = 550
         self.change_x = 0
         self.game = game
-        self.spaceship_img = pygame.image.load(r"assets\Player\spaceship.png")
-        self.hit_img = pygame.image.load(r"assets\Explosions\explosion2.png")
-        self.hit_sound = pygame.mixer.Sound(r"sound\enemy_explosion1.wav")
+        self.spaceship_img = resources.images["player_images"]["spaceship_image"]
+        self.hit_img = resources.images["player_images"]["hit_image"]
+        self.hit_sound = resources.sounds["player_sounds"]["hit_sound"]
         self.hit_sound.set_volume(0.3)
-        self.shoot_sound = pygame.mixer.Sound(r"sound\boss1_bullet.wav")
+        self.shoot_sound = resources.sounds["player_sounds"]["shoot_sound"]
         self.shoot_sound.set_volume(0.3)
         self.bullets = []
         self.damage = 1
         self.hp = 4
         self.hp_images = [
-            pygame.image.load(r"assets\Player\player_25_hp.png"),
-            pygame.image.load(r"assets\Player\player_50_hp.png"),
-            pygame.image.load(r"assets\Player\player_75_hp.png"),
-            pygame.image.load(r"assets\Player\player_100_hp.png"),
+            resources.images["player_images"]["25hp_image"],
+            resources.images["player_images"]["50hp_image"],
+            resources.images["player_images"]["75hp_image"],
+            resources.images["player_images"]["100hp_image"],
         ]
         self.last_damage_time = 0
         self.blink_end_time = 0
 
     def lose_life(self, damage=1):
         current_time = pygame.time.get_ticks()
-        if current_time - self.last_damage_time > 2000:
+        if current_time - self.last_damage_time > 2700:
             self.hp -= damage
             self.last_damage_time = current_time
-            self.blink_end_time = current_time + 2000  # Blinken endet in 2 Sekunden
+            self.blink_end_time = current_time + 2700  # Blinken endet in 2 Sekunden
             if self.hp <= 0:
                 self.game.game_over = True
                 self.game.check_game_over()
@@ -72,7 +73,7 @@ class Spaceship:
         self.game.screen.blit(self.spaceship_img, (self.x, self.y))
 
     def fire_bullet(self):
-        self.bullets.append(Bullet(self.game, self.x + 27, self.y))
+        self.bullets.append(Bullet(self.game, self.x + 27, self.y, self.resources))
         self.bullets[len(self.bullets) - 1].fired()
         pygame.mixer.Sound.play(self.shoot_sound)
 
@@ -134,14 +135,14 @@ class Spaceship:
 
 
 class Bullet:
-    def __init__(self, game, x, y, direction="up"):
+    def __init__(self, game, x, y, resources, direction="up"):
         self.x = x
         self.y = y
         self.direction = direction
         self.is_fired = False
         self.bullet_speed = 10
         self.game = game
-        self.bullet_img = pygame.image.load(r"assets\Player\bullet.png")
+        self.bullet_img = resources.images["player_images"]["bullet_image"]
 
     def fired(self):
         self.is_fired = True
