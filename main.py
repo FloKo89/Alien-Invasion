@@ -50,7 +50,7 @@ class Game:
         self.menu_button_sound.set_volume(0.4)
         self.last_video_update = pygame.time.get_ticks()
         self.current_background_music = None
-        self.current_background_video = None
+        # self.current_background_video = None
         self.cap = None
         self.change_background_music()
         self.change_background_video()
