@@ -77,4 +77,8 @@ class GameResources:
                 "hit_sound": pygame.mixer.Sound(r"sound\enemy_explosion1.wav"),
                 "shoot_sound": pygame.mixer.Sound(r"sound\boss1_bullet.wav"),
             },
+            "menu_sounds": {
+                "menu_button": pygame.mixer.Sound(r"sound\menu_button.wav"),
+                # "menu_background": pygame.mixer.Sound(r"sound\menu_background.wav"),
+            },
         }

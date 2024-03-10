@@ -46,7 +46,7 @@ class Game:
         self.running = True
         self.level_up = False
         self.level_up_timestamp = None
-        self.menu_button_sound = pygame.mixer.Sound(r"sound\menu_button.wav")
+        self.menu_button_sound = resources.sounds["menu_sounds"]["menu_button"]
         self.menu_button_sound.set_volume(0.4)
         self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.current_background_video = self.cap
