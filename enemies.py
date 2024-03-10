@@ -5,15 +5,16 @@ import time
 
 
 class Enemy:
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, resources):
         self.game = game
         self.x = x
         self.y = y
+        self.resources = resources
         self.change_x = 0
         self.change_y = 0
         self.speed = 1
         self.enemy_img = None
-        self.hit_sound = None
+        self.hit_sounds = resources.sounds["hit_sounds"].values()
         self.hit_img = None
         self.score = None
         self.damage = 1
@@ -35,7 +36,8 @@ class Enemy:
             if distance <= radius:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 bullet.is_fired = False
-                random.choice(self.hit_sounds).play()
+                explosion_sounds = list(self.resources.sounds["hit_sounds"].values())
+                random.choice(explosion_sounds).play()
                 self.game.spaceship.bullets.remove(bullet)
 
     def get_rect(self):
@@ -45,8 +47,8 @@ class Enemy:
 
 
 class Enemy_horizontal(Enemy):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    def __init__(self, game, x, y, resources):
+        super().__init__(game, x, y, resources)
         self.x = x
         self.y = y
         if x < 0:
@@ -55,21 +57,15 @@ class Enemy_horizontal(Enemy):
             self.change_x = -1
         self.change_y = 0
         self.acceleration = 0.5
-        self.enemy_img = pygame.image.load(r"assets\Enemies\enemy_horizontal.png")
-        self.hit_img = pygame.image.load(r"assets\Explosions\explosion1.png")
-        self.death_img = pygame.image.load(r"assets\Explosions\explosion2.png")
-        self.hit_sounds = [
-            pygame.mixer.Sound(r"sound\enemy_explosion1.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion2.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion3.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion4.wav"),
-        ]
+        self.enemy_img = resources.images["enemy_horizontal_images"]["enemy_horizontal"]
+        self.hit_img = resources.images["enemy_horizontal_images"]["hit_image"]
+        self.death_img = resources.images["enemy_horizontal_images"]["death_image"]
         volume = 0.3
         for sound in self.hit_sounds:
             sound.set_volume(volume)
         self.score = 5
-        self.bullet_img = pygame.image.load(r"assets\Enemies\bullet.png")
-        self.bullet_sound = pygame.mixer.Sound(r"sound\boss1_bullet.wav")
+        self.bullet_img = resources.images["enemy_horizontal_images"]["bullet_image"]
+        self.bullet_sound = resources.sounds["enemy_horizontal_sounds"]["bullet"]
         self.damage = 1
         self.bullets = []
         self.last_shot_time = time.time()
@@ -136,19 +132,21 @@ class Enemy_horizontal(Enemy):
         self.spawn_bullet(0, 1)
 
     def spawn_bullet(self, change_x, change_y):
-        bullet = EnemyHorizontalBullets(self.game, self.x, self.y, change_x, change_y)
+        bullet = EnemyHorizontalBullets(
+            self.game, self.x, self.y, self.resources, change_x, change_y
+        )
         self.game.enemy_horizontal_bullets.append(bullet)
         pygame.mixer.Sound.play(self.bullet_sound)
 
 
 class EnemyHorizontalBullets:
-    def __init__(self, game, x, y, change_x=0, change_y=0):
+    def __init__(self, game, x, y, resources, change_x=0, change_y=0):
         self.game = game
         self.x = x + 25
         self.y = y + 20
         self.change_x = change_x
         self.change_y = change_y
-        self.bullet_img = pygame.image.load(r"assets\Enemies\bullet.png")
+        self.bullet_img = resources.images["enemy_horizontal_images"]["bullet_image"]
         self.speed = 2
         self.damage = 1
 
@@ -163,21 +161,15 @@ class EnemyHorizontalBullets:
 
 
 class Enemy_vertical(Enemy):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    def __init__(self, game, x, y, resources):
+        super().__init__(game, x, y, resources)
         self.x = x
         self.y = y
         self.change_x = 0
         self.change_y = 1
-        self.enemy_img = pygame.image.load(r"assets\Enemies\enemy_vertical.png")
-        self.hit_img = pygame.image.load(r"assets\Explosions\explosion2.png")
-        self.death_img = pygame.image.load(r"assets\Explosions\explosion1.png")
-        self.hit_sounds = [
-            pygame.mixer.Sound(r"sound\enemy_explosion1.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion2.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion3.wav"),
-            pygame.mixer.Sound(r"sound\enemy_explosion4.wav"),
-        ]
+        self.enemy_img = resources.images["enemy_vertical_images"]["enemy_vertical"]
+        self.hit_img = resources.images["enemy_vertical_images"]["hit_image"]
+        self.death_img = resources.images["enemy_vertical_images"]["death_image"]
         volume = 0.5
         for sound in self.hit_sounds:
             sound.set_volume(volume)
@@ -216,21 +208,21 @@ class Enemy_vertical(Enemy):
 
 class Boss1(Enemy):
     def __init__(self, game, x, y, resources):
-        super().__init__(game, x, y)
-        self.resources = resources
+        super().__init__(game, x, y, resources)
         self.change_x = random.choice([-0.5, 0.5])
         self.change_y = random.choice([-0.5, 0.5])
         self.speed = 1
         self.acceleration = 0.5
         self.score = 100
-        self.hit_img = resources.images["explosion1"]
-        self.enemy_img = resources.images["boss1"]
-        self.shield_img = resources.images["boss1_shield"]
-        self.hit_sounds = resources.sounds["hit_sounds"]
-        self.alien_vocal1 = resources.sounds["alien_vocals"]["vocal1"]
-        self.alien_vocal2 = resources.sounds["alien_vocals"]["vocal2"]
-        self.alien_entering_sound = resources.sounds["alien_vocals"]["entering"]
-        self.is_dying_sound = resources.sounds["alien_vocals"]["dying"]
+        self.hit_img = resources.images["boss1_images"]["explosion1"]
+        self.enemy_img = resources.images["boss1_images"]["boss1"]
+        self.shield_img = resources.images["boss1_images"]["boss1_shield"]
+        self.hit_sounds = resources.sounds["hit_sounds"].values()
+        self.alien_vocal1 = resources.sounds["boss1_vocals"]["vocal1"]
+        self.alien_vocal2 = resources.sounds["boss1_vocals"]["vocal2"]
+        self.alien_entering_sound = resources.sounds["boss1_vocals"]["entering"]
+        self.is_dying_sound = resources.sounds["boss1_vocals"]["dying"]
+        self.boss1_explosion_sound = resources.sounds["boss1_vocals"]["boss1_explosion"]
         self.alien_vocal1_played = False
         self.alien_vocal2_played = False
         self.alien_vocal3_played = False
@@ -239,10 +231,14 @@ class Boss1(Enemy):
         volume = 0.5
         for sound in self.hit_sounds:
             sound.set_volume(volume)
-        self.bullet_sound = resources.sounds["bullet_sounds"][0]
-        self.second_bullet_sound = resources.sounds["bullet_sounds"][1]
+        self.bullet_sound = resources.sounds["boss1_bullet_sounds"]["boss1_bullet"]
+        self.second_bullet_sound = resources.sounds["boss1_bullet_sounds"][
+            "boss1_second_and_third_bullet"
+        ]
         self.second_bullet_sound.set_volume(0.1)
-        self.third_bullet_sound = resources.sounds["bullet_sounds"][2]
+        self.third_bullet_sound = resources.sounds["boss1_bullet_sounds"][
+            "boss1_second_and_third_bullet"
+        ]
         self.third_bullet_sound.set_volume(0.1)
 
         self.death_sound_played = False
@@ -255,7 +251,9 @@ class Boss1(Enemy):
         self.shot_interval = 2
         self.hp = 100
         N = 50
-        self.death_animation_imgs = resources.images["boss1_death_animation"]
+        self.death_animation_imgs = resources.images["boss1_images"][
+            "boss1_death_animation"
+        ]
         self.is_dying = False
         self.death_frame_index = 0
         self.last_death_animation_time = time.time()
@@ -355,7 +353,9 @@ class Boss1(Enemy):
         pygame.mixer.Sound.play(self.second_bullet_sound)
 
     def shoot_third(self):
-        bullet = Boss1ThirdBullet(self.game, self.x, self.y, direction="down")
+        bullet = Boss1ThirdBullet(
+            self.game, self.x, self.y, self.resources, direction="down"
+        )
         self.game.boss1_third_bullets.append(bullet)
         pygame.mixer.Sound.play(self.third_bullet_sound)
 
@@ -474,6 +474,7 @@ class Boss1(Enemy):
         if self.is_dying:
             if not self.death_sound_played:
                 pygame.mixer.Sound.play(self.is_dying_sound)
+                pygame.mixer.Sound.play(self.boss1_explosion_sound)
                 self.death_sound_played = True
             # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
             if time.time() - self.last_death_animation_time > 0.2:
@@ -520,7 +521,7 @@ class Boss1Bullet:
         self.y = y + 148
         self.change_x = change_x
         self.change_y = change_y
-        self.bullet_img = resources.images["boss1_bullet"]
+        self.bullet_img = resources.images["boss1_images"]["boss1_bullet"]
         self.speed = 4
         self.damage = 1
 
@@ -540,9 +541,11 @@ class Boss1SecondBullet:
         self.x = x + 60
         self.y = y + 130
         self.direction = direction
-        self.bullet_img = resources.images["boss1_second_and_third_bullet"]
+        self.bullet_img = resources.images["boss1_images"][
+            "boss1_second_and_third_bullet"
+        ]
         self.speed = 2
-        self.damage = 2
+        self.damage = 1
 
     def update(self):
         if self.direction == "up":
@@ -557,14 +560,16 @@ class Boss1SecondBullet:
 
 
 class Boss1ThirdBullet:
-    def __init__(self, game, x, y, direction="down"):
+    def __init__(self, game, x, y, resources, direction="down"):
         self.game = game
         self.x = x + 200
         self.y = y + 130
         self.direction = direction
-        self.bullet_img = pygame.image.load(r"assets\Boss1\boss1_third_bullet.png")
+        self.bullet_img = resources.images["boss1_images"][
+            "boss1_second_and_third_bullet"
+        ]
         self.speed = 2
-        self.damage = 2
+        self.damage = 1
 
     def update(self):
         if self.direction == "up":

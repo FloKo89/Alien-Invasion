@@ -7,8 +7,8 @@ levels = {
     },
     1: {
         "enemies": [
-            {"type": "boss1"}
-            # {"type": "vertical"},
+            # {"type": "boss1"},
+            {"type": "vertical"},
             # {"type": "horizontal"},
         ],
         "background_video": r"movie\level1.mp4",  # Optional, um die Framerate des Videos zu definieren

@@ -21,7 +21,6 @@ from highscore_manager import (
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
-
 resources = GameResources()
 game_over_sound = pygame.mixer.Sound(r"sound\ES_Trumpet_Sad.wav")
 
@@ -260,10 +259,12 @@ class Game:
                 )
                 if enemy_type == "horizontal":
                     print("Gegner horizontal hinzugefügt")
-                    self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                    self.enemies_horizontal.append(
+                        Enemy_horizontal(self, x, y, resources)
+                    )
                 elif enemy_type == "vertical":
                     print("Gegner vertikal hinzugefügt")
-                    self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                    self.enemies_vertical.append(Enemy_vertical(self, x, y, resources))
                 elif enemy_type == "boss1":
                     screen_center_x = self.screen.get_width() / 2
                     boss_width = Boss1(
