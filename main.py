@@ -48,11 +48,12 @@ class Game:
         self.level_up_timestamp = None
         self.menu_button_sound = resources.sounds["menu_sounds"]["menu_button"]
         self.menu_button_sound.set_volume(0.4)
-        self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
-        self.current_background_video = self.cap
         self.last_video_update = pygame.time.get_ticks()
         self.current_background_music = None
+        self.current_background_video = None
+        self.cap = None
         self.change_background_music()
+        self.change_background_video()
         self.enemies_horizontal = []
         self.enemy_horizontal_bullets = []
         self.enemies_vertical = []
@@ -65,6 +66,19 @@ class Game:
         self.level_up_fade_alpha = 0
         self.level_up_start_time = None
         self.highscores = load_highscores()
+
+        # Lade Video-Ressourcen
+        level_resources = resources.get_level_resources(self.level)
+        if (
+            level_resources
+        ):  # Sicherstellen, dass Ressourcen für das Level vorhanden sind
+            video_path = level_resources["background_video_path"]
+            self.cap = cv2.VideoCapture(video_path)
+            self.current_background_video = self.cap  # Jetzt korrekt initialisiert
+        else:
+            # Fehlerbehandlung, falls keine Ressourcen für das Level gefunden werden
+            print(f"Keine Ressourcen für Level {self.level} gefunden.")
+            self.cap = None
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
         while True:
@@ -216,18 +230,28 @@ class Game:
         pygame.mixer.Sound.play(self.menu_button_sound)
 
     def change_background_music(self):
-        self.current_background_music = levels[self.level]["background_music"]
-        if self.level in levels:
-            pygame.mixer.music.stop()
-            pygame.mixer.music.load(levels[self.level]["background_music"])
-            pygame.mixer.music.play(-1, 0.0, 5)
-            pygame.mixer.music.set_volume(0.4)
+        level_resources = self.resources.get_level_resources(self.level)
+        if level_resources:
+            new_music_path = level_resources["background_music_path"]
+            if self.current_background_music != new_music_path:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load(new_music_path)
+                pygame.mixer.music.play(-1, 0.0)
+                pygame.mixer.music.set_volume(0.4)
+                self.current_background_music = new_music_path
 
     def change_background_video(self):
-        if self.level in levels:
-            self.cap.release()
-            self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
-            play_video_background(self, self.cap)
+        level_resources = self.resources.get_level_resources(self.level)
+        if (
+            level_resources
+        ):  # Überprüfe, ob Ressourcen für das aktuelle Level vorhanden sind
+            new_video_path = level_resources["background_video_path"]
+            if (
+                self.cap is not None
+            ):  # Überprüfe, ob self.cap bereits initialisiert wurde
+                self.cap.release()  # Vorhandene Video-Capture-Instanz freigeben
+            self.cap = cv2.VideoCapture(new_video_path)  # Neues Video laden
+            play_video_background(self, self.cap)  # Video abspielen
 
     def update_enemies(self):
         if self.level not in levels:
@@ -389,7 +413,6 @@ class Game:
         self.update_enemies()
         self.change_background_music()
         self.change_background_video()
-        self.cap = cv2.VideoCapture(levels[self.level]["background_video"])
         self.last_video_update = pygame.time.get_ticks()
         self.enemies_horizontal = []
         self.enemy_horizontal_bullets = []

@@ -7,6 +7,40 @@ class GameResources:
         self.sounds = self.load_sounds()
         self.fonts = self.load_fonts()
 
+        self.level_resources = {
+            0: {
+                "background_video_path": r"movie\main_menu.mp4",
+                "background_music_path": r"sound\ES_Empty Space - Etienne Roussel.mp3",
+            },
+            1: {
+                "background_video_path": r"movie\level1.mp4",
+                "background_music_path": r"sound\bg_music_1-5.mpeg",
+            },
+            2: {
+                "background_video_path": r"movie\level2.mp4",
+                "background_music_path": r"sound\bg_music_1-5.mpeg",
+            },
+            3: {
+                "background_video_path": r"movie\level3.mp4",
+                "background_music_path": r"sound\bg_music_1-5.mpeg",
+            },
+            4: {
+                "background_video_path": r"movie\level4.mp4",
+                "background_music_path": r"sound\bg_music_1-5.mpeg",
+            },
+            5: {
+                "background_video_path": r"movie\level5.mp4",
+                "background_music_path": r"sound\Groove Metalcore 2020.wav",
+            },
+            6: {
+                "background_video_path": r"movie/win_menu.mp4",
+                "background_music_path": r"sound\Groove Metalcore 2020.wav",
+            },
+        }
+
+    def get_level_resources(self, level):
+        return self.level_resources.get(level, None)
+
     def load_images(self):
         N = 50
         return {
