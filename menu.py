@@ -42,9 +42,8 @@ def resize_frame(frame, target_width, target_height):  #
     return resized_frame
 
 
-def main_menu(game, clock):
-    # main_menu_background_music()
-    menu_font = pygame.font.Font("freesansbold.ttf", 32)
+def main_menu(game, clock, resources):
+    menu_font = resources.fonts["fonts"]["menu_font"]
     menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Beenden"]
     selected_item = 0
 
@@ -75,12 +74,12 @@ def main_menu(game, clock):
 
                     elif selected_item == 1:  # "Bestenliste" wurde ausgewählt
                         cap.release()
-                        show_highscores_screen(game)
-                        main_menu(game, clock)
+                        show_highscores_screen(game, resources)
+                        main_menu(game, clock, resources)
                         return
 
                     elif selected_item == 2:  # "Spielhilfe" wurde ausgewählt
-                        show_help_screen(game)
+                        show_help_screen(game, resources)
                         pass
 
                     elif selected_item == 3:  # "Beenden" wurde ausgewählt

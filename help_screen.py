@@ -1,8 +1,9 @@
 import pygame
 
 
-def show_help_screen(game):
-    help_image = pygame.image.load(r"assets\help_screen.png")  # Laden des Hilfebildes
+def show_help_screen(game, resources):
+    help_image = resources.images["help_screen"]
+    # help_image = pygame.image.load(r"assets\help_screen.png")  # Laden des Hilfebildes
     help_image = pygame.transform.scale(
         help_image, (game.width, game.height)
     )  # Skalieren des Bildes auf Fenstergröße
@@ -14,7 +15,7 @@ def show_help_screen(game):
             help_image, (0, 0)
         )  # Das Bild auf den Bildschirm zeichnen  # Aktualisieren des Displays
 
-        back_font = pygame.font.Font("freesansbold.ttf", 24)
+        back_font = resources.fonts["fonts"]["back_font"]
         back_text = back_font.render(
             "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
             True,

@@ -5,7 +5,7 @@ class GameResources:
     def __init__(self):
         self.images = self.load_images()
         self.sounds = self.load_sounds()
-        # self.fonts = self.load_fonts()
+        self.fonts = self.load_fonts()
 
     def load_images(self):
         N = 50
@@ -47,6 +47,7 @@ class GameResources:
                 "50hp_image": pygame.image.load(r"assets\Player\player_50_hp.png"),
                 "25hp_image": pygame.image.load(r"assets\Player\player_25_hp.png"),
             },
+            "help_screen": pygame.image.load(r"assets\help_screen.png"),
         }
 
     def load_sounds(self):
@@ -79,6 +80,21 @@ class GameResources:
             },
             "menu_sounds": {
                 "menu_button": pygame.mixer.Sound(r"sound\menu_button.wav"),
-                # "menu_background": pygame.mixer.Sound(r"sound\menu_background.wav"),
             },
+        }
+
+    def load_fonts(self):
+        return {
+            "fonts": {
+                "menu_font": pygame.font.Font("freesansbold.ttf", 32),
+                "pause_font": pygame.font.Font("freesansbold.ttf", 64),
+                "back_font": pygame.font.Font("freesansbold.ttf", 24),
+                "win_font": pygame.font.Font("freesansbold.ttf", 64),
+                "score_font": pygame.font.Font("freesansbold.ttf", 32),
+                "error_font": pygame.font.Font("freesansbold.ttf", 24),
+                "go_font": pygame.font.Font("freesansbold.ttf", 64),
+                "level_font": pygame.font.Font("freesansbold.ttf", 32),
+                "score_font": pygame.font.Font("freesansbold.ttf", 32),
+                "title_font": pygame.font.Font("freesansbold.ttf", 50),
+            }
         }

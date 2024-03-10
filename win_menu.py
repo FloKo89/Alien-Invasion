@@ -41,7 +41,7 @@ def resize_frame(frame, target_width, target_height):  #
     return resized_frame
 
 
-def win_menu(game):
+def win_menu(game, resources):
     menu_items = ["Neustart", "Hauptmenü", "Beenden"]
 
     cap = cv2.VideoCapture(r"movie\win_menu.mp4")
@@ -63,18 +63,18 @@ def win_menu(game):
         play_video_background(game, cap)
 
         # Nachricht für das Erreichen von Level 6
-        win_font = pygame.font.Font("freesansbold.ttf", 48)
+        win_font = resources.fonts["fonts"]["win_font"]
         win_text = win_font.render("HERZLICHEN GLÜCKWUNSCH!", True, (255, 255, 255))
         game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 150))
 
         # Hinweistext
-        win_font = pygame.font.Font("freesansbold.ttf", 32)
+        win_font = resources.fonts["fonts"]["win_font"]
         win_text = win_font.render(
             "Sie haben die Welt gerettet!", True, (255, 255, 255)
         )
         game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 250))
 
-        score_font = pygame.font.Font("freesansbold.ttf", 32)
+        score_font = resources.fonts["fonts"]["score_font"]
         score_text = score_font.render(
             f"Erzielte Punkte: {game.score}", True, (238, 64, 0)
         )
@@ -82,7 +82,7 @@ def win_menu(game):
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
         )
 
-        menu_font = pygame.font.Font("freesansbold.ttf", 32)
+        menu_font = resources.fonts["fonts"]["menu_font"]
 
         if name_entered:  # Wenn ein Name eingegeben wurde
             for index, item in enumerate(menu_items):
@@ -95,7 +95,7 @@ def win_menu(game):
                 )
 
         if display_error:
-            error_font = pygame.font.Font(None, 24)
+            error_font = resources.fonts["fonts"]["error_font"]
             error_msg = error_font.render(
                 "Bitte geben Sie einen Namen ein!", True, (255, 0, 0)
             )

@@ -41,7 +41,7 @@ def resize_frame(frame, target_width, target_height):  #
     return resized_frame
 
 
-def game_over_menu(game):
+def game_over_menu(game, resources):
     menu_items = ["Neustart", "Bestenliste", "Hauptmenü", "Beenden"]
 
     selected_item = 0
@@ -64,12 +64,12 @@ def game_over_menu(game):
         play_video_background(game, cap)
 
         # Game Over Text
-        go_font = pygame.font.Font("freesansbold.ttf", 64)
+        go_font = resources.fonts["fonts"]["go_font"]
         go_text = go_font.render("GAME OVER", True, (139, 37, 0))
         game.screen.blit(go_text, (game.width // 2 - go_text.get_width() // 2, 150))
 
         # Anzeige des erreichten Levels
-        level_font = pygame.font.Font("freesansbold.ttf", 32)
+        level_font = resources.fonts["fonts"]["level_font"]
         level_text = level_font.render(
             f"Erreichtes Level: {game.level}", True, (238, 64, 0)
         )
@@ -78,7 +78,7 @@ def game_over_menu(game):
         )
 
         # Anzeige der erreichten Punkte
-        score_font = pygame.font.Font("freesansbold.ttf", 32)
+        score_font = resources.fonts["fonts"]["score_font"]
         score_text = score_font.render(
             f"Erzielte Punkte: {game.score}", True, (238, 64, 0)
         )
@@ -86,7 +86,7 @@ def game_over_menu(game):
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
         )
 
-        menu_font = pygame.font.Font("freesansbold.ttf", 32)
+        menu_font = resources.fonts["fonts"]["menu_font"]
 
         if name_entered:  # Wenn ein Name eingegeben wurde
             for index, item in enumerate(menu_items):
@@ -99,7 +99,7 @@ def game_over_menu(game):
                 )
 
         if display_error:
-            error_font = pygame.font.Font(None, 24)
+            error_font = resources.fonts["fonts"]["error_font"]
             error_msg = error_font.render(
                 "Bitte geben Sie einen Namen ein!", True, (255, 0, 0)
             )
@@ -146,13 +146,13 @@ def game_over_menu(game):
                             return
                         elif selected_item == 1:
                             game_over_running = False
-                            show_highscores_screen(game)
-                            main_menu(game, clock)
+                            show_highscores_screen(game, resources)
+                            main_menu(game, clock, resources)
                             return
                         elif selected_item == 2:
                             game_over_running = False
                             game.reset(to_main_menu=True)
-                            main_menu(game, clock)
+                            main_menu(game, clock, resources)
                             return
                         elif selected_item == 3:
                             game_over_running = False

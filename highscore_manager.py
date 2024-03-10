@@ -76,15 +76,15 @@ def add_highscore(name, score):
         print(f"Error adding highscore: {e}")
 
 
-def show_highscores_screen(game):
+def show_highscores_screen(game, resources):
     highscores = load_highscores()  # Highscores laden
     game.screen.fill((0, 0, 0))  # Bildschirm mit Schwarz füllen
 
-    title_font = pygame.font.Font("freesansbold.ttf", 50)
+    title_font = resources.fonts["fonts"]["title_font"]
     title_text = title_font.render("Bestenliste", True, (255, 255, 255))
     game.screen.blit(title_text, (game.width // 2 - title_text.get_width() // 2, 50))
 
-    score_font = pygame.font.Font("freesansbold.ttf", 32)
+    score_font = resources.fonts["fonts"]["score_font"]
 
     # Platz für die Spalten festlegen
     place_x = game.width // 4
@@ -113,7 +113,7 @@ def show_highscores_screen(game):
             ),
         )
 
-    back_font = pygame.font.Font("freesansbold.ttf", 24)
+    back_font = resources.fonts["fonts"]["back_font"]
     back_text = back_font.render(
         "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
         True,

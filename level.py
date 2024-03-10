@@ -9,11 +9,11 @@ levels = {
         "enemies": [
             # {"type": "boss1"},
             {"type": "vertical"},
-            # {"type": "horizontal"},
+            {"type": "horizontal"},
         ],
         "background_video": r"movie\level1.mp4",  # Optional, um die Framerate des Videos zu definieren
         "background_music": r"sound\bg_music_1-5.mpeg",
-        "num_enemies": 1,  # Optional, um die Anzahl der generierten Feinde zu definieren
+        "num_enemies": 5,  # Optional, um die Anzahl der generierten Feinde zu definieren
     },
     2: {
         "enemies": [

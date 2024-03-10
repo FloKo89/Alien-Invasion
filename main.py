@@ -210,7 +210,7 @@ class Game:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    pause_menu(self, self.clock)
+                    pause_menu(self, self.clock, resources)
 
     def play_menu_button_sound(self):
         pygame.mixer.Sound.play(self.menu_button_sound)
@@ -297,10 +297,10 @@ class Game:
             )
             if enemy_type == "horizontal":
                 print("Zufälligen Gegner horizontal hinzugefügt")
-                self.enemies_horizontal.append(Enemy_horizontal(self, x, y))
+                self.enemies_horizontal.append(Enemy_horizontal(self, x, y, resources))
             elif enemy_type == "vertical":
                 print("Zufälligen Gegner vertikal hinzugefügt")
-                self.enemies_vertical.append(Enemy_vertical(self, x, y))
+                self.enemies_vertical.append(Enemy_vertical(self, x, y, resources))
 
     def check_collision_and_game_over(self, enemy):
         enemy.update()
@@ -314,16 +314,18 @@ class Game:
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
-            self.print_game_over()
-            player_name = game_over_menu(self)  # Hier rufen wir das Game Over Menü auf
+            # self.print_game_over()
+            player_name = game_over_menu(
+                self, resources
+            )  # Hier rufen wir das Game Over Menü auf
             if player_name:  # Überprüfen, ob ein Name eingegeben wurde
                 add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
 
-    def print_game_over(self):
-        go_font = pygame.font.Font("freesansbold.ttf", 64)
-        go_text = go_font.render("GAME OVER", True, (255, 255, 255))
-        self.screen.blit(go_text, (200, 250))
+    # def print_game_over(self):
+    # go_font = pygame.font.Font("freesansbold.ttf", 64)
+    # go_text = go_font.render("GAME OVER", True, (255, 255, 255))
+    # self.screen.blit(go_text, (200, 250))
 
     def print_score(self):
         score_font = pygame.font.Font("freesansbold.ttf", 24)
@@ -373,7 +375,7 @@ class Game:
 
     def check_win(self):
         if self.level == 6:
-            win_menu(self)
+            win_menu(self, resources)
 
     def reset(self, to_main_menu=False):
         self.game_over = False
@@ -402,7 +404,7 @@ if __name__ == "__main__":
     game = Game(800, 600, resources)
 
     while True:
-        main_menu(game, game.clock)
+        main_menu(game, game.clock, resources)
         game.update_enemies()
         game.run()
         game.reset()

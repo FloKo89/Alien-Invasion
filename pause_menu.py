@@ -3,12 +3,12 @@ from menu import main_menu
 from help_screen import show_help_screen
 
 
-def pause_menu(game, clock):
+def pause_menu(game, clock, resources):
     paused = True
     menu_items = ["Fortsetzen", "Spielhilfe", "Neustarten", "Hauptmenü", "Beenden"]
     selected_item = 0
-    pause_font = pygame.font.Font("freesansbold.ttf", 64)
-    menu_font = pygame.font.Font("freesansbold.ttf", 32)
+    pause_font = resources.fonts["fonts"]["pause_font"]
+    menu_font = resources.fonts["fonts"]["menu_font"]
 
     while paused:
         game.screen.fill((0, 0, 0))
@@ -43,7 +43,7 @@ def pause_menu(game, clock):
                     if selected_item == 0:
                         paused = False
                     elif selected_item == 1:
-                        show_help_screen(game)
+                        show_help_screen(game, resources)
                     elif selected_item == 2:
                         paused = False
                         game.reset()
@@ -51,7 +51,7 @@ def pause_menu(game, clock):
                     elif selected_item == 3:
                         paused = False
                         game.reset(to_main_menu=True)
-                        main_menu(game, clock)
+                        main_menu(game, clock, resources)
                     elif selected_item == 4:
                         pygame.quit()
                         exit()
