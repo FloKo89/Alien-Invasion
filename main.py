@@ -22,7 +22,7 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
 resources = GameResources()
-game_over_sound = pygame.mixer.Sound(r"sound\ES_Trumpet_Sad.wav")
+game_over_sound = resources.sounds["game_sounds"]["game_over"]
 
 
 class Game:
