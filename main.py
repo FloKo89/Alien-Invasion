@@ -38,7 +38,7 @@ class Game:
         self.screen = pygame.display.set_mode(
             (self.width, self.height), pygame.DOUBLEBUF
         )
-        pygame.display.set_caption("Mein Space Invaders")
+        pygame.display.set_caption("Alien Invasion")
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship(
             self, self.screen.get_width() / 2 - 32, 540, resources
