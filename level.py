@@ -8,7 +8,7 @@ levels = {
             {"type": "vertical"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 2,
+        "num_enemies": 4,
     },
     2: {
         "enemies": [
@@ -18,7 +18,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 6,
+        "num_enemies": 7,
     },
     3: {
         "enemies": [
@@ -29,7 +29,7 @@ levels = {
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 8,
+        "num_enemies": 9,
     },
     4: {
         "enemies": [
