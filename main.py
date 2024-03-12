@@ -4,6 +4,7 @@ import math
 import cv2
 import sys
 
+import english
 from resources import GameResources
 from enemies import Enemy_horizontal, Enemy_vertical, Boss1
 from menu import main_menu, play_video_background
@@ -21,6 +22,7 @@ from highscore_manager import (
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
+current_language = english.texts
 resources = GameResources()
 game_over_sound = resources.sounds["game_sounds"]["game_over"]
 
@@ -78,6 +80,15 @@ class Game:
             # Fehlerbehandlung, falls keine Ressourcen für das Level gefunden werden
             print(f"Keine Ressourcen für Level {self.level} gefunden.")
             self.cap = None
+
+    def load_language(language):
+        global current_language
+        if language == "German":
+            import german
+            current_language = german.texts
+        else:
+            import english
+            current_language = english.texts
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
         while True:

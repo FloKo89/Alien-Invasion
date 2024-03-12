@@ -3,6 +3,7 @@ import cv2
 
 from highscore_manager import show_highscores_screen
 from help_screen import show_help_screen
+from settings import settings
 
 clock = pygame.time.Clock()
 
@@ -44,7 +45,7 @@ def resize_frame(frame, target_width, target_height):  #
 
 def main_menu(game, clock, resources):
     menu_font = resources.fonts["fonts"]["menu_font"]
-    menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Beenden"]
+    menu_items = ["Spiel starten", "Bestenliste", "Spielhilfe", "Sprache", "Beenden"]
     selected_item = 0
 
     cap = cv2.VideoCapture(resources.level_resources[0]["background_video_path"])
@@ -79,7 +80,10 @@ def main_menu(game, clock, resources):
                     elif selected_item == 2:  # "Spielhilfe" wurde ausgewählt
                         show_help_screen(game, resources)
 
-                    elif selected_item == 3:  # "Beenden" wurde ausgewählt
+                    elif selected_item == 3:
+                        settings(game, resources)
+
+                    elif selected_item == 4:  # "Beenden" wurde ausgewählt
                         game.quit_game()
 
         for index, item in enumerate(menu_items):
