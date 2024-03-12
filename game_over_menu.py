@@ -88,7 +88,7 @@ def game_over_menu(game, resources):
 
         # Anzeige der erreichten Punkte
         score_font = resources.fonts["fonts"]["score_font"]
-        score_text_string = f"{resources.current_language['score'] + ": "}{game.score}"
+        score_text_string = f"{resources.current_language['points_scored'] + ": "}{game.score}"
         score_text = score_font.render(score_text_string, True, (238, 64, 0))
         game.screen.blit(
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)

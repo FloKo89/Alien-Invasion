@@ -15,10 +15,10 @@ texts = {
     "game_over": "PERSO!",
     "congratulations": "Congratulazioni!",
     "win_text": "Avete salvato il mondo!",
-    "player_name": "Nome del giocatore:",
-    "reached_level": "Livello raggiunto:",
+    "player_name": "Nome del giocatore",
+    "reached_level": "Livello raggiunto",
     "score": "Punti",
-    "points_scored": "Punti segnati:",
+    "points_scored": "Punti segnati",
     "error_msg": "Inserisci un nome!",
     "back_to_main_menu": "Premere un pulsante qualsiasi per tornare al menu principale",
 }
