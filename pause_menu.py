@@ -1,5 +1,4 @@
 import pygame
-import sys
 from menu import main_menu
 from help_screen import show_help_screen
 

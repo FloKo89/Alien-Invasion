@@ -1,5 +1,4 @@
 import pygame
-import sys
 
 def show_help_screen(game, resources):
     help_image = resources.images["help_screen"]

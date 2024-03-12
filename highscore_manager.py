@@ -1,5 +1,4 @@
 import pygame
-import sys
 import pickle
 import cv2
 import os

@@ -1,5 +1,4 @@
 import pygame
-import sys
 import cv2
 from menu import main_menu
 from highscore_manager import add_highscore
