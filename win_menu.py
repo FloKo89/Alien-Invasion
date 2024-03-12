@@ -42,9 +42,13 @@ def resize_frame(frame, target_width, target_height):  #
 
 
 def win_menu(game, resources):
-    menu_items = ["Neustart", "Hauptmenü", "Beenden"]
+    menu_items = [
+        resources.current_language["restart"],
+        resources.current_language["main_menu"],
+        resources.current_language["quit"],
+    ]
 
-    cap = cv2.VideoCapture(r"movie\win_menu.mp4")
+    cap = cv2.VideoCapture(resources.level_resources[8]["background_video_path"])
 
     selected_item = 0
     font = pygame.font.Font(None, 36)
@@ -53,31 +57,27 @@ def win_menu(game, resources):
     active = True
     text = ""
     name_entered = False
-    prompt_font = pygame.font.Font(None, 36)  # Schriftart für den Aufforderungstext
-    prompt_text = prompt_font.render("Spielername:", True, (238, 64, 0))
+    prompt_font = pygame.font.Font(None, 36)
+    prompt_text_string = resources.current_language["player_name"]
+    prompt_text = prompt_font.render(prompt_text_string, True, (255, 255, 255))
     display_error = False
 
     showing_win_menu = True
     while showing_win_menu:
-        # game.screen.fill((0, 0, 0))  # Hintergrund schwarz setzen
         play_video_background(game, cap)
-
-        # Nachricht für das Erreichen von Level 6
         win_font = resources.fonts["fonts"]["win_font"]
-        win_text = win_font.render("HERZLICHEN GLÜCKWUNSCH!", True, (255, 255, 255))
+        win_font_string = resources.current_language["congratulations"]
+        win_text = win_font.render(win_font_string, True, (255, 255, 255))
         game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 150))
 
-        # Hinweistext
         win_font = resources.fonts["fonts"]["win_font"]
-        win_text = win_font.render(
-            "Sie haben die Welt gerettet!", True, (255, 255, 255)
-        )
+        win_font_string = resources.current_language["you_saved_the_world"]
+        win_text = win_font.render(win_font_string, True, (255, 255, 255))
         game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 250))
 
         score_font = resources.fonts["fonts"]["score_font"]
-        score_text = score_font.render(
-            f"Erzielte Punkte: {game.score}", True, (238, 64, 0)
-        )
+        score_font_string = f"{resources.current_language['points_scored'] + ": "}{game.score}"
+        score_text = score_font.render(score_font_string, True, (255, 255, 255))
         game.screen.blit(
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
         )
@@ -96,9 +96,8 @@ def win_menu(game, resources):
 
         if display_error:
             error_font = resources.fonts["fonts"]["error_font"]
-            error_msg = error_font.render(
-                "Bitte geben Sie einen Namen ein!", True, (255, 0, 0)
-            )
+            error_font_string = resources.current_language["error_msg"]
+            error_msg = error_font.render(error_font_string, True, (255, 0, 0))
             game.screen.blit(
                 error_msg, (game.width // 2 - error_msg.get_width() // 2, 500)
             )
@@ -116,9 +115,6 @@ def win_menu(game, resources):
                             name_entered = True  # Name wurde eingegeben
                             active = False  # Eingabefeld deaktivieren
                             display_error = False  # Fehlermeldung zurücksetzen
-                            print(
-                                f"Adding highscore for {text} with score {game.score}"
-                            )
                             add_highscore(text, game.score)  # Highscore hinzufügen
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]

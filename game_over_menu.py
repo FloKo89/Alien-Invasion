@@ -42,11 +42,16 @@ def resize_frame(frame, target_width, target_height):  #
 
 
 def game_over_menu(game, resources):
-    menu_items = ["Neustart", "Bestenliste", "Hauptmenü", "Beenden"]
+    menu_items = [
+        resources.current_language["restart"],
+        resources.current_language["highscores"],
+        resources.current_language["main_menu"],
+        resources.current_language["quit"],
+    ]
 
     selected_item = 0
 
-    cap = cv2.VideoCapture(r"movie\game_over_menu_bg_movie.mp4")
+    cap = cv2.VideoCapture(resources.level_resources[7]["background_video_path"])
 
     font = pygame.font.Font(None, 36)
     input_box = pygame.Rect(game.width // 2 - 70, 350, 140, 32)
@@ -55,7 +60,9 @@ def game_over_menu(game, resources):
     text = ""
     name_entered = False
     prompt_font = pygame.font.Font(None, 36)  # Schriftart für den Aufforderungstext
-    prompt_text = prompt_font.render("Spielername:", True, (238, 64, 0))
+    prompt_text = prompt_font.render(
+        resources.current_language["player_name"], True, (238, 64, 0)
+    )
     display_error = False
 
     # Hauptloop für das Game Over-Menü
@@ -65,23 +72,24 @@ def game_over_menu(game, resources):
 
         # Game Over Text
         go_font = resources.fonts["fonts"]["go_font"]
-        go_text = go_font.render("GAME OVER", True, (139, 37, 0))
+        go_text = go_font.render(
+            resources.current_language["game_over"], True, (139, 37, 0)
+        )
         game.screen.blit(go_text, (game.width // 2 - go_text.get_width() // 2, 150))
 
         # Anzeige des erreichten Levels
         level_font = resources.fonts["fonts"]["level_font"]
-        level_text = level_font.render(
-            f"Erreichtes Level: {game.level}", True, (238, 64, 0)
-        )
+        level_text_string = f"{resources.current_language['reached_level'] + ": "}{game.level}"
+        level_text = level_font.render(level_text_string, True, (238, 64, 0))
+
         game.screen.blit(
             level_text, (game.width // 2 - level_text.get_width() // 2, 250)
         )
 
         # Anzeige der erreichten Punkte
         score_font = resources.fonts["fonts"]["score_font"]
-        score_text = score_font.render(
-            f"Erzielte Punkte: {game.score}", True, (238, 64, 0)
-        )
+        score_text_string = f"{resources.current_language['score'] + ": "}{game.score}"
+        score_text = score_font.render(score_text_string, True, (238, 64, 0))
         game.screen.blit(
             score_text, (game.width // 2 - score_text.get_width() // 2, 300)
         )
@@ -100,9 +108,8 @@ def game_over_menu(game, resources):
 
         if display_error:
             error_font = resources.fonts["fonts"]["error_font"]
-            error_msg = error_font.render(
-                "Bitte geben Sie einen Namen ein!", True, (255, 0, 0)
-            )
+            error_msg_string = resources.current_language["error_msg"]
+            error_msg = error_font.render(error_msg_string, True, (255, 0, 0))
             game.screen.blit(
                 error_msg, (game.width // 2 - error_msg.get_width() // 2, 500)
             )
@@ -120,9 +127,6 @@ def game_over_menu(game, resources):
                             name_entered = True  # Name wurde eingegeben
                             active = False  # Eingabefeld deaktivieren
                             display_error = False  # Fehlermeldung zurücksetzen
-                            print(
-                                f"Adding highscore for {text} with score {game.score}"
-                            )
                             add_highscore(text, game.score)  # Highscore hinzufügen
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]

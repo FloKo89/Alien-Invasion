@@ -4,7 +4,6 @@ import math
 import cv2
 import sys
 
-import english
 from resources import GameResources
 from enemies import Enemy_horizontal, Enemy_vertical, Boss1
 from menu import main_menu, play_video_background
@@ -22,7 +21,6 @@ from highscore_manager import (
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
-current_language = english.texts
 resources = GameResources()
 game_over_sound = resources.sounds["game_sounds"]["game_over"]
 
@@ -78,17 +76,7 @@ class Game:
             self.current_background_video = self.cap  # Jetzt korrekt initialisiert
         else:
             # Fehlerbehandlung, falls keine Ressourcen für das Level gefunden werden
-            print(f"Keine Ressourcen für Level {self.level} gefunden.")
             self.cap = None
-
-    def load_language(language):
-        global current_language
-        if language == "German":
-            import german
-            current_language = german.texts
-        else:
-            import english
-            current_language = english.texts
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
         while True:
@@ -146,7 +134,6 @@ class Game:
                 + len(self.boss1)
                 < levels[self.level]["num_enemies"]
             ):
-                print("Aufruf von update_enemies")
                 self.update_enemies()
 
             if self.level_up:
@@ -216,7 +203,6 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game.quit_game()
-                
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -252,16 +238,12 @@ class Game:
 
     def change_background_video(self):
         level_resources = self.resources.get_level_resources(self.level)
-        if (
-            level_resources
-        ):  # Überprüfe, ob Ressourcen für das aktuelle Level vorhanden sind
+        if level_resources:
             new_video_path = level_resources["background_video_path"]
-            if (
-                self.cap is not None
-            ):  # Überprüfe, ob self.cap bereits initialisiert wurde
-                self.cap.release()  # Vorhandene Video-Capture-Instanz freigeben
-            self.cap = cv2.VideoCapture(new_video_path)  # Neues Video laden
-            play_video_background(self, self.cap)  # Video abspielen
+            if self.cap is not None:
+                self.cap.release()
+            self.cap = cv2.VideoCapture(new_video_path)
+            play_video_background(self, self.cap)
 
     def update_enemies(self):
         if self.level not in levels:
@@ -292,18 +274,14 @@ class Game:
                     enemy_type,
                 )
                 if enemy_type == "horizontal":
-                    print("Gegner horizontal hinzugefügt")
                     self.enemies_horizontal.append(
                         Enemy_horizontal(self, x, y, resources)
                     )
                 elif enemy_type == "vertical":
-                    print("Gegner vertikal hinzugefügt")
                     self.enemies_vertical.append(Enemy_vertical(self, x, y, resources))
                 elif enemy_type == "boss1":
                     screen_center_x = self.screen.get_width() / 2
-                    boss_width = Boss1(
-                        self, 0, 0, resources
-                    ).enemy_img.get_width()  # Temporärer Boss, um die Breite zu erhalten
+                    boss_width = Boss1(self, 0, 0, resources).enemy_img.get_width()
                     self.boss1.append(
                         Boss1(
                             self,
@@ -348,33 +326,29 @@ class Game:
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
-            player_name = game_over_menu(
-                self, resources
-            )  # Hier rufen wir das Game Over Menü auf
-            if player_name:  # Überprüfen, ob ein Name eingegeben wurde
-                add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
-            self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
+            player_name = game_over_menu(self, resources)
+            if player_name:
+                add_highscore(player_name, self.score)
+            self.reset()
 
     def print_score(self):
-        score_font = pygame.font.Font("freesansbold.ttf", 24)
-        score_text = score_font.render(
-            "Punkte: " + str(self.score), True, (255, 255, 255)
+        score_font = resources.fonts["fonts"]["score_font"]
+        score_text_string = f"{resources.current_language['score'] + ": "}{self.score}"
+        score_text = score_font.render(score_text_string, True, (238, 64, 0)
         )
         self.screen.blit(score_text, (8, 8))
 
     def print_level(self):
-        level_font = pygame.font.Font("freesansbold.ttf", 24)
-        level_text = level_font.render(
-            "Level: " + str(self.level), True, (255, 255, 255)
-        )
-        self.screen.blit(level_text, (700, 8))
+        level_font = resources.fonts["fonts"]["level_font"]
+        level_font_string = resources.current_language["level"] + ": " + str(self.level)
+        level_text = level_font.render(level_font_string, True, (238, 64, 0))
+        self.screen.blit(level_text, (675, 8))
 
     def print_level_up(self):
         if self.level in levels:
-            level_up_font = pygame.font.Font("freesansbold.ttf", 64)
-            level_up_text = level_up_font.render(
-                "Level: " + str(self.level), True, (255, 255, 255)
-            )
+            level_up_font = resources.fonts["fonts"]["level_up_font"]
+            level_up_font_string = resources.current_language["level_up"]
+            level_up_text = level_up_font.render(level_up_font_string, True, (238, 64, 0))
             level_up_text.set_alpha(self.level_up_fade_alpha)
             self.screen.blit(
                 level_up_text, (self.width // 2 - level_up_text.get_width() // 2, 250)
@@ -425,7 +399,7 @@ class Game:
         self.boss1_bullets = []
         self.boss1_second_bullets = []
         self.boss1_third_bullets = []
-    
+
     def quit_game(self):
         self.cap.release()
         pygame.quit()

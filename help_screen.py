@@ -1,5 +1,6 @@
 import pygame
 
+
 def show_help_screen(game, resources):
     help_image = resources.images["help_screen"]
     # help_image = pygame.image.load(r"assets\help_screen.png")  # Laden des Hilfebildes
@@ -15,11 +16,8 @@ def show_help_screen(game, resources):
         )  # Das Bild auf den Bildschirm zeichnen  # Aktualisieren des Displays
 
         back_font = resources.fonts["fonts"]["back_font"]
-        back_text = back_font.render(
-            "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
-            True,
-            (255, 0, 0),
-        )
+        back_font_string = resources.current_language["back_to_main_menu"]
+        back_text = back_font.render(back_font_string, True, (255, 255, 255))
         game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 573))
 
         for event in pygame.event.get():

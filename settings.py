@@ -49,6 +49,24 @@ def settings(game, resources):
                     game.play_menu_button_sound()
                 elif event.key == pygame.K_RETURN:
                     if selected_item == 0:
+                        resources.load_language("German")
                         waiting = False
                     elif selected_item == 1:
+                        resources.load_language("English")
+                        waiting = False
+                    elif selected_item == 2:
+                        resources.load_language("French")
+                        waiting = False
+                    elif selected_item == 3:
+                        resources.load_language("Spanish")
+                        waiting = False
+                    elif selected_item == 4:
+                        resources.load_language("Italian")
+                        waiting = False
+                    elif selected_item == 5:
+                        resources.load_language("Russian")
+                        waiting = False
+                    elif selected_item == 6:
+                        waiting = False
+                    elif selected_item == 7:
                         game.quit_game()

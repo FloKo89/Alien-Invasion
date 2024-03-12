@@ -2,6 +2,8 @@ import os
 import sys
 import pygame
 
+current_language = None
+
 
 def resource_path(relative_path):
     """Erhalte den absoluten Pfad zur Ressource, funktioniert für die Entwicklung und für PyInstaller"""
@@ -15,6 +17,8 @@ def resource_path(relative_path):
 
 class GameResources:
     def __init__(self):
+        self.current_language = None
+        self.load_language("English")
         self.images = self.load_images()
         self.sounds = self.load_sounds()
         self.fonts = self.load_fonts()
@@ -53,6 +57,14 @@ class GameResources:
                 "background_music_path": resource_path(
                     "sound/Groove Metalcore 2020.wav"
                 ),
+            },
+            7: {
+                "background_video_path": resource_path(
+                    "movie/game_over_menu_bg_movie.mp4"
+                ),
+            },
+            8: {
+                "background_video_path": resource_path("movie/win_menu.mp4"),
             },
         }
 
@@ -203,7 +215,34 @@ class GameResources:
                 "error_font": pygame.font.Font("freesansbold.ttf", 24),
                 "go_font": pygame.font.Font("freesansbold.ttf", 64),
                 "level_font": pygame.font.Font("freesansbold.ttf", 32),
+                "level_up_font": pygame.font.Font("freesansbold.ttf", 64),
                 "score_font": pygame.font.Font("freesansbold.ttf", 32),
                 "title_font": pygame.font.Font("freesansbold.ttf", 50),
             }
         }
+
+    def load_language(self, language):
+        if language == "German":
+            from languages import german
+
+            self.current_language = german.texts
+        elif language == "French":
+            from languages import french
+
+            self.current_language = french.texts
+        elif language == "Spanish":
+            from languages import spanish
+
+            self.current_language = spanish.texts
+        elif language == "Italian":
+            from languages import italian
+
+            self.current_language = italian.texts
+        elif language == "Russian":
+            from languages import russian
+
+            self.current_language = russian.texts
+        else:
+            from languages import english
+
+            self.current_language = english.texts

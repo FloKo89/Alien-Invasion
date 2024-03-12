@@ -51,7 +51,6 @@ def load_highscores():
             highscores = pickle.load(file)
         return highscores
     except (FileNotFoundError, EOFError, pickle.UnpicklingError) as e:
-        print(f"Error loading highscores: {e}")
         return []
 
 
@@ -81,7 +80,8 @@ def show_highscores_screen(game, resources):
     game.screen.fill((0, 0, 0))  # Bildschirm mit Schwarz füllen
 
     title_font = resources.fonts["fonts"]["title_font"]
-    title_text = title_font.render("Bestenliste", True, (255, 255, 255))
+    title_font_string = resources.current_language["highscores"]
+    title_text = title_font.render(title_font_string, True, (255, 255, 255))
     game.screen.blit(title_text, (game.width // 2 - title_text.get_width() // 2, 50))
 
     score_font = resources.fonts["fonts"]["score_font"]
@@ -104,7 +104,8 @@ def show_highscores_screen(game, resources):
         game.screen.blit(name_text, (name_x, start_y + index * 40))
 
         # Rendern und blitten der Punktzahl rechtsbündig
-        score_text = score_font.render(f"{score} Punkte", True, (255, 255, 255))
+        score_text_string = f"{score} {resources.current_language['points']}"
+        score_text = score_font.render(score_text_string, True, (255, 255, 255))
         game.screen.blit(
             score_text,
             (
@@ -114,11 +115,8 @@ def show_highscores_screen(game, resources):
         )
 
     back_font = resources.fonts["fonts"]["back_font"]
-    back_text = back_font.render(
-        "Beliebige Taste drücken, um zum Hauptmenü zurückzukehren",
-        True,
-        (255, 0, 0),
-    )
+    back_font_string = resources.current_language["back_to_main_menu"]
+    back_text = back_font.render(back_font_string, True, (255, 255, 255))
     game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 550))
 
     pygame.display.update()

@@ -5,14 +5,21 @@ from help_screen import show_help_screen
 
 def pause_menu(game, clock, resources):
     paused = True
-    menu_items = ["Fortsetzen", "Spielhilfe", "Neustarten", "Hauptmenü", "Beenden"]
+    menu_items = [
+        resources.current_language["continue"],
+        resources.current_language["help"],
+        resources.current_language["restart"],
+        resources.current_language["main_menu"],
+        resources.current_language["quit"],
+    ]
     selected_item = 0
     pause_font = resources.fonts["fonts"]["pause_font"]
     menu_font = resources.fonts["fonts"]["menu_font"]
 
     while paused:
         game.screen.fill((0, 0, 0))
-        pause_text = pause_font.render("Pausiert", True, (255, 255, 255))
+        pause_text_string = resources.current_language["paused"]
+        pause_text = pause_font.render(pause_text_string, True, (255, 255, 255))
         game.screen.blit(
             pause_text, (game.width // 2 - pause_text.get_width() // 2, 100)
         )
