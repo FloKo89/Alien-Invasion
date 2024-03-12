@@ -141,7 +141,7 @@ class GameResources:
                 ),
             },
             "help_screen": pygame.image.load(
-                resource_path("assets/help_screen_de.png")
+                resource_path("assets/help_screen_en.png")
             ),
         }
 
