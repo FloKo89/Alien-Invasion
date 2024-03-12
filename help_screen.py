@@ -1,5 +1,5 @@
 import pygame
-
+import sys
 
 def show_help_screen(game, resources):
     help_image = resources.images["help_screen"]
@@ -26,7 +26,7 @@ def show_help_screen(game, resources):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 waiting = False
 

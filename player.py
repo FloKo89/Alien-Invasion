@@ -1,11 +1,9 @@
 import pygame
 import math
-
 import pygame
 import math
 
 # from enemies import *
-
 
 class Spaceship:
     def __init__(self, game, x, y, resources):

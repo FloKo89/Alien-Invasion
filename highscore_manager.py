@@ -1,4 +1,5 @@
 import pygame
+import sys
 import pickle
 import cv2
 import os
@@ -128,6 +129,6 @@ def show_highscores_screen(game, resources):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 waiting = False

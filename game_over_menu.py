@@ -1,5 +1,6 @@
 import pygame
 import cv2
+import sys
 from menu import main_menu
 from highscore_manager import add_highscore, show_highscores_screen
 
@@ -110,7 +111,7 @@ def game_over_menu(game, resources):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
 
             if event.type == pygame.KEYDOWN:
                 if active:  # Wenn das Eingabefeld aktiv ist
@@ -158,7 +159,7 @@ def game_over_menu(game, resources):
                             game_over_running = False
                             game.running = False
                             pygame.quit()
-                            exit()
+                            sys.exit()
 
         # Zeichnen des Eingabefeldes
         if not name_entered:

@@ -1,4 +1,5 @@
 import pygame
+import sys
 from menu import main_menu
 from help_screen import show_help_screen
 
@@ -31,7 +32,7 @@ def pause_menu(game, clock, resources):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     selected_item = (selected_item - 1) % len(menu_items)
@@ -54,4 +55,4 @@ def pause_menu(game, clock, resources):
                         main_menu(game, clock, resources)
                     elif selected_item == 4:
                         pygame.quit()
-                        exit()
+                        sys.exit()

@@ -1,5 +1,6 @@
 import pygame
 import cv2
+import sys
 
 from highscore_manager import show_highscores_screen
 from help_screen import show_help_screen
@@ -56,7 +57,7 @@ def main_menu(game, clock, resources):
             if event.type == pygame.QUIT:
                 cap.release()
                 pygame.quit()
-                exit()
+                sys.exit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
@@ -85,7 +86,7 @@ def main_menu(game, clock, resources):
                     elif selected_item == 3:  # "Beenden" wurde ausgewählt
                         cap.release()
                         pygame.quit()
-                        exit()
+                        sys.exit()
 
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)
