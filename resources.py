@@ -140,7 +140,9 @@ class GameResources:
                     resource_path("assets/Player/player_25_hp.png")
                 ),
             },
-            "help_screen": pygame.image.load(resource_path("assets/help_screen.png")),
+            "help_screen": pygame.image.load(
+                resource_path("assets/help_screen_de.png")
+            ),
         }
 
     def get_level_resources(self, level):
