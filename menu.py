@@ -55,9 +55,7 @@ def main_menu(game, clock, resources):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                cap.release()
-                pygame.quit()
-                sys.exit()
+                game.quit_game()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
@@ -81,12 +79,9 @@ def main_menu(game, clock, resources):
 
                     elif selected_item == 2:  # "Spielhilfe" wurde ausgewählt
                         show_help_screen(game, resources)
-                        pass
 
                     elif selected_item == 3:  # "Beenden" wurde ausgewählt
-                        cap.release()
-                        pygame.quit()
-                        sys.exit()
+                        game.quit_game()
 
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)

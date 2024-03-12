@@ -50,7 +50,6 @@ class Game:
         self.menu_button_sound.set_volume(0.4)
         self.last_video_update = pygame.time.get_ticks()
         self.current_background_music = None
-        # self.current_background_video = None
         self.cap = None
         self.change_background_music()
         self.change_background_video()
@@ -205,8 +204,8 @@ class Game:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                game.quit_game()
+                
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -338,18 +337,12 @@ class Game:
         if self.game_over and not self.game_over_sound_played:
             pygame.mixer.Sound.play(game_over_sound)
             self.game_over_sound_played = True
-            # self.print_game_over()
             player_name = game_over_menu(
                 self, resources
             )  # Hier rufen wir das Game Over Menü auf
             if player_name:  # Überprüfen, ob ein Name eingegeben wurde
                 add_highscore(player_name, self.score)  # Fügen Sie den Highscore hinzu
             self.reset()  # Nachdem das Menü geschlossen wurde, setzen wir das Spiel zurück
-
-    # def print_game_over(self):
-    # go_font = pygame.font.Font("freesansbold.ttf", 64)
-    # go_text = go_font.render("GAME OVER", True, (255, 255, 255))
-    # self.screen.blit(go_text, (200, 250))
 
     def print_score(self):
         score_font = pygame.font.Font("freesansbold.ttf", 24)
@@ -421,6 +414,11 @@ class Game:
         self.boss1_bullets = []
         self.boss1_second_bullets = []
         self.boss1_third_bullets = []
+    
+    def quit_game(self):
+        self.cap.release()
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == "__main__":

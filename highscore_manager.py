@@ -128,7 +128,6 @@ def show_highscores_screen(game, resources):
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                game.quit_game()
             if event.type == pygame.KEYDOWN:
                 waiting = False

@@ -25,8 +25,7 @@ def show_help_screen(game, resources):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                game.quit_game()
             if event.type == pygame.KEYDOWN:
                 waiting = False
 

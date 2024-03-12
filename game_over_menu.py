@@ -110,8 +110,7 @@ def game_over_menu(game, resources):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                game.quit_game()
 
             if event.type == pygame.KEYDOWN:
                 if active:  # Wenn das Eingabefeld aktiv ist
@@ -158,8 +157,7 @@ def game_over_menu(game, resources):
                         elif selected_item == 3:
                             game_over_running = False
                             game.running = False
-                            pygame.quit()
-                            sys.exit()
+                            game.quit_game()
 
         # Zeichnen des Eingabefeldes
         if not name_entered:
