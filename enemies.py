@@ -99,19 +99,16 @@ class Enemy_horizontal(Enemy):
     def update(self):
         if self.alive:
             self.x += self.change_x * self.speed
-            # Wenn der Gegner von der linken Seite ins Fenster kommt und den rechten Rand erreicht
+
             if self.change_x == 1 and self.x >= 736:
                 self.change_x = -(self.change_x)
 
-            # Wenn der Gegner, der von der linken Seite ins Fenster kam, den linken Rand erreicht
             elif self.change_x == -1 and self.x <= 0:
                 self.change_x = -(self.change_x)
 
-            # Wenn der Gegner von der rechten Seite ins Fenster kommt und den linken Rand erreicht
             elif self.change_x == -1 and self.x <= 0:
                 self.change_x = -(self.change_x)
 
-            # Wenn der Gegner, der von der rechten Seite ins Fenster kam, den rechten Rand erreicht
             elif self.change_x == 1 and self.x >= 736:
                 self.change_x = -(self.change_x)
 
@@ -264,17 +261,14 @@ class Boss1(Enemy):
         self.third_bullets = []
 
     def draw_health_bar(self):
-        # Position und Größe des Lebensbalkens definieren
         bar_width = 200
         bar_height = 20
         margin_x = 10
         margin_y = 10
         border_thickness = 3
 
-        # Berechnung des prozentualen Anteils der verbleibenden HP
         hp_percentage = self.hp / 100.0
 
-        # Rahmen für den Balken zeichnen
         pygame.draw.rect(
             self.game.screen,
             (255, 255, 255),
@@ -286,27 +280,23 @@ class Boss1(Enemy):
             ),
         )
 
-        # Farbverlauf: Grün bei 100% HP und Rot bei 0% HP
         color = (255 * (1 - hp_percentage), 255 * hp_percentage, 0)
 
-        # Hintergrund des Lebensbalkens
         pygame.draw.rect(
             self.game.screen,
             (150, 150, 150),
             (margin_x, margin_y, bar_width, bar_height),
         )
 
-        # Vordergrund des Lebensbalkens mit Farbverlauf
         pygame.draw.rect(
             self.game.screen,
             color,
             (margin_x, margin_y, bar_width * hp_percentage, bar_height),
         )
 
-        # Text für genaue HP anzeigen
         font = pygame.font.SysFont(
             None, 24
-        )  # Sie können hier auch eine benutzerdefinierte Schriftart wählen
+        )  
         hp_text = font.render(
             f"HP: {self.hp} " + f" Phase: {self.phase}", True, (255, 255, 255)
         )
@@ -366,7 +356,7 @@ class Boss1(Enemy):
 
         target_y = (
             self.game.screen.get_height() / 2 - self.enemy_img.get_height() / 2
-        )  # Korrektur hier
+        ) 
         entering_speed = 1
         if self.y < target_y:
             self.y += entering_speed
@@ -380,12 +370,10 @@ class Boss1(Enemy):
         if self.death_frame_index <= len(self.death_animation_imgs) - 25:
             self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
-        # Wenn der Boss den rechten Rand erreicht, ändern Sie die Richtung
         if self.x + self.enemy_img.get_width() >= self.game.screen.get_width():
             self.change_x = -0.5
             self.change_y = random.choice([-0.5, 0.5])
 
-        # Wenn der Boss den linken Rand erreicht, ändern Sie die Richtung
         if self.x <= 0:
             self.change_x = 0.5
             self.change_y = random.choice([-0.5, 0.5])
@@ -396,7 +384,7 @@ class Boss1(Enemy):
         ):
             self.change_y = -(
                 self.change_y
-            )  # Wenn der Boss den oberen oder unteren Rand erreicht, ändern Sie die Richtung
+            )
 
         self.speed += self.acceleration
         if self.speed >= 5:
@@ -427,8 +415,8 @@ class Boss1(Enemy):
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if self.hp >= 80:  # Wenn der Boss 90% seiner HP verloren hat
-            self.speed = 2  # Geschwindigkeit verdoppeln
+        if self.hp >= 80:  
+            self.speed = 2  
             self.phase = 1
         elif self.hp >= 60:
             self.speed = 3
@@ -461,31 +449,29 @@ class Boss1(Enemy):
 
         if (
             time.time() - self.last_shield_renewal >= 12 and self.hp > 0
-        ):  # Wenn 12 Sekunden vergangen sind
-            self.shield_strength = self.max_shield_strength  # Schild wird erneuert
+        ):  
+            self.shield_strength = self.max_shield_strength 
             self.last_shield_renewal = time.time()
-            # Zeitpunkt der Erneuerung wird gespeichert
+            
 
-        if self.shield_strength > 0:  # Wenn der Schild noch nicht 0 erreicht hat
+        if self.shield_strength > 0: 
             self.game.screen.blit(
                 self.shield_img, (self.x - 20, self.y - 20)
-            )  # Schild wird gezeichnet
+            ) 
 
         if self.is_dying:
             if not self.death_sound_played:
                 pygame.mixer.Sound.play(self.is_dying_sound)
                 pygame.mixer.Sound.play(self.boss1_explosion_sound)
                 self.death_sound_played = True
-            # Zeigt den nächsten Frame der Sterbeanimation alle 0.2 Sekunden
             if time.time() - self.last_death_animation_time > 0.2:
                 self.death_frame_index += 1
                 self.last_death_animation_time = time.time()
 
-            # Zeigt den aktuellen Frame der Sterbeanimation
             if self.death_frame_index < len(self.death_animation_imgs):
                 if self.death_frame_index >= len(self.death_animation_imgs) - 25:
-                    offset_x = -375  # Beispielwert
-                    offset_y = -280  # Beispielwert
+                    offset_x = -375  
+                    offset_y = -280 
                     self.game.screen.blit(
                         self.death_animation_imgs[self.death_frame_index],
                         (self.x + offset_x, self.y + offset_y),
