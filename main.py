@@ -66,16 +66,15 @@ class Game:
         self.level_up_start_time = None
         self.highscores = load_highscores()
 
-        # Lade Video-Ressourcen
+        
         level_resources = resources.get_level_resources(self.level)
         if (
             level_resources
-        ):  # Sicherstellen, dass Ressourcen für das Level vorhanden sind
+        ):  
             video_path = level_resources["background_video_path"]
             self.cap = cv2.VideoCapture(video_path)
-            self.current_background_video = self.cap  # Jetzt korrekt initialisiert
+            self.current_background_video = self.cap
         else:
-            # Fehlerbehandlung, falls keine Ressourcen für das Level gefunden werden
             self.cap = None
 
     def generate_enemy_position(self, enemies, enemy_type, min_distance=40):
@@ -84,18 +83,17 @@ class Game:
                 new_x = random.randint(0, 736)
                 new_y = random.randint(
                     -100, -50
-                )  # Startposition oberhalb des Bildschirms
-            else:  # horizontal
+                )  
+            else:  
                 new_y = random.randint(25, 250)
-                # Abhängig vom Wert von change_x startet der Feind entweder links oder rechts außerhalb des Bildschirms
                 if random.choice([1, -1]) == 1:
                     new_x = random.randint(
                         -250, -50
-                    )  # Startposition links außerhalb des Bildschirms
+                    )  
                 else:
                     new_x = random.randint(
                         800, 1000
-                    )  # Startposition rechts außerhalb des Bildschirms
+                    )  
 
             too_close = False
             for enemy in enemies:
@@ -253,17 +251,14 @@ class Game:
             len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
         )
 
-        # Frühes Beenden, wenn die maximale Anzahl von Feinden erreicht ist
         if total_enemies >= levels[self.level]["num_enemies"]:
             return
 
-        # Erstelle eine Liste der fest definierten Gegner, die bereits im Spiel sind
         existing_enemies = []
         existing_enemies.extend(["horizontal"] * len(self.enemies_horizontal))
         existing_enemies.extend(["vertical"] * len(self.enemies_vertical))
         existing_enemies.extend(["boss1"] * len(self.boss1))
 
-        # Gehe durch die fest definierten Gegner in levels und füge fehlende hinzu
         for enemy_config in levels[self.level]["enemies"]:
             enemy_type = enemy_config["type"]
             if existing_enemies.count(enemy_type) < levels[self.level]["enemies"].count(
@@ -295,7 +290,6 @@ class Game:
                 if total_enemies >= levels[self.level]["num_enemies"]:
                     return
 
-        # Nachdem alle fehlenden fest definierten Gegner hinzugefügt wurden, füllen Sie den Rest mit zufällig generierten Gegnern auf
         num_existing_enemies = (
             len(self.enemies_horizontal) + len(self.enemies_vertical) + len(self.boss1)
         )
@@ -366,7 +360,7 @@ class Game:
         elif self.level_up_fade_state == "hold":
             if (
                 pygame.time.get_ticks() - self.level_up_start_time > 1000
-            ):  # Halten Sie für 1 Sekunde
+            ):
                 self.level_up_fade_state = "out"
 
         elif self.level_up_fade_state == "out":
