@@ -70,7 +70,7 @@ class GameResources:
     def load_images(self):
         N = 50
         return {
-            "icon": pygame.image.load(resource_path("icon.ico")),
+            "icon": pygame.image.load(resource_path("icon.png")),
             "boss1_images": {
                 "boss1": pygame.image.load(resource_path("assets/Boss1/Boss1.png")),
                 "boss1_shield": pygame.image.load(
