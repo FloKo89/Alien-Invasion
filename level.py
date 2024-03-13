@@ -14,22 +14,22 @@ levels = {
         "enemies": [
             {"type": "vertical"},
             {"type": "vertical"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 7,
+        "num_enemies": 6,
     },
     3: {
         "enemies": [
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 9,
+        "num_enemies": 8,
     },
     4: {
         "enemies": [
@@ -37,12 +37,11 @@ levels = {
             {"type": "vertical"},
             {"type": "vertical"},
             {"type": "vertical"},
-            {"type": "horizontal"},
-            {"type": "horizontal"},
+            {"type": "vertical"},
             {"type": "horizontal"},
             {"type": "horizontal"},
         ],
-        "num_enemies": 9,
+        "num_enemies": 8,
     },
     5: {
         "enemies": [
@@ -68,8 +67,10 @@ def level_check(self):
         self.level = 3
     elif self.score >= 250 and self.score < 285:
         self.level = 4
-    elif self.score >= 285:
+    elif self.score >= 285 and self.score < 340:
         self.level = 5
+    elif self.score >= 340:
+        self.level = 6
 
     if current_level != self.level:
         level_resources = self.resources.get_level_resources(self.level)

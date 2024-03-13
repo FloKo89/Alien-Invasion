@@ -47,7 +47,7 @@ def win_menu(game, resources):
         resources.current_language["quit"],
     ]
 
-    cap = cv2.VideoCapture(resources.level_resources[8]["background_video_path"])
+    cap = cv2.VideoCapture(resources.level_resources[6]["background_video_path"])
 
     selected_item = 0
     font = pygame.font.Font(None, 36)
@@ -70,9 +70,9 @@ def win_menu(game, resources):
         game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 150))
 
         win_font = resources.fonts["fonts"]["win_font"]
-        win_font_string = resources.current_language["you_saved_the_world"]
+        win_font_string = resources.current_language["win_text"]
         win_text = win_font.render(win_font_string, True, (255, 255, 255))
-        game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 250))
+        game.screen.blit(win_text, (game.width // 2 - win_text.get_width() // 2, 220))
 
         score_font = resources.fonts["fonts"]["score_font"]
         score_font_string = f"{resources.current_language['points_scored'] + ": "}{game.score}"
@@ -83,7 +83,7 @@ def win_menu(game, resources):
 
         menu_font = resources.fonts["fonts"]["menu_font"]
 
-        if name_entered:  # Wenn ein Name eingegeben wurde
+        if name_entered:  
             for index, item in enumerate(menu_items):
                 color = (255, 0, 0) if index == selected_item else (255, 255, 255)
                 menu_text = menu_font.render(item, True, color)
@@ -108,13 +108,14 @@ def win_menu(game, resources):
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_RETURN:
-                        if not text:
-                            display_error = True
-                        else:
-                            name_entered = True 
-                            active = False  
-                            display_error = False  
-                            add_highscore(text, game.score) 
+                        if event.key == pygame.K_RETURN:
+                            if len(text.strip()) > 0:
+                                name_entered = True
+                                active = False
+                                display_error = False
+                                add_highscore(text, game.score)
+                            else:
+                                display_error = True 
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:
@@ -137,7 +138,7 @@ def win_menu(game, resources):
                         elif selected_item == 1:
                             showing_win_menu = False
                             game.reset(to_main_menu=True)
-                            main_menu(game, clock)
+                            main_menu(game, clock, resources)
                             return
                         elif selected_item == 2:
                             showing_win_menu = False

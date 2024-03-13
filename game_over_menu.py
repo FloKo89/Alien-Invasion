@@ -116,13 +116,15 @@ def game_over_menu(game, resources):
             if event.type == pygame.KEYDOWN:
                 if active:  
                     if event.key == pygame.K_RETURN:
-                        if not text:
-                            display_error = True
-                        else:
-                            name_entered = True  
-                            active = False  
-                            display_error = False  
-                            add_highscore(text, game.score)  
+                        if event.key == pygame.K_RETURN:
+                            if len(text.strip()) > 0:
+                                name_entered = True
+                                active = False
+                                display_error = False
+                                add_highscore(text, game.score)
+                            else:
+                                display_error = True
+
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:

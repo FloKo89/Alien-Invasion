@@ -62,9 +62,6 @@ class GameResources:
                     "movie/game_over_menu_bg_movie.mp4"
                 ),
             },
-            8: {
-                "background_video_path": resource_path("movie/win_menu.mp4"),
-            },
         }
 
     def load_images(self):
@@ -229,7 +226,7 @@ class GameResources:
                 "menu_font": pygame.font.Font("freesansbold.ttf", 32),
                 "pause_font": pygame.font.Font("freesansbold.ttf", 64),
                 "back_font": pygame.font.Font("freesansbold.ttf", 24),
-                "win_font": pygame.font.Font("freesansbold.ttf", 64),
+                "win_font": pygame.font.Font("freesansbold.ttf", 50),
                 "score_font": pygame.font.Font("freesansbold.ttf", 32),
                 "error_font": pygame.font.Font("freesansbold.ttf", 24),
                 "go_font": pygame.font.Font("freesansbold.ttf", 64),

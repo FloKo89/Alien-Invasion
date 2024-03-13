@@ -294,9 +294,7 @@ class Boss1(Enemy):
             (margin_x, margin_y, bar_width * hp_percentage, bar_height),
         )
 
-        font = pygame.font.SysFont(
-            None, 24
-        )  
+        font = pygame.font.SysFont(None, 24)
         hp_text = font.render(
             f"HP: {self.hp} " + f" Phase: {self.phase}", True, (255, 255, 255)
         )
@@ -354,9 +352,7 @@ class Boss1(Enemy):
             pygame.mixer.Sound.play(self.alien_entering_sound)
             self.alien_entering_played = True
 
-        target_y = (
-            self.game.screen.get_height() / 2 - self.enemy_img.get_height() / 2
-        ) 
+        target_y = self.game.screen.get_height() / 2 - self.enemy_img.get_height() / 2
         entering_speed = 1
         if self.y < target_y:
             self.y += entering_speed
@@ -382,9 +378,7 @@ class Boss1(Enemy):
             self.y <= 0
             or self.y + self.enemy_img.get_height() >= self.game.screen.get_height()
         ):
-            self.change_y = -(
-                self.change_y
-            )
+            self.change_y = -(self.change_y)
 
         self.speed += self.acceleration
         if self.speed >= 5:
@@ -415,8 +409,8 @@ class Boss1(Enemy):
             self.last_shot_time3 = time.time()
             self.shot_interval = random.randint(1, 2)
 
-        if self.hp >= 80:  
-            self.speed = 2  
+        if self.hp >= 80:
+            self.speed = 2
             self.phase = 1
         elif self.hp >= 60:
             self.speed = 3
@@ -447,17 +441,12 @@ class Boss1(Enemy):
             pygame.mixer.Sound.play(self.alien_vocal1)
             self.alien_vocal3_played = True
 
-        if (
-            time.time() - self.last_shield_renewal >= 12 and self.hp > 0
-        ):  
-            self.shield_strength = self.max_shield_strength 
+        if time.time() - self.last_shield_renewal >= 12 and self.hp > 0:
+            self.shield_strength = self.max_shield_strength
             self.last_shield_renewal = time.time()
-            
 
-        if self.shield_strength > 0: 
-            self.game.screen.blit(
-                self.shield_img, (self.x - 20, self.y - 20)
-            ) 
+        if self.shield_strength > 0:
+            self.game.screen.blit(self.shield_img, (self.x - 20, self.y - 20))
 
         if self.is_dying:
             if not self.death_sound_played:
@@ -470,8 +459,8 @@ class Boss1(Enemy):
 
             if self.death_frame_index < len(self.death_animation_imgs):
                 if self.death_frame_index >= len(self.death_animation_imgs) - 25:
-                    offset_x = -375  
-                    offset_y = -280 
+                    offset_x = -375
+                    offset_y = -280
                     self.game.screen.blit(
                         self.death_animation_imgs[self.death_frame_index],
                         (self.x + offset_x, self.y + offset_y),
