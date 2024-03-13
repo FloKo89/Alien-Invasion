@@ -70,6 +70,7 @@ class GameResources:
     def load_images(self):
         N = 50
         return {
+            "icon": pygame.image.load(resource_path("icon.ico")),
             "boss1_images": {
                 "boss1": pygame.image.load(resource_path("assets/Boss1/Boss1.png")),
                 "boss1_shield": pygame.image.load(
@@ -141,19 +142,24 @@ class GameResources:
             },
             "help_screen": {
                 "help_screen_en": pygame.image.load(
-                resource_path("assets/Help_Screen/help_screen_en.png")
-                    ),
-                "help_screen_de": pygame.image.load(resource_path("assets/Help_Screen/help_screen_de.png")
-                    ),
-                "help_screen_fr": pygame.image.load(resource_path("assets/Help_Screen/help_screen_fr.png")
-                    ),
-                "help_screen_es": pygame.image.load(resource_path("assets/Help_Screen/help_screen_es.png")
-                    ),
-                "help_screen_it": pygame.image.load(resource_path("assets/Help_Screen/help_screen_it.png")
-                    ),
-                "help_screen_ru": pygame.image.load(resource_path("assets/Help_Screen/help_screen_ru.png")
-                    ),
-            }
+                    resource_path("assets/Help_Screen/help_screen_en.png")
+                ),
+                "help_screen_de": pygame.image.load(
+                    resource_path("assets/Help_Screen/help_screen_de.png")
+                ),
+                "help_screen_fr": pygame.image.load(
+                    resource_path("assets/Help_Screen/help_screen_fr.png")
+                ),
+                "help_screen_es": pygame.image.load(
+                    resource_path("assets/Help_Screen/help_screen_es.png")
+                ),
+                "help_screen_it": pygame.image.load(
+                    resource_path("assets/Help_Screen/help_screen_it.png")
+                ),
+                "help_screen_ru": pygame.image.load(
+                    resource_path("assets/Help_Screen/help_screen_ru.png")
+                ),
+            },
         }
 
     def get_level_resources(self, level):

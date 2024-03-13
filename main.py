@@ -22,6 +22,8 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
 resources = GameResources()
+icon = resources.images["icon"]
+pygame.display.set_icon(icon)
 game_over_sound = resources.sounds["game_sounds"]["game_over"]
 
 
