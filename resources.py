@@ -6,9 +6,7 @@ current_language = None
 
 
 def resource_path(relative_path):
-    """Erhalte den absoluten Pfad zur Ressource, funktioniert für die Entwicklung und für PyInstaller"""
     try:
-        # PyInstaller erstellt einen temporären Ordner _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
