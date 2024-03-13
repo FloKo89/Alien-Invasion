@@ -2,11 +2,11 @@ import pygame
 
 
 def show_help_screen(game, resources):
-    help_image = resources.images["help_screen"]
-    # help_image = pygame.image.load(r"assets\help_screen.png")  # Laden des Hilfebildes
+    help_screen_key = f"help_screen_{resources.current_language_code}"
+    help_image = resources.images["help_screen"][help_screen_key]
     help_image = pygame.transform.scale(
         help_image, (game.width, game.height)
-    )  # Skalieren des Bildes auf Fenstergröße
+    )
 
     waiting = True
     while waiting:

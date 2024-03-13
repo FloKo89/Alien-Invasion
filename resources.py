@@ -19,6 +19,7 @@ class GameResources:
     def __init__(self):
         self.current_language = None
         self.load_language("English")
+        self.current_language_code = "en"
         self.images = self.load_images()
         self.sounds = self.load_sounds()
         self.fonts = self.load_fonts()
@@ -140,9 +141,15 @@ class GameResources:
                     resource_path("assets/Player/player_25_hp.png")
                 ),
             },
-            "help_screen": pygame.image.load(
-                resource_path("assets/help_screen_en.png")
-            ),
+            "help_screen": {
+                "help_screen_en": pygame.image.load(
+                resource_path("assets/Help_Screen/help_screen_en.png")
+                    ),
+                "help_screen_de": pygame.image.load(resource_path("assets/Help_Screen/help_screen_de.png")
+                    ),
+                "help_screen_fr": pygame.image.load(resource_path("assets/Help_Screen/help_screen_fr.png")
+                    ),
+            }
         }
 
     def get_level_resources(self, level):
@@ -228,23 +235,29 @@ class GameResources:
             from languages import german
 
             self.current_language = german.texts
+            self.current_language_code = "de"
         elif language == "French":
             from languages import french
 
             self.current_language = french.texts
+            self.current_language_code = "fr"
         elif language == "Spanish":
             from languages import spanish
 
             self.current_language = spanish.texts
+            self.current_language_code = "es"
         elif language == "Italian":
             from languages import italian
 
             self.current_language = italian.texts
+            self.current_language_code = "it"
         elif language == "Russian":
             from languages import russian
 
             self.current_language = russian.texts
+            self.current_language_code = "ru"
         else:
             from languages import english
 
             self.current_language = english.texts
+            self.current_language_code = "en"
