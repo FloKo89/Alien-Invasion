@@ -3,8 +3,6 @@ import math
 import pygame
 import math
 
-# from enemies import *
-
 class Spaceship:
     def __init__(self, game, x, y, resources):
         self.resources = resources
@@ -35,7 +33,7 @@ class Spaceship:
         if current_time - self.last_damage_time > 2700:
             self.hp -= damage
             self.last_damage_time = current_time
-            self.blink_end_time = current_time + 2700  # Blinken endet in 2 Sekunden
+            self.blink_end_time = current_time + 2700  
             if self.hp <= 0:
                 self.game.game_over = True
                 self.game.check_game_over()
@@ -44,13 +42,13 @@ class Spaceship:
 
     def draw_lives(self, screen):
         screen_width, _ = screen.get_size()
-        heart_img = self.hp_images[self.hp - 1]  # Da die Indizierung bei 0 beginnt
+        heart_img = self.hp_images[self.hp - 1]
 
-        # Position des Herzens unten rechts
-        pos_x = screen_width - heart_img.get_width() - 10  # 10 Pixel Abstand vom Rand
+        
+        pos_x = screen_width - heart_img.get_width() - 10
         pos_y = (
             screen.get_height() - heart_img.get_height() - 10
-        )  # 10 Pixel Abstand vom Rand
+        )
 
         screen.blit(heart_img, (pos_x, pos_y))
 
@@ -68,8 +66,8 @@ class Spaceship:
         if current_time < self.blink_end_time:
             if (
                 current_time % 200 < 100
-            ):  # Ändern Sie die Zahl für die Blinkgeschwindigkeit
-                return  # Bild wird nicht gezeichnet, damit es aussieht, als würde es blinken
+            ):  
+                return
 
         self.game.screen.blit(self.spaceship_img, (self.x, self.y))
 
@@ -96,13 +94,12 @@ class Spaceship:
                 spaceship_center_y - bullet_center_y,
             )
 
-            if distance <= radius:  # Sie können den Radius anpassen
+            if distance <= radius:
                 self.collision_response(bullet_center_x, bullet_center_y)
                 self.lose_life(
                     bullet.damage
-                )  # Hier geben wir den Schadenswert des Projektils an die Methode weiter
+                )
 
-                # Bullet aus der entsprechenden Liste entfernen
                 if bullet in self.game.boss1_bullets:
                     self.game.boss1_bullets.remove(bullet)
                 elif bullet in self.game.enemy_horizontal_bullets:
@@ -148,14 +145,14 @@ class Bullet:
     def fired(self):
         self.is_fired = True
 
-    def update(self):  # Wird in der Game-Klasse aufgerufen
+    def update(self):  
         if self.direction == "up":
             self.y -= self.bullet_speed
         elif self.direction == "down":
-            self.y += self.bullet_speed  # Bewegung der Kugel
+            self.y += self.bullet_speed  
 
-        if self.y < 0:  # Wenn die Kugel den oberen Rand erreicht hat
-            self.is_fired = False  # Kugel wird gelöscht
+        if self.y < 0:  
+            self.is_fired = False
         self.game.screen.blit(
             self.bullet_img, (self.x, self.y)
-        )  # Kugel wird gezeichnet
+        )
