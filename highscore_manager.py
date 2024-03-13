@@ -116,7 +116,7 @@ def show_highscores_screen(game, resources):
 
     back_font = resources.fonts["fonts"]["back_font"]
     back_font_string = resources.current_language["back_to_main_menu"]
-    back_text = back_font.render(back_font_string, True, (255, 255, 255))
+    back_text = back_font.render(back_font_string, True, (238, 64, 0))
     game.screen.blit(back_text, (game.width // 2 - back_text.get_width() // 2, 550))
 
     pygame.display.update()

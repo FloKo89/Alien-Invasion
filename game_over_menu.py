@@ -59,7 +59,7 @@ def game_over_menu(game, resources):
     active = True
     text = ""
     name_entered = False
-    prompt_font = pygame.font.Font(None, 36)  # Schriftart für den Aufforderungstext
+    prompt_font = pygame.font.Font(None, 36)
     prompt_text = prompt_font.render(
         resources.current_language["player_name"], True, (238, 64, 0)
     )

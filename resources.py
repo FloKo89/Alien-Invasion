@@ -149,6 +149,12 @@ class GameResources:
                     ),
                 "help_screen_fr": pygame.image.load(resource_path("assets/Help_Screen/help_screen_fr.png")
                     ),
+                "help_screen_es": pygame.image.load(resource_path("assets/Help_Screen/help_screen_es.png")
+                    ),
+                "help_screen_it": pygame.image.load(resource_path("assets/Help_Screen/help_screen_it.png")
+                    ),
+                "help_screen_ru": pygame.image.load(resource_path("assets/Help_Screen/help_screen_ru.png")
+                    ),
             }
         }
 
