@@ -13,7 +13,7 @@ def show_help_screen(game, resources):
         game.screen.fill((0, 0, 0))
         game.screen.blit(
             help_image, (0, 0)
-        )  # Das Bild auf den Bildschirm zeichnen  # Aktualisieren des Displays
+        ) 
 
         back_font = resources.fonts["fonts"]["back_font"]
         back_font_string = resources.current_language["back_to_main_menu"]
