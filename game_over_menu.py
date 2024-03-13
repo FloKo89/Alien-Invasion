@@ -6,26 +6,25 @@ from highscore_manager import add_highscore, show_highscores_screen
 clock = pygame.time.Clock()
 
 
-def play_video_background(game, cap):  # Video im Hintergrund abspielen
-    current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
+def play_video_background(game, cap):  
+    current_time = pygame.time.get_ticks() 
     frame_duration = 1000.0 / cap.get(
         cv2.CAP_PROP_FPS
-    )  # Dauer eines Einzelbildes in Millisekunden
+    )  
     if (
         current_time - game.last_video_update > frame_duration
-    ):  # Wenn genug Zeit verstrichen ist
-        ret, frame = cap.read()  # Einzelbild lesen
-        if not ret:  # Wenn das Video zu Ende ist
-            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
-            ret, frame = cap.read()  # Erneut lesen
+    ): 
+        ret, frame = cap.read()  
+        if not ret:  
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  
+            ret, frame = cap.read() 
 
-        frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
-        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
-        game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        frame = resize_frame(frame, game.width, game.height)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))
+        game.screen.blit(frame, (0, 0))
         game.last_video_update = current_time
     else:
-        # Das gleiche Bild sollte beibehalten werden, da nicht genug Zeit verstrichen ist
         pass
 
 
@@ -65,19 +64,16 @@ def game_over_menu(game, resources):
     )
     display_error = False
 
-    # Hauptloop für das Game Over-Menü
     game_over_running = True
     while game_over_running:
         play_video_background(game, cap)
 
-        # Game Over Text
         go_font = resources.fonts["fonts"]["go_font"]
         go_text = go_font.render(
             resources.current_language["game_over"], True, (139, 37, 0)
         )
         game.screen.blit(go_text, (game.width // 2 - go_text.get_width() // 2, 150))
 
-        # Anzeige des erreichten Levels
         level_font = resources.fonts["fonts"]["level_font"]
         level_text_string = f"{resources.current_language['reached_level'] + ": "}{game.level}"
         level_text = level_font.render(level_text_string, True, (238, 64, 0))
@@ -86,7 +82,6 @@ def game_over_menu(game, resources):
             level_text, (game.width // 2 - level_text.get_width() // 2, 250)
         )
 
-        # Anzeige der erreichten Punkte
         score_font = resources.fonts["fonts"]["score_font"]
         score_text_string = f"{resources.current_language['points_scored'] + ": "}{game.score}"
         score_text = score_font.render(score_text_string, True, (238, 64, 0))
@@ -96,7 +91,7 @@ def game_over_menu(game, resources):
 
         menu_font = resources.fonts["fonts"]["menu_font"]
 
-        if name_entered:  # Wenn ein Name eingegeben wurde
+        if name_entered: 
             for index, item in enumerate(menu_items):
                 color = (255, 0, 0) if index == selected_item else (255, 255, 255)
                 menu_text = menu_font.render(item, True, color)
@@ -119,22 +114,22 @@ def game_over_menu(game, resources):
                 game.quit_game()
 
             if event.type == pygame.KEYDOWN:
-                if active:  # Wenn das Eingabefeld aktiv ist
+                if active:  
                     if event.key == pygame.K_RETURN:
                         if not text:
                             display_error = True
                         else:
-                            name_entered = True  # Name wurde eingegeben
-                            active = False  # Eingabefeld deaktivieren
-                            display_error = False  # Fehlermeldung zurücksetzen
-                            add_highscore(text, game.score)  # Highscore hinzufügen
+                            name_entered = True  
+                            active = False  
+                            display_error = False  
+                            add_highscore(text, game.score)  
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:
                         text += event.unicode
                 elif (
                     name_entered
-                ):  # Wenn der Name eingegeben wurde und das Eingabefeld nicht aktiv ist
+                ):  
                     if event.key == pygame.K_DOWN:
                         selected_item = (selected_item + 1) % len(menu_items)
                         game.play_menu_button_sound()
@@ -162,23 +157,19 @@ def game_over_menu(game, resources):
                             game.running = False
                             game.quit_game()
 
-        # Zeichnen des Eingabefeldes
         if not name_entered:
             txt_surface = font.render(text, True, color)
 
-            # Gesamtbreite von "Spielername:" und dem Eingabefeld berechnen
+            
             combined_width = (
                 prompt_text.get_width() + 10 + max(140, txt_surface.get_width())
             )
 
-            # Startposition von "Spielername:" so anpassen, dass die gesamte Kombination zentriert ist
             prompt_x = game.width // 2 - combined_width // 2
             txt_surface_x = prompt_x + prompt_text.get_width() + 10
 
-            # Position von input_box aktualisieren
             input_box.topleft = (txt_surface_x, input_box.y)
 
-            # Zeichnen des "Spielername:"-Texts und des Eingabefelds
             game.screen.blit(prompt_text, (prompt_x, input_box.y))
             text_y = input_box.y + (input_box.height - txt_surface.get_height()) // 2
             game.screen.blit(txt_surface, (txt_surface_x + 6, text_y))

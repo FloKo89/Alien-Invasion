@@ -15,7 +15,7 @@ def settings(game, resources):
     ]
     selected_item = 0
     menu_font = resources.fonts["fonts"]["menu_font"]
-    additional_gap = 30  # Zusätzlicher Abstand für die letzten beiden Elemente
+    additional_gap = 30 
 
     while waiting:
         game.screen.fill((0, 0, 0))
@@ -23,10 +23,9 @@ def settings(game, resources):
         for index, item in enumerate(menu_items):
             color = (255, 0, 0) if index == selected_item else (255, 255, 255)
             menu_text = menu_font.render(item, True, color)
-            # Erhöhe y_position um additional_gap für die letzten beiden Elemente
             if (
                 index >= 6
-            ):  # Beginne zusätzlichen Abstand ab dem siebten Element (Index 6)
+            ): 
                 y_position = 50 + index * 40 + additional_gap
             else:
                 y_position = 50 + index * 40
