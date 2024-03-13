@@ -6,30 +6,29 @@ import os
 clock = pygame.time.Clock()
 
 
-def play_video_background(game, cap):  # Video im Hintergrund abspielen
-    current_time = pygame.time.get_ticks()  # Aktuelle Zeit in Millisekunden
+def play_video_background(game, cap):
+    current_time = pygame.time.get_ticks() 
     frame_duration = 1000.0 / cap.get(
         cv2.CAP_PROP_FPS
-    )  # Dauer eines Einzelbildes in Millisekunden
+    )  
     if (
         current_time - game.last_video_update > frame_duration
-    ):  # Wenn genug Zeit verstrichen ist
-        ret, frame = cap.read()  # Einzelbild lesen
-        if not ret:  # Wenn das Video zu Ende ist
-            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Video von Anfang wiederholen
-            ret, frame = cap.read()  # Erneut lesen
+    ):  
+        ret, frame = cap.read()  
+        if not ret:  
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  
+            ret, frame = cap.read()  
 
-        frame = resize_frame(frame, game.width, game.height)  # Rahmen skalieren
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Farbkanäle tauschen
-        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  # Bild drehen
-        game.screen.blit(frame, (0, 0))  # Rahmen auf Bildschirm zeichnen
+        frame = resize_frame(frame, game.width, game.height)  
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  
+        frame = pygame.surfarray.make_surface(frame.transpose([1, 0, 2]))  
+        game.screen.blit(frame, (0, 0))  
         game.last_video_update = current_time
     else:
-        # Das gleiche Bild sollte beibehalten werden, da nicht genug Zeit verstrichen ist
         pass
 
 
-def resize_frame(frame, target_width, target_height):  #
+def resize_frame(frame, target_width, target_height):  
     height, width, channels = frame.shape
     aspect_ratio = width / height
     new_width = int(target_height * aspect_ratio)
@@ -68,16 +67,16 @@ def add_highscore(name, score):
         highscores.append((name, score))
         highscores.sort(
             key=lambda x: x[1], reverse=True
-        )  # Sort by score in descending order
-        highscores = highscores[:MAX_HIGHSCORES]  # Keep only the top scores
+        )  
+        highscores = highscores[:MAX_HIGHSCORES]  
         save_highscores(highscores)
     except Exception as e:
         print(f"Error adding highscore: {e}")
 
 
 def show_highscores_screen(game, resources):
-    highscores = load_highscores()  # Highscores laden
-    game.screen.fill((0, 0, 0))  # Bildschirm mit Schwarz füllen
+    highscores = load_highscores()  
+    game.screen.fill((0, 0, 0))  
 
     title_font = resources.fonts["fonts"]["title_font"]
     title_font_string = resources.current_language["highscores"]
@@ -86,24 +85,20 @@ def show_highscores_screen(game, resources):
 
     score_font = resources.fonts["fonts"]["score_font"]
 
-    # Platz für die Spalten festlegen
     place_x = game.width // 4
-    name_x = place_x + 100  # Verschiebung um 100 Pixel von der Platzierung
-    score_right_margin = 160  # Rechter Abstand für die Punktzahlen
+    name_x = place_x + 100
+    score_right_margin = 160
 
-    start_y = 150  # Startposition für die Highscores
+    start_y = 150
     for index, (name, score) in enumerate(highscores):
-        # Rendern und blitten der Platzierung
         place_text = score_font.render(f"{index + 1}.", True, (255, 255, 255))
         game.screen.blit(
             place_text, (place_x - place_text.get_width() // 2, start_y + index * 40)
         )
 
-        # Rendern und blitten des Namens
         name_text = score_font.render(name, True, (255, 255, 255))
         game.screen.blit(name_text, (name_x, start_y + index * 40))
 
-        # Rendern und blitten der Punktzahl rechtsbündig
         score_text_string = f"{score} {resources.current_language['points']}"
         score_text = score_font.render(score_text_string, True, (255, 255, 255))
         game.screen.blit(
