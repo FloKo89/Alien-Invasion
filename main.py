@@ -380,6 +380,8 @@ class Game:
         self.game_over_sound_played = False
         self.score = 0
         self.level = 0 if to_main_menu else 1
+        self.current_background_music = None
+        self.current_background_video = None
         self.running = True
         self.spaceship = Spaceship(
             self, self.screen.get_width() / 2 - 32, 515, resources
