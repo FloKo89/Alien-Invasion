@@ -1,6 +1,4 @@
-
 .idea/workspace.xml
 *.pyc
 /build
 /dist
-/itch.io
