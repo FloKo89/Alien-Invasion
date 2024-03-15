@@ -113,8 +113,6 @@ class Game:
             play_video_background(self, self.cap)
             self.level_up = level_check(self)
             self.check_win()
-            self.print_score()
-            self.print_level()
             self.handle_events()
             self.spaceship.draw_lives(self.screen)
             self.spaceship.update()
@@ -196,6 +194,9 @@ class Game:
                 if bullet.y > 580:
                     self.boss1_third_bullets.remove(bullet)
                     break
+            
+            self.print_score()
+            self.print_level()
 
             pygame.display.update()
 
