@@ -21,12 +21,16 @@ Now have fun!
 
 ## Features
 
-Different types of opponents
-Unique rounds with randomized opponents
-5 levels including 1 boss fight
-Highscore for competitions
-How to play
+- Different types of opponents
+- Unique rounds with randomized opponents
+- 5 levels including 1 boss fight
+- Highscore for competitions
+
+
+## How to play
+
 The game is very easy to control and includes a control aid.
 
-Contact me
+## Contact me
+
 For more information, contact me at floko89@web.de.
