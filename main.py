@@ -329,11 +329,12 @@ class Game:
             self.reset()
 
     def print_score(self):
-        score_font = resources.fonts["fonts"]["score_font"]
-        score_text_string = f"{resources.current_language['score'] + ": "}{self.score}"
-        score_text = score_font.render(score_text_string, True, (238, 64, 0)
-        )
-        self.screen.blit(score_text, (8, 8))
+        if self.level is not 5:
+            score_font = resources.fonts["fonts"]["score_font"]
+            score_text_string = f"{resources.current_language['score'] + ": "}{self.score}"
+            score_text = score_font.render(score_text_string, True, (238, 64, 0)
+            )
+            self.screen.blit(score_text, (8, 8))
 
     def print_level(self):
         level_font = resources.fonts["fonts"]["level_font"]
