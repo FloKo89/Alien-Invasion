@@ -206,17 +206,17 @@ class Game:
                 game.quit_game()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     self.spaceship.move(-10)
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     self.spaceship.move(10)
                 if event.key == pygame.K_SPACE:
                     self.spaceship.fire_bullet()
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     self.spaceship.move(10)
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     self.spaceship.move(-10)
 
             if event.type == pygame.KEYDOWN:
@@ -329,7 +329,7 @@ class Game:
             self.reset()
 
     def print_score(self):
-        if self.level is not 5:
+        if self.level != 5:
             score_font = resources.fonts["fonts"]["score_font"]
             score_text_string = f"{resources.current_language['score'] + ": "}{self.score}"
             score_text = score_font.render(score_text_string, True, (238, 64, 0)
