@@ -4,6 +4,7 @@ import math
 import cv2
 import sys
 
+from version import __version__
 from resources import GameResources
 from enemies import Enemy_horizontal, Enemy_vertical, Boss1
 from menu import main_menu, play_video_background
@@ -21,6 +22,7 @@ from highscore_manager import (
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(32)
+version = __version__
 resources = GameResources()
 icon = resources.images["icon"]
 pygame.display.set_icon(icon)
